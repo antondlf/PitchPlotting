@@ -8,16 +8,21 @@ import tempfile
 bp = Blueprint('/record', __name__)
 
 
-@bp.route('/record')
+@bp.route('/record/<string:filename>')
 @login_required
-def record():
-    return render_template('/record/index.html')
+def record(filename):
+    return render_template('/record/index.html', recording=filename)
 
 
-bp = Blueprint('pitch_track', __name__, url_prefix='/pitch_track')
+@bp.route('/record/<string:filename>')
+def recorded(filename):
+    return render_template()
 
 
-@bp.route('/pitch_track', methods=['POST'])
+#bp = Blueprint('pitch_track', __name__, url_prefix='/pitch_track')
+
+
+@bp.route('/record/pitch_track', methods=['POST'])
 def pitch_track():
     import parselmouth as praat
 

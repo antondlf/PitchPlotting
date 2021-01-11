@@ -36,12 +36,13 @@ def create_app(test_config=None):
     app.register_blueprint(blog.bp)
     app.add_url_rule('/', endpoint='index')
 
-    from pitch_track import pitch_track
-    app.register_blueprint(pitch_track.bp)
-
     from . import record
     app.register_blueprint(record.bp)
     app.add_url_rule('/', endpoint='record')
+
+    from . import audio
+    app.register_blueprint(audio.bp)
+    app.add_url_rule('/', endpoint='audio')
 
     return app
 
