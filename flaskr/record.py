@@ -32,7 +32,7 @@ def recorded(filename):
 
 
 @bp.route('/record/send/<string:filename>/<string:path>', methods=['POST'])
-def show_plot(filename, path):
+def show_plot(filename, path='plot.png'):
 
     # Save the file that was sent, and read it into a parselmouth.Sound
     with tempfile.NamedTemporaryFile() as tmp:
@@ -50,11 +50,11 @@ def show_plot(filename, path):
     return redirect(url_for('/record.record_redirect', filename='Sentence1_dec.wav', path=path))
 
 
-@bp.route('/tmp/<string:filename>')
+@bp.route('/record/tmp/<string:filename>')
 def return_temp_file(filename):
-    return send_from_directory('./tmp', filename, as_attachment=True)
+    return send_from_directory('../tmp', filename, as_attachment=True)
 
 
-@bp.route('/tmp')
+@bp.route('/record/tmp')
 def test_png():
     return return_temp_file('plot.png')

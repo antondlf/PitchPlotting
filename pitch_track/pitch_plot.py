@@ -48,6 +48,7 @@ def draw_pitch(new_pitch, old_pitch, path):
     pitch_values_old = old_pitch.selected_array['frequency']
     pitch_values_old[pitch_values_old == 0] = np.nan
 
+    plt.clf()
     # create a plot object for new_pitch with label "You"
     new_pitch_plot = plt.plot(new_pitch.xs(), pitch_values_new, 'o', label='You', markersize=5, color='blue')
     #plt.plot(new_pitch.xs(), pitch_values_new, 'o', label = 'You', markersize=2)
@@ -58,6 +59,7 @@ def draw_pitch(new_pitch, old_pitch, path):
 
     # Create legends
     first_legend = plt.legend(handles=new_pitch_plot)
+
     plt.gca().add_artist(first_legend)
 
     # Second legend on the lower right corner
