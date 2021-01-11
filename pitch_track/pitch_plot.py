@@ -4,23 +4,25 @@ from flask import(
 )
 import tempfile
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import json
 import parselmouth as praat
 from urllib.parse import quote
 
-def pitch_track():
-
-    # Save the file that was sent, and read it into a parselmouth.Sound
-    with tempfile.NamedTemporaryFile() as tmp:
-        tmp.write(request.files['audio'].read())
-        sound = praat.Sound(tmp.name)
-
-    # Calculate the pitch track with Parselmouth
-    pitch_track = sound.to_pitch().selected_array['frequency']
-
-    # Convert the NumPy array into a list, then encode as JSON to send back
-    return jsonify(list(pitch_track))
+# def pitch_track():
+#
+#     # Save the file that was sent, and read it into a parselmouth.Sound
+#     with tempfile.NamedTemporaryFile() as tmp:
+#         tmp.write(request.files['audio'].read())
+#         sound = praat.Sound(tmp.name)
+#
+#     # Calculate the pitch track with Parselmouth
+#     pitch_track = sound.to_pitch().selected_array['frequency']
+#
+#     # Convert the NumPy array into a list, then encode as JSON to send back
+#     return jsonify(list(pitch_track))
 
 
 def load_json_as_np(path):
@@ -30,7 +32,7 @@ def load_json_as_np(path):
     return np.asarray(data)
 
 
-def draw_pitch(new_pitch, old_pitch):
+def draw_pitch(new_pitch, old_pitch, path):
     """This function plots pitch from a praat sound object
     inputs
     _________________
@@ -38,7 +40,7 @@ def draw_pitch(new_pitch, old_pitch):
     The old_pitch is the target audio that the student is given
     """
     # Extract selected pitch contour, and
-    pitch_values_new = load_json_as_np(new_pitch)
+    pitch_values_new = new_pitch.selected_array['frequency']
     # replace unvoiced samples by NaN to not plot
     pitch_values_new[pitch_values_new == 0] = np.nan
 
@@ -64,14 +66,14 @@ def draw_pitch(new_pitch, old_pitch):
     # Set the plot's bounds
     plt.ylim(0, max(new_pitch.ceiling, old_pitch.ceiling))
     plt.ylabel("fundamental frequency [Hz]")
-    plt.show()
+    plt.savefig('tmp/{}'.format(path))
+    return path
 
 
-def plot_pitch(new_audio_path, old_audio):
+def plot_pitch(new_audio_path, old_audio_path):
     """This function takes in two audio samples and turns them into
     a pitch plot"""
-
-    old_pitch = praat.Sound(old_audio).to_pitch()
+    old_pitch = praat.Sound(old_audio_path).to_pitch()
     # spectrogram = old_audio.to_spectrogram()
     draw_pitch(new_audio_path, old_pitch)
     # draw_spectrogram(spectrogram, pitch, dynamic_range = 70)
