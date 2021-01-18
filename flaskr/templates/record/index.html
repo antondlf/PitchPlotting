@@ -11,7 +11,8 @@
     <link rel="stylesheet" type="text/css" href="../static/stylejs.css">
   </head>
   <body>
-    <h3> Ti sei reso conto che ti hanno ingannato </h3>
+    <!--Sentence text to be rendered below-->
+    <h3> {{<!-- TODO input sentence-->}} </h3>
     <audio controls>
         <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
         <source src="{{ url_for('/audio.download_file', filename=recording)}}" type="audio/wav">

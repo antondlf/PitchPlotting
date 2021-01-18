@@ -13,6 +13,7 @@ var recordButton = document.getElementById("recordButton");
 var stopButton = document.getElementById("stopButton");
 var pauseButton = document.getElementById("pauseButton");
 var sendButton = document.getElementById("sendButton");
+//get url from html
 var url = "/record/send/Sentence1_dec.wav/plot.png" //TODO: Remove hardcoding
 
 //add events to those 2 buttons
