@@ -11,18 +11,22 @@ import parselmouth as praat
 
 from pitch_track.pitch_plot import draw_pitch
 
+import os
+
 
 bp = Blueprint('/record', __name__)
 
 @bp.route('/')
+@login_required
 def index():
     db = get_db()
     posts = db.execute(
-        'SELECT p.id, title, body, created, author_id, username' #TODO: match this function to audio
-        ' FROM post p JOIN user u ON p.author_id = u.id'
+        'SELECT p.id, created, chapter_title, audio_path' #TODO: match this function to audio
+        ' FROM chapters p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC'
     ).fetchall()
     return render_template('blog/index.html', posts=posts)
+
 
 @bp.route('/record/<string:filename>', methods=['GET'])
 @login_required
@@ -31,11 +35,13 @@ def record(filename):
     return render_template('/record/index.html', recording=filename)
 
 @bp.route('/record/plotted/<string:filename>/<string:path>', methods=['POST']) # TODO: undo hardcoding
+@login_required
 def record_redirect(filename, path):
     """Yields the template with latest plot and posts recording info into db."""
-    title = request.form['title'] # TODO: find a way to encode into database
-    body = request.form['body']
-    recording_id = 'id' # TODO:link to id creation
+    chapter_id = request.form['title'] # TODO: find a way to encode into database
+    author_id = request.form['body']
+    recording_path = 'id' # TODO:link to id creation
+    plot_path =
     error = None
     if not title:
         error = 'Title is required.'
@@ -44,9 +50,9 @@ def record_redirect(filename, path):
     else:
         db = get_db()
         db.execute(
-            'INSERT INTO post (title, body, author_id)'
-            ' VALUES (?, ?, ?)',
-            (recording_id, body, g.user['id'])
+            'INSERT INTO recordings (chapter_id, author_id, recording_path, plot_path)'
+            ' VALUES (?, ?, ?, ?)',
+            (recording_id, body, g.user['id']) #TODO: do right variables
         )
         db.commit()
     return render_template('/record/index.html', recording=filename, plot=path)
@@ -78,7 +84,7 @@ def show_plot(filename, path='plot.png'):
 
     path = draw_pitch(new_pitch, old_pitch, path)
 
-    return redirect(url_for('/record.record_redirect', filename='Sentence1_dec.wav', path=path))
+    return redirect(url_for('/record.record_redirect', filename=filename, path=path))
 
 
 @bp.route('/record/tmp/<string:filename>')

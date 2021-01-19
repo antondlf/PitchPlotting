@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS post;
+DROP TABLE IF EXISTS chapters;
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -7,12 +8,18 @@ CREATE TABLE user (
   password TEXT NOT NULL
 );
 
-CREATE TABLE post (
+CREATE TABLE userdata (
+    user_id TEXT UNIQUE NOT NULL,
+    experimental_condition TEXT NOT NULL
+);
+
+CREATE TABLE recordings (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   author_id INTEGER NOT NULL,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  title TEXT NOT NULL,
-  body TEXT NOT NULL,
+  chapter_id TEXT NOT NULL,
+  recording_path TEXT NOT NULL,
+  plot_path TEXT,
   FOREIGN KEY (author_id) REFERENCES user (id)
 );
 
@@ -20,5 +27,6 @@ CREATE TABLE chapters (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   chapter_title TEXT NOT NULL,
-  audio_path TEXT NOT NULL
+  audio_path TEXT NOT NULL,
+  text TEXT NOT NULL
 );

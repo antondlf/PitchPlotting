@@ -2,6 +2,8 @@ import sqlite3
 import click
 from flask import current_app, g
 from flask.cli import with_appcontext
+import flaskr.data_management as data_management
+
 
 def get_db():
 
@@ -24,6 +26,7 @@ def init_db():
 
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
+    data_management.init_chapters(db)
 
 @click.command('init-db')
 @with_appcontext
