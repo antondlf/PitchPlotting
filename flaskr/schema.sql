@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS post;
+DROP TABLE IF EXISTS recordings;
 DROP TABLE IF EXISTS chapters;
+DROP TABLE IF EXISTS userdata;
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -15,12 +16,12 @@ CREATE TABLE userdata (
 
 CREATE TABLE recordings (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  author_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   chapter_id TEXT NOT NULL,
   recording_path TEXT NOT NULL,
   plot_path TEXT,
-  FOREIGN KEY (author_id) REFERENCES user (id)
+  FOREIGN KEY (user_id) REFERENCES user (id)
 );
 
 CREATE TABLE chapters (

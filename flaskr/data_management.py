@@ -17,7 +17,7 @@ def init_chapters(database): # TODO: clean up paths
     # Get chapter directory
     for dirname in os.listdir('./Recordings'):
 
-        chap_directory = '../Recordings/{}'.format(dirname)
+        chap_directory = './Recordings/{}'.format(dirname)
 
         # Check that it is a directory
         if os.path.isdir('./Recordings/{}'.format(dirname)):

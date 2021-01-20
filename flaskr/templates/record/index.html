@@ -12,10 +12,10 @@
   </head>
   <body>
     <!--Sentence text to be rendered below-->
-    <h3> {{<!-- TODO input sentence-->}} </h3>
+    <h3> {{ sentence }} </h3>
     <audio controls>
         <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
-        <source src="{{ url_for('/audio.download_file', filename=recording)}}" type="audio/wav">
+        <source src="{{ url_for('/audio.download_file', chaptername=recording)}}" type="audio/wav">
     </audio>
     <!--<h1>Simple Recorder.js demo</h1>
     <p><small>Made by the <a href="https://addpipe.com" target="_blank">Pipe Video Recording Platform</a></small></p>
@@ -33,8 +33,10 @@
     <!-- inserting these scripts at the end to be able to use all the elements in the DOM -->
   	<script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
   	<script src="../static/js/app.js"></script>
+    {% if plot %}
     <div id="image">
-    <img class='NO-CACHE' src="{{ url_for('/record.return_temp_file', filename='plot.png') }}">
+    <img class='NO-CACHE' src="{{ url_for('/record.return_temp_file', filename=plot) }}">
     </div>
+    {% endif %}
   </body>
 </html>

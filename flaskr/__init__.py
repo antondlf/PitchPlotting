@@ -32,13 +32,13 @@ def create_app(test_config=None):
     from . import auth
     app.register_blueprint(auth.bp)
 
-    from . import blog
-    app.register_blueprint(blog.bp)
-    app.add_url_rule('/', endpoint='index')
-
     from . import record
     app.register_blueprint(record.bp)
-    app.add_url_rule('/', endpoint='record')
+    app.add_url_rule('/', endpoint='index')
+
+    # from . import record
+    # app.register_blueprint(record.bp)
+    # app.add_url_rule('/', endpoint='record')
 
     from . import audio
     app.register_blueprint(audio.bp)
