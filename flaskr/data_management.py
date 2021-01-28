@@ -25,7 +25,7 @@ def init_chapters(database): # TODO: clean up paths
             item_pair = os.listdir('./Recordings/{}'.format(dirname))
 
             # Check that there are two files in directory
-            if len(item_pair) == 2:
+            if len(item_pair) == 3: #TODO decide whether or not textgrids will be included
                 #database = get_db()
 
                 # Extract info from the directories
@@ -40,13 +40,16 @@ def init_chapters(database): # TODO: clean up paths
                     elif file.endswith('.txt'):
                         with open('./Recordings/{}/{}'.format(dirname, file)) as in_file:
                             text = in_file.read()
+
+                    elif file.endswith('.TextGrid'):
+                        textgrid_path = '{}/{}'.format(chap_directory, file)
             else:
                 print("Error: incorrect number of files in directory")
             if title and text:
                 database.execute(
-                    'INSERT INTO chapters (chapter_title, audio_path, text)'
-                    ' VALUES (?, ?, ?)',
-                    (title, audio_path, text)
+                    'INSERT INTO chapters (chapter_title, audio_path, textgrid_path, text)'
+                    ' VALUES (?, ?, ?, ?)',
+                    (title, audio_path, textgrid_path, text)
                 )
                 database.commit()
         else:

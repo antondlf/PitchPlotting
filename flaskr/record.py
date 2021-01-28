@@ -61,13 +61,13 @@ def record(chaptername):
             plot_path = None
         else:
             new_audio_path, plot_path = user_audio[0]
-        return render_template('/record/index.html', recording=chaptername, sentence=text, plot=plot_path)
+        #return render_template('/record/index.html', recording=chaptername, sentence=text, plot=plot_path)
 
     if request.method == 'POST':
         process_recording(audio_path, chaptername)
         return redirect(url_for('/record.record', chaptername=chaptername), code=302)
 
-    #return render_template('/record/index.html', recording=chaptername, sentence=text, plot=plot_path)
+    return render_template('/record/index.html', recording=chaptername, sentence=text, plot=plot_path)
 
 
 

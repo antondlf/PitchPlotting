@@ -29,5 +29,6 @@ CREATE TABLE chapters (
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   chapter_title TEXT NOT NULL,
   audio_path TEXT NOT NULL,
+  textgrid_path TEXT NOT NULL,
   text TEXT NOT NULL
 );
