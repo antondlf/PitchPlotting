@@ -19,8 +19,7 @@ CREATE TABLE recordings (
   user_id INTEGER NOT NULL,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   chapter_id TEXT NOT NULL,
-  recording_path TEXT NOT NULL,
-  plot_path TEXT,
+  trial_id TEXT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES user (id)
 );
 

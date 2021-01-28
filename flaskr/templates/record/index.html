@@ -35,7 +35,7 @@
   	<script src="../static/js/app.js"></script>
     {% if plot %}
     <div id="image">
-    <img class='NO-CACHE' src="{{ url_for('/record.return_temp_file', filename=plot) }}">
+    <img class='NO-CACHE' src="{{ url_for('/record.return_plot_file', filename=plot) }}">
     </div>
     {% endif %}
   </body>

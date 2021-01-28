@@ -7,7 +7,7 @@ from flask.cli import with_appcontext
 import flaskr.db
 
 def get_unique_id():
-    return uuid.uuid1() # TODO: figure out id generation
+    return str(uuid.uuid1()) # TODO: figure out id generation
 
 
 def init_chapters(database): # TODO: clean up paths
