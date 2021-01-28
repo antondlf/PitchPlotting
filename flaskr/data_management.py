@@ -13,16 +13,16 @@ def get_unique_id():
 def init_chapters(database): # TODO: clean up paths
     """Take chapter titles from Recordings directory and
     create a chapter for each file"""
-
+    recordings_dir = os.path.join(current_app.root_path, '../Recordings')
     # Get chapter directory
-    for dirname in os.listdir('./Recordings'):
+    for dirname in os.listdir(recordings_dir):
 
-        chap_directory = './Recordings/{}'.format(dirname)
+        chap_directory = os.path.join(recordings_dir, dirname)
 
         # Check that it is a directory
-        if os.path.isdir('./Recordings/{}'.format(dirname)):
+        if os.path.isdir(chap_directory):
 
-            item_pair = os.listdir('./Recordings/{}'.format(dirname))
+            item_pair = os.listdir(chap_directory)
 
             # Check that there are two files in directory
             if len(item_pair) == 3: #TODO decide whether or not textgrids will be included
@@ -34,15 +34,15 @@ def init_chapters(database): # TODO: clean up paths
                     # Extract the name and path of wav file
                     if file.endswith('.wav'):
                         title = dirname
-                        audio_path = '{}/{}'.format(chap_directory, file)
+                        audio_path = os.path.join(chap_directory, file)
 
                     # Extract text from txt file
                     elif file.endswith('.txt'):
-                        with open('./Recordings/{}/{}'.format(dirname, file)) as in_file:
+                        with open(os.path.join(chap_directory, file)) as in_file:
                             text = in_file.read()
 
                     elif file.endswith('.TextGrid'):
-                        textgrid_path = '{}/{}'.format(chap_directory, file)
+                        textgrid_path = os.path.join(chap_directory, file)
             else:
                 print("Error: incorrect number of files in directory")
             if title and text:
