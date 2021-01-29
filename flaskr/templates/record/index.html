@@ -13,6 +13,9 @@
   <body>
     <!--Sentence text to be rendered below-->
     <h3> {{ sentence }} </h3>
+    <div id="textplot">
+    <img class='NO-CACHE' src="{{ url_for('/record.return_textplot_file', chaptername=recording, filename=textplot) }}">
+    </div>
     <audio controls>
         <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
         <source src="{{ url_for('/audio.download_file', chaptername=recording)}}" type="audio/wav">
@@ -29,9 +32,14 @@
     </div>
     <div id="formats">Format: start recording to see sample rate</div>
   	<p><strong>Recordings:</strong></p>
-  	<ol id="recordingsList"></ol>
+    {% for recording in audio %}
+    <audio controls>
+        <source src="{{ url_for('/record.return_plot_file', dir='participants', filename=recording) }}" type="audio/wav">
+    </audio>
+  	<!--ol id="recordingsList"></ol-->
     <!-- inserting these scripts at the end to be able to use all the elements in the DOM -->
-  	<script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+    {% endfor %}
+    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
   	<script src="../static/js/app.js"></script>
     {% if plot %}
     <div id="image">

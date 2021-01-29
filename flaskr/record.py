@@ -39,16 +39,20 @@ def index():
 def record(chaptername):
     """Yields the template without a plot."""
 
+    recordings = list()
     db = get_db()
     sentence = db.execute(
-        'SELECT audio_path, text'
+        'SELECT audio_path, text, textplot_path'
         ' FROM chapters WHERE chapter_title=?'  # p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC',
         (chaptername,)
     ).fetchall()
     if not len(sentence) == 1:
         abort(404, "Audio '{0}' doesn't exist or database entry is corrupt.".format(chaptername))
-    audio_path, text = sentence[0]
+    audio_path, text, textplot_path = sentence[0]
+
+    # make sure textplot only contains the name of the file
+    textplot = textplot_path.rsplit('/', 1)[-1]
     user_id = g.user['id']
     if request.method == 'GET':
         user_audio = db.execute(
@@ -57,20 +61,32 @@ def record(chaptername):
             ' ORDER BY created DESC',
             (chaptername, user_id)
         ).fetchall()
-        if len (user_audio) < 1: #TODO: limit recording opportunities
-            #render_template()#TODO: create 'Go to Next chapter' template
+        # if len (user_audio) < 1: #TODO: limit recording opportunities
+        #     #render_template()#TODO: create 'Go to Next chapter' template
+        #
+        #     plot_path = None
+        #else:
 
-            plot_path = None
-        else:
+        if len(user_audio) > 0:
             plot_path = user_audio[0]['trial_id'] + '.png'
+        else:
+            plot_path = None
+
+        recordings = [row['trial_id'] + '.wav' for row in user_audio]
+        if len(recordings) > 3: #TODO:decide limit to recordings
+            recordings = recordings[-3:]
+
         #return render_template('/record/index.html', recording=chaptername, sentence=text, plot=plot_path)
 
     elif request.method == 'POST':
         audio_data = request.data
-        plot_path = process_recording(audio_path, chaptername, audio_data)
-        #return redirect(url_for('/record.record', chaptername=chaptername), code=302)
+        plot_path, recording_path = process_recording(audio_path, chaptername, audio_data)
 
-    return render_template('/record/index.html', recording=chaptername, sentence=text, plot=plot_path)
+        return redirect(url_for('/record.record', chaptername=chaptername), code=302)
+
+    return render_template(
+        '/record/index.html', recording=chaptername, sentence=text, textplot=textplot, plot=plot_path, audio=recordings
+    )
 
 
 
@@ -86,7 +102,7 @@ def process_recording(original_recording, chaptername, audio_data):
     chapter_id = chaptername
     user_id = g.user['id']
     trial_path = os.path.join(current_app.root_path, '../participant_recordings', trial_id)
-    plot_path = save_plot(original_recording, trial_path, audio_data)
+    plot_path, recording_path = save_plot(original_recording, trial_path, audio_data)
 
     error = None
     if not chapter_id:
@@ -107,7 +123,7 @@ def process_recording(original_recording, chaptername, audio_data):
             (chapter_id, user_id, trial_id) #TODO: change recording_path and plot_path
         )
         db.commit()
-    return plot_path
+    return plot_path, recording_path
 
 
 # @bp.route('/recorded/<string:filename>')
@@ -125,9 +141,7 @@ def save_plot(filename, path, audio_data):
 
     recording_path = path + '.wav'
     plot_path = path + '.png'
-
     # Save the file that was sent, and read it into a parselmouth.Sound
-
     with open(recording_path, 'wb') as out_file: # TODO: turn into path to participant_recordings
         out_file.write(audio_data)
     sound = praat.Sound(recording_path)
@@ -139,7 +153,7 @@ def save_plot(filename, path, audio_data):
     old_pitch = praat.Sound(filename).to_pitch()
     draw_pitch(new_pitch, old_pitch, plot_path)
 
-    return plot_path
+    return plot_path, recording_path
 
 
 
@@ -150,3 +164,12 @@ def return_plot_file(filename):
     """Get the plot file from tmp directory."""
     dir = os.path.join(current_app.root_path, '../participant_recordings')
     return send_from_directory(dir, filename, as_attachment=True)
+
+@bp.route('/record/<string:chaptername>/<string:filename>')
+@login_required
+def return_textplot_file(chaptername, filename):
+    """Get the plot file from tmp directory."""
+
+    path = os.path.join(current_app.root_path, '../Recordings/', chaptername)
+
+    return send_from_directory(path, filename, as_attachment=True)

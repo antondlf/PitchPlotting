@@ -181,23 +181,23 @@ function createDownloadLink(blob) {
 }
 
 function sendAudio(data) {
-    let audio = new FormData();
+/*    let audio = new FormData();
 
     audio.append("data", data);
-    fetch(url, {method: "POST", body: audio});
-//    fetch(url, {method:"POST", redirect:'follow', body:audio})
-////            .then((res) => {
-////                res.redirect(302, res.url)
-////            }
-////            )
-//            .then(response => {
-//                if (response.redirected) {window.location = response.url;}
-//                else {throw Error(`Server returned ${response.status}: ${response.statusText}`)}
-//            })
-//            //.then(response => console.log(response.text()))
-//            .catch(err => {
-//                alert(err);
-//            });
+    fetch(url, {method: "POST", body: audio});*/
+    fetch(url, {method:"POST", body:data})
+//            .then((res) => {
+//                res.redirect(302, res.url)
+//            }
+//            )
+            .then(response => {
+                if (response.redirected) {window.location = response.url;}
+                else {throw Error(`Server returned ${response.status}: ${response.statusText}`)}
+            })
+            //.then(response => console.log(response.text()))
+            .catch(err => {
+                alert(err);
+            });
 }
 
 function sendAudioEvent() {

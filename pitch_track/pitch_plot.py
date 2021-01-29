@@ -32,7 +32,7 @@ def load_json_as_np(path):
     return np.asarray(data)
 
 
-def draw_pitch(new_pitch, old_pitch,path):
+def draw_pitch(new_pitch, old_pitch, path):
     """This function plots pitch from a praat sound object
     inputs
     _________________
@@ -68,6 +68,7 @@ def draw_pitch(new_pitch, old_pitch,path):
     # Set the plot's bounds
     plt.ylim(0, max(new_pitch.ceiling, old_pitch.ceiling))
     plt.ylabel("fundamental frequency [Hz]")
+    plt.title(path)
     plt.savefig(path)
     return path
 
