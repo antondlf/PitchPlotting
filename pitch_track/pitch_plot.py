@@ -1,38 +1,43 @@
-from flask import  jsonify
-from flask import(
-    Blueprint, flash, jsonify, request, url_for
-)
-import tempfile
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import json
 import parselmouth as praat
-from urllib.parse import quote
 
-# def pitch_track():
-#
-#     # Save the file that was sent, and read it into a parselmouth.Sound
-#     with tempfile.NamedTemporaryFile() as tmp:
-#         tmp.write(request.files['audio'].read())
-#         sound = praat.Sound(tmp.name)
-#
-#     # Calculate the pitch track with Parselmouth
-#     pitch_track = sound.to_pitch().selected_array['frequency']
-#
-#     # Convert the NumPy array into a list, then encode as JSON to send back
-#     return jsonify(list(pitch_track))
+def trim_recording(pitch:np.array) -> tuple:
+    """Trims the front zeros from the pitch array and the corresponding
+    time values."""
 
 
-def load_json_as_np(path):
+    array = pitch.selected_array['frequency']
+    trimmed_pitch = np.trim_zeros(array, 'f')
 
-    with open(path) as in_file:
-        data = json.load(in_file)
-    return np.asarray(data)
+    trim = array.shape[0] - trimmed_pitch.shape[0]
+    time = pitch.xs()
+    trimmed_time = time[trim:]
+
+    # Subtract time values
+    norm = min(trimmed_time)
+    trimmed_time = trimmed_time - norm
+
+    return trimmed_pitch, trimmed_time
+
+def pitch_difference(pitch_values_old, pitch_values_new):
+    """Generate a number to add to pitch_values_old so that
+    graphs don't clash."""
+
+    pitch_floor_new = min(pitch_values_new)
+    pitch_ceiling_old = max(pitch_values_old)
+
+    if  pitch_floor_new - 5 < pitch_ceiling_old:
+        scaling_factor = (pitch_ceiling_old - pitch_floor_new) + 5
+        pitch_values_new += scaling_factor
+
+    return pitch_values_old
 
 
-def draw_pitch(new_pitch, old_pitch, path):
+
+def draw_pitch(new_pitch, old_pitch):
     """This function plots pitch from a praat sound object
     inputs
     _________________
@@ -40,21 +45,24 @@ def draw_pitch(new_pitch, old_pitch, path):
     The old_pitch is the target audio that the student is given
     """
     # Extract selected pitch contour, and
-    pitch_values_new = new_pitch.selected_array['frequency']
+    pitch_values_new, time_new = trim_recording(new_pitch)
     # replace unvoiced samples by NaN to not plot
     pitch_values_new[pitch_values_new == 0] = np.nan
 
     # Repeat the actions above for the other pitch sample
-    pitch_values_old = old_pitch.selected_array['frequency']
+    pitch_values_old, time_old = trim_recording(old_pitch)
     pitch_values_old[pitch_values_old == 0] = np.nan
+
+    # Make sure graphs don't clash
+    pitch_values_old = pitch_difference(pitch_values_old, pitch_values_new)
 
     plt.clf()
     # create a plot object for new_pitch with label "You"
-    new_pitch_plot = plt.plot(new_pitch.xs() - 1.5, pitch_values_new, 'o', label='You', markersize=5, color='blue')
+    new_pitch_plot = plt.plot(time_new, pitch_values_new, 'o', label='You', markersize=5, color='blue')
     #plt.plot(new_pitch.xs(), pitch_values_new, 'o', label = 'You', markersize=2)
 
     # create a plot object for old_pitch with label "Target"
-    old_pitch_plot = plt.plot(old_pitch.xs(), pitch_values_old, 'o', label='Target', markersize=5, color='orange')
+    old_pitch_plot = plt.plot(time_old, pitch_values_old, 'o', label='Target', markersize=5, color='orange')
     #plt.plot(old_pitch.xs(), pitch_values_old, 'o', label = 'Target', markersize=2)
 
     # Create legends
