@@ -37,7 +37,7 @@ def pitch_difference(pitch_values_old, pitch_values_new):
 
 
 
-def draw_pitch(new_pitch, old_pitch):
+def draw_pitch(new_pitch, old_pitch, path):
     """This function plots pitch from a praat sound object
     inputs
     _________________
