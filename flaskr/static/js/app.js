@@ -180,8 +180,12 @@ function createDownloadLink(blob) {
 	recordingsList.appendChild(li);
 }
 
-function sendAudio(audio) {
-    fetch(url, {method:"POST", redirect:'follow', body:audio})
+function sendAudio(data) {
+/*    let audio = new FormData();
+
+    audio.append("data", data);
+    fetch(url, {method: "POST", body: audio});*/
+    fetch(url, {method:"POST", body:data})
 //            .then((res) => {
 //                res.redirect(302, res.url)
 //            }
