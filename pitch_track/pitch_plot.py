@@ -50,7 +50,7 @@ def draw_pitch(new_pitch, old_pitch, path):
 
     plt.clf()
     # create a plot object for new_pitch with label "You"
-    new_pitch_plot = plt.plot(new_pitch.xs() - 2, pitch_values_new, 'o', label='You', markersize=5, color='blue')
+    new_pitch_plot = plt.plot(new_pitch.xs() - 1.5, pitch_values_new, 'o', label='You', markersize=5, color='blue')
     #plt.plot(new_pitch.xs(), pitch_values_new, 'o', label = 'You', markersize=2)
 
     # create a plot object for old_pitch with label "Target"
