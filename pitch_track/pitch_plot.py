@@ -29,7 +29,7 @@ def pitch_difference(pitch_values_old, pitch_values_new):
     pitch_floor_new = min(pitch_values_new)
     pitch_ceiling_old = max(pitch_values_old)
 
-    if  pitch_floor_new - 5 < pitch_ceiling_old:
+    if  pitch_floor_new - 100 < pitch_ceiling_old:
         scaling_factor = (pitch_ceiling_old - pitch_floor_new) + 5
         pitch_values_new += scaling_factor
 
@@ -58,11 +58,11 @@ def draw_pitch(new_pitch, old_pitch, path):
 
     plt.clf()
     # create a plot object for new_pitch with label "You"
-    new_pitch_plot = plt.plot(time_new, pitch_values_new, 'o', label='You', markersize=5, color='blue')
+    new_pitch_plot = plt.plot(time_new, pitch_values_new, 'o', label='You', markersize=2, color='blue')
     #plt.plot(new_pitch.xs(), pitch_values_new, 'o', label = 'You', markersize=2)
 
     # create a plot object for old_pitch with label "Target"
-    old_pitch_plot = plt.plot(time_old, pitch_values_old, 'o', label='Target', markersize=5, color='orange')
+    old_pitch_plot = plt.plot(time_old, pitch_values_old, 'o', label='Target', markersize=2, color='orange')
     #plt.plot(old_pitch.xs(), pitch_values_old, 'o', label = 'Target', markersize=2)
 
     # Create legends
