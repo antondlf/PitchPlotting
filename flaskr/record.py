@@ -73,8 +73,8 @@ def record(chaptername):
             plot_path = None
 
         recordings = [row['trial_id'] + '.wav' for row in user_audio]
-        if len(recordings) > 3: #TODO:decide limit to recordings
-            recordings = recordings[-3:]
+        if len(recordings) > 1: #TODO:decide limit to recordings
+            recordings = recordings[-1]
 
         #return render_template('/record/index.html', recording=chaptername, sentence=text, plot=plot_path)
 
@@ -173,3 +173,26 @@ def return_textplot_file(chaptername, filename):
     path = os.path.join(current_app.root_path, '../Recordings/', chaptername)
 
     return send_from_directory(path, filename, as_attachment=True)
+
+@bp.route('/record/<string:chaptername>/next_chapter')
+@login_required
+def next_chapter(chaptername):
+
+
+    index_dir = os.path.join(current_app.root_path, '../Recordings')
+    new_chapter = ''.join(['Chapter_', str(int(chaptername.rsplit('_')[-1]) + 1)])
+
+    if new_chapter in index_dir:
+        print('chapter exists')
+        return redirect(url_for('/record.record', chaptername=new_chapter, code=302))
+    else:
+        print('chapter does not exist, redirect')
+        return redirect(url_for('/record.end_message'))
+
+
+
+@bp.route('/done')
+@login_required
+
+def end_message():
+    return 'Done!'

@@ -45,15 +45,27 @@ def init_chapters(database): # TODO: clean up paths
 
                     elif file.endswith('.png'):
                         textplot_path = os.path.join(chap_directory, file)
+            # elif dirname.startswith('baseline'):
+            #   title = dirname
+            #   with open(os.path.join(chap_directory, item_pair[0])) as in_file:
+            #       text = in_file.read()
             else:
                 print("Error: incorrect number of files in directory")
-            if title and text:
+            if title and text and textplot_path:
                 database.execute(
                     'INSERT INTO chapters (chapter_title, audio_path, textplot_path, text)'
                     ' VALUES (?, ?, ?, ?)',
                     (title, audio_path, textplot_path, text)
                 )
                 database.commit()
+
+            # elif title and text:
+            #     database.execute(
+            #         'INSERT INTO baseline (chapter_title, text)'
+            #         ' VALUES (?, ?)',
+            #         (title, text)
+            #     )
+            #database.commit()
 
             else:
                 print('Missing title or text')
