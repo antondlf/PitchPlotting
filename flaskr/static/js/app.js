@@ -21,6 +21,7 @@ var nextButton = document.getElementById('nextButton');
 if (nextButton) {
     console.log('Trial done')
     nextButton.addEventListener("click", nextChapter);
+    recordButton.disabled = true;
 
 }
 else {
