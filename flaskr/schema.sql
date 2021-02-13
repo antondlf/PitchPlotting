@@ -20,6 +20,7 @@ CREATE TABLE recordings (
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   chapter_id TEXT NOT NULL,
   trial_id TEXT NOT NULL,
+  is_baseline TEXT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES user (id)
 );
 

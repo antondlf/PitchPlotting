@@ -3,6 +3,9 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import parselmouth as praat
+import seaborn as sns
+
+sns.set()
 
 def trim_recording(pitch:np.array) -> tuple:
     """Trims the front zeros from the pitch array and the corresponding

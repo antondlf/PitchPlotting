@@ -51,6 +51,8 @@ def record(chaptername):
         abort(404, "Audio '{0}' doesn't exist or database entry is corrupt.".format(chaptername))
     audio_path, text, textplot_path = sentence[0]
 
+    is_baseline = False
+
     # make sure textplot only contains the name of the file
     textplot = textplot_path.rsplit('/', 1)[-1]
     user_id = g.user['id']
@@ -66,7 +68,8 @@ def record(chaptername):
         #
         #     plot_path = None
         #else:
-
+        if textplot_path == 'Baseline':
+            return render_template('/record/baseline.html', sentence=text)
         if len(user_audio) > 0:
             plot_path = user_audio[0]['trial_id'] + '.png'
         else:
@@ -80,17 +83,24 @@ def record(chaptername):
 
     elif request.method == 'POST':
         audio_data = request.data
-        plot_path, recording_path = process_recording(audio_path, chaptername, audio_data)
+        # TODO: this is the issue with baseline ones
+        if textplot_path == 'Baseline':
+            is_baseline = True
+            process_recording(audio_path, chaptername, audio_data, is_baseline)
+            return render_template('/record/baseline.html', sentence=text)
+
+        process_recording(audio_path, chaptername, audio_data, is_baseline)
+
 
         return redirect(url_for('/record.record', chaptername=chaptername), code=302)
 
     return render_template(
-        '/record/index.html', recording=chaptername, sentence=text, textplot=textplot, plot=plot_path, audio=recordings
-    )
+            '/record/index.html', recording=chaptername, sentence=text, textplot=textplot, plot=plot_path, audio=recordings
+        )
 
 
 
-def process_recording(original_recording, chaptername, audio_data):
+def process_recording(original_recording, chaptername, audio_data, is_baseline):
     """Yields the template with latest plot and posts recording info into db."""
     # First get a unique id for this recording
     trial_id = get_unique_id()
@@ -102,25 +112,29 @@ def process_recording(original_recording, chaptername, audio_data):
     chapter_id = chaptername
     user_id = g.user['id']
     trial_path = os.path.join(current_app.root_path, '../participant_recordings', trial_id)
-    plot_path, recording_path = save_plot(original_recording, trial_path, audio_data)
-
     error = None
+    if is_baseline == False:
+        plot_path, recording_path = save_plot(original_recording, trial_path, audio_data)
+        if not plot_path:
+            error += 'Plot_path missing.'
+    elif is_baseline == True:
+        plot_path = 'Baseline' # TODO:get better solutions
+        recording_path = trial_path + '.wav'
+
     if not chapter_id:
         error += 'Chapter_id is missing.'
     if not trial_id:
         error += 'trial_id missing.'
     if not trial_path:
         error += 'trial_path missing.'
-    if not plot_path:
-        error += 'Plot_path missing.'
     if error is not None:
         flash(error)
     else:
         db = get_db()
         db.execute(
-            'INSERT INTO recordings (chapter_id, user_id, trial_id)'
-            ' VALUES (?, ?, ?)',
-            (chapter_id, user_id, trial_id) #TODO: change recording_path and plot_path
+            'INSERT INTO recordings (chapter_id, user_id, trial_id, is_baseline)'
+            ' VALUES (?, ?, ?, ?)',
+            (chapter_id, user_id, trial_id, is_baseline)
         )
         db.commit()
     return plot_path, recording_path
@@ -176,18 +190,22 @@ def return_textplot_file(chaptername, filename):
 
 @bp.route('/record/<string:chaptername>/next_chapter')
 @login_required
-def next_chapter(chaptername):
+def next_chapter(chaptername): # TODO:create Baseline condition
 
 
     index_dir = os.path.join(current_app.root_path, '../Recordings')
-    new_chapter = ''.join(['Chapter_', str(int(chaptername.rsplit('_')[-1]) + 1)])
+    name_sections = chaptername.rsplit('_', 1)
+    new_chapter = ''.join([name_sections[0], '_', str(int(name_sections[-1]) + 1)])
 
     if new_chapter in index_dir:
         print('chapter exists')
         return redirect(url_for('/record.record', chaptername=new_chapter, code=302))
     else:
-        print('chapter does not exist, redirect')
-        return redirect(url_for('/record.end_message'))
+        if name_sections[0] == 'Baseline':
+            return redirect(url_for('/record.record', chaptername='Chapter_1', code=302))
+        else:
+            print('chapter does not exist, redirect')
+            return redirect(url_for('/record.end_message'))
 
 
 
