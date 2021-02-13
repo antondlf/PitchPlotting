@@ -202,7 +202,7 @@ def next_chapter(chaptername): # TODO:create Baseline condition
         return redirect(url_for('/record.record', chaptername=new_chapter, code=302))
     else:
         if name_sections[0] == 'Baseline':
-            return redirect(url_for('/record.record', chaptername='Chapter_1', code=302))
+            return redirect(url_for('/record.record', chaptername='Chapter_1'))
         else:
             print('chapter does not exist, redirect')
             return redirect(url_for('/record.end_message'))

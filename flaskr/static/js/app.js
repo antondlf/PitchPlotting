@@ -11,15 +11,20 @@ var audioContext //audio context to help us record
 
 var recordButton = document.getElementById("recordButton");
 var stopButton = document.getElementById("stopButton");
-var pauseButton = document.getElementById("pauseButton");
-var sendButton = document.getElementById("sendButton");
+//var pauseButton = document.getElementById("pauseButton");
+//var sendButton = document.getElementById("sendButton");
 //get url from html
 var url = window.location.href
 var audioElem = document.getElementById("audio");
-var bellElem = document.getElementById("bell")
+var bellElem = document.getElementById("bell");
 var nextButton = document.getElementById('nextButton');
-if (typeof nextButton != "undefined") {
+if (nextButton) {
+    console.log('Trial done')
     nextButton.addEventListener("click", nextChapter);
+
+}
+else {
+    console.log('trial in progress')
 }
 
 //add events to those 2 buttons
@@ -37,6 +42,7 @@ stopButton.addEventListener("click", stopRecording);
 //playVideo();
 
 async function playAudio() {
+  console.log('Audio Playing')
   var duration = document.getElementById("audio").duration;
   console.log(duration)
   try {
