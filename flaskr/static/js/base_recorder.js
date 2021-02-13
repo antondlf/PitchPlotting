@@ -12,14 +12,12 @@ var bellElem = document.getElementById("bell")
 
 var recordButton = document.getElementById("recordButton");
 var stopButton = document.getElementById("stopButton");
-var pauseButton = document.getElementById("pauseButton");
 var sendButton = document.getElementById("sendButton");
 var nextButton = document.getElementById('nextButton');
 
 //add events to those 2 buttons
 recordButton.addEventListener("click", startRecording);
 stopButton.addEventListener("click", stopRecording);
-pauseButton.addEventListener("click", pauseRecording);
 sendButton.addEventListener("click", sendAudioEvent);
 nextButton.addEventListener("click", nextChapter);
 
