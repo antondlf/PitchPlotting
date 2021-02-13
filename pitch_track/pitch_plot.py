@@ -33,7 +33,7 @@ def pitch_difference(pitch_values_old, pitch_values_new):
     pitch_ceiling_old = max(pitch_values_old)
 
     if  pitch_floor_new - 100 < pitch_ceiling_old:
-        scaling_factor = (pitch_ceiling_old - pitch_floor_new) + 5
+        scaling_factor = (pitch_ceiling_old - pitch_floor_new) + 100
         pitch_values_new += scaling_factor
 
     return pitch_values_old
