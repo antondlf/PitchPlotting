@@ -21,6 +21,9 @@
             <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
             <source src="{{ url_for('/audio.download_file', chaptername=recording)}}" type="audio/wav">
         </audio>
+        <audio id="bell" hidden>
+          <source src="{{ url_for('/audio.get_bell')}}" type="audio/wav">
+        </audio>
         <!--<h1>Simple Recorder.js demo</h1>
         <p><small>Made by the <a href="https://addpipe.com" target="_blank">Pipe Video Recording Platform</a></small></p>
         <p>This demo uses <a href="https://github.com/mattdiamond/Recorderjs" target="_blank">Recorder.js</a> to record wav/PCM audio directly in the browser. Matt Diamond‘s <a target="_blank" href="https://github.com/mattdiamond/Recorderjs">Recorder.js</a> is a popular JavaScript library for recording audio in the browser as uncompressed pcm audio in .wav containers. Before it, the only way to record audio was to use Flash.</p>

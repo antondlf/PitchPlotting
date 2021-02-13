@@ -28,6 +28,9 @@
           <button id="sendButton" disabled>Send</button>
           <button id="nextButton" disabled>Next Activity</button>
         </div>
+        <audio id="bell" hidden>
+          <source src="{{ url_for('/audio.get_bell')}}" type="audio/wav">
+        </audio>
         <div>Recording starts in <span id="time"></span> </div>
         <div id="formats">Format: start recording to see sample rate</div>
       </div>

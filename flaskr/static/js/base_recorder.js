@@ -8,6 +8,7 @@ var input; 							//MediaStreamAudioSourceNode we'll be recording
 // shim for AudioContext when it's not avb.
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioContext //audio context to help us record
+var bellElem = document.getElementById("bell")
 
 var recordButton = document.getElementById("recordButton");
 var stopButton = document.getElementById("stopButton");
@@ -23,8 +24,7 @@ sendButton.addEventListener("click", sendAudioEvent);
 nextButton.addEventListener("click", nextChapter);
 
 async function bellSound(){
-    var audio = new Audio('bell_sound.wav');
-    audio.play();
+    bellElem.play();
 }
 
 function startRecording() {

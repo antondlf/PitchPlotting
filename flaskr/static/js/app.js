@@ -16,6 +16,7 @@ var sendButton = document.getElementById("sendButton");
 //get url from html
 var url = window.location.href
 var audioElem = document.getElementById("audio");
+var bellElem = document.getElementById("bell")
 var nextButton = document.getElementById('nextButton');
 if (typeof nextButton != "undefined") {
     nextButton.addEventListener("click", nextChapter);
@@ -49,8 +50,7 @@ async function playAudio() {
 }
 
 async function bellSound(){
-    var audio = new Audio('bell_sound.wav');
-    audio.play();
+    bellElem.play();
 }
 
 function startTimer(duration, display) {
