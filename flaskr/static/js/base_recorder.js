@@ -41,7 +41,7 @@ function startRecording() {
 
 	recordButton.disabled = true;
 	stopButton.disabled = false;
-	pauseButton.disabled = false;
+	//pauseButton.disabled = false;
 	sendButton.disabled = true;
 	nextButton.disabled = true;
 
@@ -85,23 +85,23 @@ function startRecording() {
 	  	//enable the record button if getUserMedia() fails
     	recordButton.disabled = false;
     	stopButton.disabled = true;
-    	pauseButton.disabled = true
+    	//pauseButton.disabled = true
 	});
 }
 
-function pauseRecording(){
-	console.log("pauseButton clicked rec.recording=",rec.recording );
-	if (rec.recording){
-		//pause
-		rec.stop();
-		pauseButton.innerHTML="Resume";
-	}else{
-		//resume
-		rec.record()
-		pauseButton.innerHTML="Pause";
-
-	}
-}
+//function pauseRecording(){
+//	console.log("pauseButton clicked rec.recording=",rec.recording );
+//	if (rec.recording){
+//		//pause
+//		rec.stop();
+//		//pauseButton.innerHTML="Resume";
+//	}else{
+//		//resume
+//		rec.record()
+//		//pauseButton.innerHTML="Pause";
+//
+//	}
+//}
 
 function stopRecording() {
 	console.log("stopButton clicked");
@@ -113,7 +113,7 @@ function stopRecording() {
 	nextButton.disabled = false;
 
 	//reset button just in case the recording is stopped while paused
-	pauseButton.innerHTML="Pause";
+	//pauseButton.innerHTML="Pause";
 
 	//tell the recorder to stop the recording
 	rec.stop();
