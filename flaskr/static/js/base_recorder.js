@@ -22,6 +22,11 @@ pauseButton.addEventListener("click", pauseRecording);
 sendButton.addEventListener("click", sendAudioEvent);
 nextButton.addEventListener("click", nextChapter);
 
+async function bellSound(){
+    var audio = new Audio('bell_sound.wav');
+    audio.play();
+}
+
 function startRecording() {
 	console.log("recordButton clicked");
 
@@ -46,6 +51,7 @@ function startRecording() {
     	We're using the standard promise based getUserMedia()
     	https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
 	*/
+	bellSound()
 
 	navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
 		console.log("getUserMedia() success, stream created, initializing Recorder.js ...");

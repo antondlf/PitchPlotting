@@ -48,6 +48,11 @@ async function playAudio() {
   console.log('timeout starts');
 }
 
+async function bellSound(){
+    var audio = new Audio('bell_sound.wav');
+    audio.play();
+}
+
 function startTimer(duration, display) {
     var timer = duration;
     var func = setInterval(function () {
@@ -97,6 +102,7 @@ function startRecording() {
 			the sampleRate defaults to the one set in your OS for your playback device
 
 		*/
+		bellSound();
 		audioContext = new AudioContext();
 		console.log("audioContext initialized");
 
