@@ -12,13 +12,13 @@ var bellElem = document.getElementById("bell")
 
 var recordButton = document.getElementById("recordButton");
 var stopButton = document.getElementById("stopButton");
-var sendButton = document.getElementById("sendButton");
+//var sendButton = document.getElementById("sendButton");
 var nextButton = document.getElementById('nextButton');
 
 //add events to those 2 buttons
 recordButton.addEventListener("click", startRecording);
 stopButton.addEventListener("click", stopRecording);
-sendButton.addEventListener("click", sendAudioEvent);
+//sendButton.addEventListener("click", sendAudioEvent);
 nextButton.addEventListener("click", nextChapter);
 
 async function bellSound(){
@@ -42,7 +42,7 @@ function startRecording() {
 	recordButton.disabled = true;
 	stopButton.disabled = false;
 	//pauseButton.disabled = false;
-	sendButton.disabled = true;
+	//sendButton.disabled = true;
 	nextButton.disabled = true;
 
 	/*
@@ -109,7 +109,7 @@ function stopRecording() {
 	//disable the stop button, enable the record too allow for new recordings
 	stopButton.disabled = true;
 	recordButton.disabled = true;
-	sendButton.disabled = false;
+	//sendButton.disabled = false;
 	nextButton.disabled = false;
 
 	//reset button just in case the recording is stopped while paused
@@ -207,6 +207,8 @@ function sendAudioEvent() {
 }
 
 function nextChapter() {
+    console.log('send audio')
+    sendAudioEvent()
     console.log('redirect_started')
     console.log(window.location.href)
     var new_address = window.location.href + '/next_chapter'
