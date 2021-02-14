@@ -74,4 +74,3 @@ def draw_text_plot(audio, textgrid, plot_path,  jitter = 0.001, text_jitter = 10
     plt.tick_params(axis='x', which='both')
     plt.savefig(plot_path)
     # Optionally pre-emphasize the sound before calculating the spectrogram snd.pre_emphasize()
-s
