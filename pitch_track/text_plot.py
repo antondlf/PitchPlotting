@@ -25,7 +25,16 @@ def draw_text_plot(audio, textgrid, plot_path,  jitter = 0.001, text_jitter = 10
 
     # Format textgrid
     tg = tgio.openTextgrid(textgrid)
-    entryList = tg.tierDict["Sentence"].entryList  # Get all intervals
+    # Make sure there is only one tier
+    if len(list(tg.tierDict.keys())) > 1:
+        print('Error: more than one tier in textgrid')
+        return
+    else:
+        # Get tier name
+        tier_key = list(tg.tierDict.keys())[0]
+
+
+    entryList = tg.tierDict[tier_key].entryList  # Get all intervals
 
     # Get time values rounded to correspond to correspond to textgrid values
     time = pitch.xs()
@@ -49,7 +58,6 @@ def draw_text_plot(audio, textgrid, plot_path,  jitter = 0.001, text_jitter = 10
 
     # Get jitter values for text
     text_jitter = np.resize([20, 0], len(entryList))
-    print(text_jitter)
 
     # Iterate through each interval in the textgrid together with the colors
     for interval, style, t_jitter in zip(entryList, color_list, text_jitter):
@@ -69,7 +77,7 @@ def draw_text_plot(audio, textgrid, plot_path,  jitter = 0.001, text_jitter = 10
         plt.plot(time[start[0]:end[0]], pitch_values[start[0]:end[0]], 'o', markersize=5, color='w')
         plt.plot(time[start[0]:end[0]], pitch_values[start[0]:end[0]], 'o', markersize=2, color=style)
         jitter += jitter
-        print(jitter)
+
     plt.xlim(min(time), max(time))
     plt.grid(False)
     plt.ylim(0, pitch.ceiling)
