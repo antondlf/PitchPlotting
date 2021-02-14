@@ -66,12 +66,12 @@ def draw_pitch(new_pitch, old_pitch, path):
 
     plt.clf()
     # create a plot object for new_pitch with label "You"
-    new_pitch_plot = plt.plot(time_new, pitch_values_new, 'o', label='You', markersize=2, color='blue')
-    #plt.plot(new_pitch.xs(), pitch_values_new, 'o', label = 'You', markersize=2)
+    plt.plot(time_new, pitch_values_new, 'o', markersize=5, color='w')
+    new_pitch_plot = plt.plot(time_new, pitch_values_new, 'o', label='You', markersize=2, color='b')
 
     # create a plot object for old_pitch with label "Target"
-    old_pitch_plot = plt.plot(time_old, pitch_values_old, 'o', label='Target', markersize=2, color='orange')
-    #plt.plot(old_pitch.xs(), pitch_values_old, 'o', label = 'Target', markersize=2)
+    plt.plot(time_old, pitch_values_old, 'o', markersize=5, color='w')
+    old_pitch_plot = plt.plot(time_old, pitch_values_old, 'o', label='Target', markersize=2, color='y')
 
     # Create legends
     first_legend = plt.legend(handles=new_pitch_plot)

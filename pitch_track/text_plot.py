@@ -43,7 +43,7 @@ def draw_text_plot(audio, textgrid, plot_path,  jitter = 0.001, text_jitter = 10
     time = (np.around(time, decimals=2))
 
     # Color list for plotting
-    color_list = ['b', 'r', 'g', 'm', 'c', 'k', 'y']
+    # color_list = ['b', 'r', 'g', 'm', 'c', 'k', 'y']
 
     # Summary statistics to remove outliers and noise
     deviation = np.std(pitch_values)
