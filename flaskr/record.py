@@ -197,7 +197,7 @@ def next_chapter(chaptername): # TODO:create Baseline condition
     name_sections = chaptername.rsplit('_', 1)
     new_chapter = ''.join([name_sections[0], '_', str(int(name_sections[-1]) + 1)])
 
-    if new_chapter in index_dir:
+    if new_chapter in os.listdir(index_dir):
         print('chapter exists')
         return redirect(url_for('/record.record', chaptername=new_chapter, code=302))
     else:

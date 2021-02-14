@@ -100,6 +100,7 @@ function startRecording() {
     	https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
 	*/
 
+    bellSound();
 	navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
 		console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
 
@@ -109,7 +110,7 @@ function startRecording() {
 			the sampleRate defaults to the one set in your OS for your playback device
 
 		*/
-		bellSound();
+
 		audioContext = new AudioContext();
 		console.log("audioContext initialized");
 

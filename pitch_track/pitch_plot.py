@@ -29,6 +29,7 @@ def pitch_difference(pitch_values_old, pitch_values_new):
     """Generate a number to add to pitch_values_old so that
     graphs don't clash."""
 
+
     pitch_floor_new = min(pitch_values_new)
     pitch_ceiling_old = max(pitch_values_old)
 
@@ -47,6 +48,10 @@ def draw_pitch(new_pitch, old_pitch, path):
     The new_pitch will be recorded when the script is run
     The old_pitch is the target audio that the student is given
     """
+
+    # Clear figure to avoid cached plots
+    plt.clf()
+
     # Extract selected pitch contour, and
     pitch_values_new, time_new = trim_recording(new_pitch)
     # replace unvoiced samples by NaN to not plot
@@ -77,7 +82,7 @@ def draw_pitch(new_pitch, old_pitch, path):
     plt.legend(handles=old_pitch_plot, loc='lower right')
     plt.grid(False)
     # Set the plot's bounds
-    plt.ylim(0, max(new_pitch.ceiling, old_pitch.ceiling))
+    plt.ylim(0, max(max(pitch_values_old), max(pitch_values_new)) + 10)
     plt.ylabel("fundamental frequency [Hz]")
     plt.savefig(path)
     return path
