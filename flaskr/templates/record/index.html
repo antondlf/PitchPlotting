@@ -17,6 +17,9 @@
     <div class="row" id="chapter_data">
       <div class="column">
         <h3> {{ sentence }} </h3>
+        <div id="textplot">
+        <img width="100%" src="{{ url_for('/record.return_textplot_file', chaptername=recording, filename=textplot) }}">
+        </div>
         <audio id = "audio" controls>
             <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
             <source src="{{ url_for('/audio.download_file', chaptername=recording)}}" type="audio/wav">
@@ -40,9 +43,6 @@
         <div id="formats">Format: start recording to see sample rate</div>
       </div>
       <div class="column">
-        <div id="textplot">
-        <img width="100%" src="{{ url_for('/record.return_textplot_file', chaptername=recording, filename=textplot) }}">
-        </div>
       </div>
     </div>
     <div class="row" id="user_data">
@@ -55,14 +55,14 @@
         <!--ol id="recordingsList"></ol-->
         <!-- inserting these scripts at the end to be able to use all the elements in the DOM -->
         {% endfor %}
-      </div>
-
-      <div class="column">
         {% if plot %}
         <div id="image">
         <img class='NO-CACHE' src="{{ url_for('/record.return_plot_file', filename=plot) }}">
         </div>
         {% endif %}
+      </div>
+
+      <div class="column">
       </div>
     </div>
     <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
