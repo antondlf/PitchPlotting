@@ -49,6 +49,8 @@ def draw_text_plot(audio, textgrid, plot_path,  jitter = 0.001, text_jitter = 10
     deviation = np.std(pitch_values)
     average = np.mean(pitch_values)
 
+    pitch_min = min(pitch_values[pitch_values > 0])
+
     # Remove 0 values and values further than two standard deviations from the mean
     pitch_values[pitch_values == 0] = np.nan
     pitch_values[pitch_values >= average+(deviation*2.5)] = np.nan
@@ -61,7 +63,10 @@ def draw_text_plot(audio, textgrid, plot_path,  jitter = 0.001, text_jitter = 10
     # # Get jitter values for text
     # text_jitter = np.resize([20, 0], len(entryList))
     #
-    # # Iterate through each interval in the textgrid together with the colors
+    # Place the text right above the maximum value that sits within 2.5 standard
+    # Deviations of the mean.
+    text_placement = max(pitch_values[pitch_values <= average+(deviation*2.5)]) + 10
+
     for interval in entryList:
     #     #plt.axvline(interval[0], linestyle='dotted')
     #     # Get start and end time for each boundary
@@ -69,7 +74,7 @@ def draw_text_plot(audio, textgrid, plot_path,  jitter = 0.001, text_jitter = 10
     #     # Place text at the start of each interval
         plt.text(
             round(interval[0], 2), #+ jitter,
-            average+(deviation*2.5),
+            text_placement,
             interval[2],
             fontsize=8,
             c='k'
@@ -85,7 +90,7 @@ def draw_text_plot(audio, textgrid, plot_path,  jitter = 0.001, text_jitter = 10
 
     plt.xlim(min(time), max(time))
     plt.grid(False)
-    plt.ylim(0, pitch.ceiling)
+    plt.ylim(pitch_min - 30, text_placement + 30)
     plt.ylabel("fundamental frequency [Hz]")
     plt.tick_params(axis='x', which='both')
     plt.savefig(plot_path)
