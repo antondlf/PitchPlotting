@@ -17,6 +17,8 @@ def midpoint(x, y):
 
 def draw_text_plot(audio, textgrid, plot_path,  jitter = 0.001, text_jitter = 10):
 
+    plt.clf()
+
     pitch = parselmouth.Sound(audio).to_pitch()
 
     # Extract selected pitch contour, and
@@ -52,31 +54,34 @@ def draw_text_plot(audio, textgrid, plot_path,  jitter = 0.001, text_jitter = 10
     pitch_values[pitch_values >= average+(deviation*2.5)] = np.nan
     pitch_values[pitch_values <= average-(deviation*2.5)] = np.nan
 
-    # Make sure there are enough colors for each word
-    while len(color_list) < len(entryList):
-        color_list = color_list *2
-
-    # Get jitter values for text
-    text_jitter = np.resize([20, 0], len(entryList))
-
-    # Iterate through each interval in the textgrid together with the colors
-    for interval, style, t_jitter in zip(entryList, color_list, text_jitter):
-        #plt.axvline(interval[0], linestyle='dotted')
-        # Get start and end time for each boundary
-        start, end = (np.where(time == round(interval[0], 2))[0], np.where(time == round(interval[1], 2))[0])
-        # Place text at the start of each interval
+    # # Make sure there are enough colors for each word
+    # while len(color_list) < len(entryList):
+    #     color_list = color_list *2
+    #
+    # # Get jitter values for text
+    # text_jitter = np.resize([20, 0], len(entryList))
+    #
+    # # Iterate through each interval in the textgrid together with the colors
+    for interval in entryList:
+    #     #plt.axvline(interval[0], linestyle='dotted')
+    #     # Get start and end time for each boundary
+    #     start, end = (np.where(time == round(interval[0], 2))[0], np.where(time == round(interval[1], 2))[0])
+    #     # Place text at the start of each interval
         plt.text(
-            round(interval[0], 2) + jitter,
-            average+(deviation*2.5) + t_jitter,
+            round(interval[0], 2), #+ jitter,
+            average+(deviation*2.5),
             interval[2],
-            fontsize=10,
-            c = style
+            fontsize=8,
+            c='k'
         )
-        # Get the indices, round so that they match arrays
-        time[start[0]:end[0]] += jitter
-        plt.plot(time[start[0]:end[0]], pitch_values[start[0]:end[0]], 'o', markersize=5, color='w')
-        plt.plot(time[start[0]:end[0]], pitch_values[start[0]:end[0]], 'o', markersize=2, color=style)
-        jitter += jitter
+    #     # Get the indices, round so that they match arrays
+    #     time[start[0]:end[0]] += jitter
+    #     plt.plot(time[start[0]:end[0]], pitch_values[start[0]:end[0]], 'o', markersize=5, color='w')
+    #     plt.plot(time[start[0]:end[0]], pitch_values[start[0]:end[0]], 'o', markersize=2, color=style)
+    #     jitter += jitter
+
+    plt.plot(time, pitch_values, 'o', markersize=5, color='w')
+    plt.plot(time, pitch_values, 'o', markersize=2, color='b')
 
     plt.xlim(min(time), max(time))
     plt.grid(False)
