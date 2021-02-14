@@ -17,12 +17,15 @@ def midpoint(x, y):
 
 def draw_text_plot(audio, textgrid, plot_path,  jitter = 0.001, text_jitter = 10):
 
+    pitch = parselmouth.Sound(audio).to_pitch()
+
     # Extract selected pitch contour, and
     pitch_values = pitch.selected_array['frequency']
     np.trim_zeros(pitch_values)
 
     # Format textgrid
-    entryList = textgrid.tierDict["Sentence"].entryList  # Get all intervals
+    tg = tgio.openTextgrid(textgrid)
+    entryList = tg.tierDict["Sentence"].entryList  # Get all intervals
 
     # Get time values rounded to correspond to correspond to textgrid values
     time = pitch.xs()
