@@ -11,11 +11,7 @@
       <header>
         <div>
           <h1><a class="action" href="{{ url_for('/record.record', chaptername=post['chapter_title']) }}">{{ post['chapter_title'] }}</a></h1>
-          <div class="about">by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</div>
         </div>
-        <{% if g.user['id'] == post['author_id'] %}
-          <!--a class="action" href="{{ url_for('/record.record', id=chapters['id']) }}">{{ post['chapter_title'] }}</a-->
-        {% endif %}-->
       </header>
       <p class="body">{{ post[] }}</p>
     </article>
