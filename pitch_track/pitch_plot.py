@@ -23,6 +23,7 @@ def trim_recording(pitch:np.array) -> tuple:
     norm = min(trimmed_time)
     trimmed_time = trimmed_time - norm
 
+
     return trimmed_pitch, trimmed_time
 
 def pitch_difference(pitch_values_old, pitch_values_new):

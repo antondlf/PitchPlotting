@@ -48,6 +48,7 @@ def record(chaptername):
         (chaptername,)
     ).fetchall()
     if not len(sentence) == 1:
+        print(sentence)
         abort(404, "Audio '{0}' doesn't exist or database entry is corrupt.".format(chaptername))
     audio_path, text, textplot_path = sentence[0]
 
@@ -199,9 +200,10 @@ def next_chapter(chaptername): # TODO:create Baseline condition
 
     if new_chapter in os.listdir(index_dir):
         print('chapter exists')
-        return redirect(url_for('/record.record', chaptername=new_chapter, code=302))
+        return redirect(url_for('/record.record', chaptername=new_chapter))
     else:
         if name_sections[0] == 'Baseline': #TODO: add intermediate message between baseline and chapters
+            print('chapter does not exist')
             # TODO: create 'Go to Next chapter' template
             return redirect(url_for('/record.record', chaptername='Chapter_1'))
         else:
