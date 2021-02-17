@@ -45,10 +45,9 @@ def init_chapters(database):
                         audio_path = os.path.join(chap_directory, file)
 
                     elif file.endswith('.TextGrid'):
-                        plotname = file.rsplit('.')[0] + '.png'
-                        textplot_path = os.path.join(chap_directory, plotname)
                         textgrid_path = os.path.join(chap_directory, file)
-                        draw_text_plot(audio_path, textgrid_path, textplot_path)
+                    elif file.endswith('.png'):
+                        textplot_path = os.path.join(chap_directory, file)
                 elif dirname.startswith('Baseline'):
                     textplot_path = 'Baseline'
                     audio_path = 'Baseline'
