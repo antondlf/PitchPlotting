@@ -93,7 +93,7 @@ def record(chaptername):
         process_recording(audio_path, chaptername, audio_data, is_baseline)
 
 
-        return redirect(url_for('/record.record', chaptername=chaptername), code=302)
+        return redirect(url_for('/record.record', chaptername=chaptername))
 
     return render_template(
             '/record/index.html', recording=chaptername, sentence=text, textplot=textplot, plot=plot_path, audio=recordings
