@@ -8,10 +8,10 @@ from flask.cli import with_appcontext
 import flaskr.db
 
 def get_unique_id():
-    return str(uuid.uuid1()) # TODO: figure out id generation
+    return str(uuid.uuid1())
 
 
-def init_chapters(database): # TODO: clean up paths
+def init_chapters(database):
     """Take chapter titles from Recordings directory and
     create a chapter for each file"""
     recordings_dir = os.path.join(current_app.root_path, '../Recordings')

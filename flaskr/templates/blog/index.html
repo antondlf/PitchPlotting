@@ -2,21 +2,17 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Posts{% endblock %}</h1>
+  <h1>{% block title %}Dashboard{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-  {% for post in posts %}
-    <article class="post">
-      <header>
-        <div>
-          <h1><a class="action" href="{{ url_for('/record.record', chaptername=post['chapter_title']) }}">{{ post['chapter_title'] }}</a></h1>
-        </div>
-      </header>
-      <p class="body">{{ post[] }}</p>
-    </article>
-    {% if not loop.last %}
+  <article class="post">
+    <header>
+      <div>
+        <h1><a class="action" href="{{ url_for('/record.record', chaptername='Baseline_1') }}">Start Activites</a></h1>
+      </div>
+    </header>
+    <!--p class="body"></p-->
+  </article>
       <hr>
-    {% endif %}
-  {% endfor %}
 {% endblock %}

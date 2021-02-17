@@ -63,8 +63,8 @@ def record(chaptername):
             ' ORDER BY created DESC',
             (chaptername, user_id)
         ).fetchall()
-        # if len (user_audio) < 1: #TODO: limit recording opportunities
-        #     #render_template()#TODO: create 'Go to Next chapter' template
+        # if len (user_audio) < 1:
+        #     #render_template()
         #
         #     plot_path = None
         #else:
@@ -76,14 +76,14 @@ def record(chaptername):
             plot_path = None
 
         recordings = [row['trial_id'] + '.wav' for row in user_audio]
-        if len(recordings) > 1: #TODO:decide limit to recordings
-            recordings = recordings[-1]
+        # if len(recordings) > 1:
+        #     recordings = recordings[-1]
 
         #return render_template('/record/index.html', recording=chaptername, sentence=text, plot=plot_path)
 
     elif request.method == 'POST':
         audio_data = request.data
-        # TODO: this is the issue with baseline ones
+
         if textplot_path == 'Baseline':
             is_baseline = True
             process_recording(audio_path, chaptername, audio_data, is_baseline)
@@ -201,7 +201,8 @@ def next_chapter(chaptername): # TODO:create Baseline condition
         print('chapter exists')
         return redirect(url_for('/record.record', chaptername=new_chapter, code=302))
     else:
-        if name_sections[0] == 'Baseline':
+        if name_sections[0] == 'Baseline': #TODO: add intermediate message between baseline and chapters
+            # TODO: create 'Go to Next chapter' template
             return redirect(url_for('/record.record', chaptername='Chapter_1'))
         else:
             print('chapter does not exist, redirect')
