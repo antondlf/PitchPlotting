@@ -70,13 +70,14 @@ async function bellSound(){
 
 function startTimer(duration, display) {
     var timer = duration;
+    document.getElementById("formats").innerHTML="Wait..."
     var func = setInterval(function () {
         //console.log(timer);
         display.textContent = timer;
 
         if (--timer < 0) {
             setTimeout(startRecording(), 5000)
-            display.textContent = 'Go!'
+            display.textContent = '0'
             clearInterval(func);
         }
     }, 1000);
