@@ -6,11 +6,11 @@
     <title>Italian Prosody Project</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
-    <script src="../static/js/app.js"></script>
+    <script src="/static/js/app.js"></script>
 
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> <!--integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"-->
-    <link rel="stylesheet" type="text/css" href="../static/stylejs.css">
+    <link rel="stylesheet" type="text/css" href="/static/stylejs.css">
   </head>
   <body>
     <!--Sentence text to be rendered below-->
@@ -43,26 +43,6 @@
         <div id="textplot">
         <img width="100%" src="{{ url_for('/record.return_textplot_file', chaptername=recording, filename=textplot) }}">
         </div>
-      </div>
-    </div>
-    <div class="row" id="user_data">
-      <div class="column">
-        <p><strong>Recordings:</strong></p>
-        {% for recording in audio %}
-        <audio controls>
-            <source src="{{ url_for('/record.return_plot_file', dir='participants', filename=recording) }}" type="audio/wav">
-        </audio>
-        <!--ol id="recordingsList"></ol-->
-        <!-- inserting these scripts at the end to be able to use all the elements in the DOM -->
-        {% endfor %}
-      </div>
-
-      <div class="column">
-        {% if plot %}
-        <div id="image">
-        <img class='NO-CACHE' src="{{ url_for('/record.return_plot_file', filename=plot) }}">
-        </div>
-        {% endif %}
       </div>
     </div>
     <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>

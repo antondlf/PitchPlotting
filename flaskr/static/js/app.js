@@ -21,7 +21,10 @@ var nextButton = document.getElementById('nextButton');
 if (nextButton) {
     console.log('Trial done')
     nextButton.addEventListener("click", nextChapter);
-    recordButton.disabled = true;
+    if (recordButton){
+        recordButton.disabled = true;
+    }
+
 
 }
 else {
@@ -29,8 +32,13 @@ else {
 }
 
 //add events to those 2 buttons
-recordButton.addEventListener("click", playAudio);
-stopButton.addEventListener("click", stopRecording);
+if (recordButton) {
+    recordButton.addEventListener("click", playAudio);
+}
+
+if (stopButton) {
+    stopButton.addEventListener("click", stopRecording);
+}
 //pauseButton.addEventListener("click", pauseRecording);
 //sendButton.addEventListener("click", sendAudioEvent);
 //if (nextButton != "undefined") {
@@ -115,7 +123,7 @@ function startRecording() {
 		console.log("audioContext initialized");
 
 		//update the format 
-		document.getElementById("formats").innerHTML="Format: 1 channel pcm @ "+audioContext.sampleRate/1000+"kHz"
+		document.getElementById("formats").innerHTML="Go!"
         console.log("getElementById done");
 
 		/*  assign to gumStream for later use  */

@@ -11,7 +11,8 @@ CREATE TABLE user (
 
 CREATE TABLE userdata (
     user_id TEXT UNIQUE NOT NULL,
-    experimental_condition TEXT NOT NULL
+    experimental_condition TEXT NOT NULL,
+    chapter_list TEXT NOT NULL,
 );
 
 CREATE TABLE recordings (

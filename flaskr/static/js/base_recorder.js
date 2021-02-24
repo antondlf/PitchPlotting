@@ -211,7 +211,7 @@ function nextChapter() {
     sendAudioEvent()
     console.log('redirect_started')
     console.log(window.location.href)
-    var new_address = window.location.href + '/next_chapter'
+    var new_address = window.location.href + '/post_trial/next_chapter'
     var new_page = new URL(new_address)
     console.log(new_address)
     window.location.replace(new_page);

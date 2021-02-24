@@ -93,12 +93,43 @@ def record(chaptername):
         process_recording(audio_path, chaptername, audio_data, is_baseline)
 
 
-        return redirect(url_for('/record.record', chaptername=chaptername))
+        return redirect(url_for('/record.post_trial', chapter_id=chaptername))
 
     return render_template(
             '/record/index.html', recording=chaptername, sentence=text, textplot=textplot, plot=plot_path, audio=recordings
         )
 
+
+@bp.route('/record/<string:chapter_id>/post_trial')
+@login_required
+def post_trial(chapter_id):
+
+    db = get_db()
+    user_id = g.user['id']
+    user_audio = db.execute(
+        'SELECT trial_id'
+        ' FROM recordings WHERE chapter_id=? AND user_id=?'
+        ' ORDER BY created DESC',
+        (chapter_id, user_id)
+    ).fetchall()
+    sentence = db.execute(
+        'SELECT audio_path, text'
+        ' FROM chapters WHERE chapter_title=?'  # p JOIN user u ON p.author_id = u.id'
+        ' ORDER BY created DESC',
+        (chapter_id,)
+    ).fetchall()
+
+    if len(user_audio) > 0:
+        plot_path = user_audio[0]['trial_id'] + '.png'
+    else:
+        print("No audio was processed")
+        plot_path = None
+
+    recording_path = user_audio[0]['trial_id'] + '.wav'
+
+    text = sentence[0]['text']
+
+    return render_template('/record/post_trial.html', sentence=text, recording=recording_path, plot=plot_path, original_audio=chapter_id)
 
 
 def process_recording(original_recording, chaptername, audio_data, is_baseline):
@@ -189,7 +220,7 @@ def return_textplot_file(chaptername, filename):
 
     return send_from_directory(path, filename, as_attachment=True)
 
-@bp.route('/record/<string:chaptername>/next_chapter')
+@bp.route('/record/<string:chaptername>/post_trial/next_chapter')
 @login_required
 def next_chapter(chaptername): # TODO:create Baseline condition
 

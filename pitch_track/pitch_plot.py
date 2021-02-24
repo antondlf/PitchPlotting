@@ -51,11 +51,11 @@ def draw_pitch(new_pitch, old_pitch, path):
     """
 
     # Clear figure to avoid cached plots
-    plt.clf()
+    #plt.clf()
 
-    # Extract selected pitch contour, and
+    # # Extract selected pitch contour, and
     pitch_values_new, time_new = trim_recording(new_pitch)
-    # replace unvoiced samples by NaN to not plot
+    # # replace unvoiced samples by NaN to not plot
     pitch_values_new[pitch_values_new == 0] = np.nan
 
     # Repeat the actions above for the other pitch sample
@@ -68,11 +68,11 @@ def draw_pitch(new_pitch, old_pitch, path):
     plt.clf()
     # create a plot object for new_pitch with label "You"
     plt.plot(time_new, pitch_values_new, 'o', markersize=5, color='w')
-    new_pitch_plot = plt.plot(time_new, pitch_values_new, 'o', label='You', markersize=2, color='b')
+    new_pitch_plot = plt.plot(time_new, pitch_values_new, 'o', label='You', markersize=2, color='y')
 
     # create a plot object for old_pitch with label "Target"
     plt.plot(time_old, pitch_values_old, 'o', markersize=5, color='w')
-    old_pitch_plot = plt.plot(time_old, pitch_values_old, 'o', label='Target', markersize=2, color='y')
+    old_pitch_plot = plt.plot(time_old, pitch_values_old, 'o', label='Target', markersize=2, color='b')
 
     # Create legends
     first_legend = plt.legend(handles=new_pitch_plot)
@@ -84,7 +84,7 @@ def draw_pitch(new_pitch, old_pitch, path):
     plt.grid(False)
     # Set the plot's bounds
     plt.ylim(0, max(max(pitch_values_old), max(pitch_values_new)) + 10)
-    plt.ylabel("fundamental frequency [Hz]")
+    #plt.ylabel("fundamental frequency [Hz]")
     plt.savefig(path)
     return path
 
