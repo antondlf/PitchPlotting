@@ -66,9 +66,17 @@ def draw_pitch(new_pitch, old_pitch, path):
     pitch_values_old = pitch_difference(pitch_values_old, pitch_values_new)
 
     plt.clf()
+
+    # Make sure units are not included
+    plt.xticks(time_new, '')
+    plt.yticks(pitch_values_new, '')
     # create a plot object for new_pitch with label "You"
     plt.plot(time_new, pitch_values_new, 'o', markersize=5, color='w')
     new_pitch_plot = plt.plot(time_new, pitch_values_new, 'o', label='You', markersize=2, color='y')
+
+    # Make sure units are not included
+    plt.xticks(time_old, '')
+    plt.yticks(pitch_values_old, '')
 
     # create a plot object for old_pitch with label "Target"
     plt.plot(time_old, pitch_values_old, 'o', markersize=5, color='w')

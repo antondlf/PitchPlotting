@@ -30,10 +30,13 @@
         <audio id="bell" hidden>
           <source src="{{ url_for('/audio.get_bell')}}" type="audio/wav">
         </audio>
-        <div>Recording starts in <span id="time"></span> </div>
-        <div id="formats">Format: start recording to see sample rate</div>
+        <h1>
+          <font size="+5" id="formats"></font>
+        </h1>
+        <div>Recorder will initialize in <span id="time"></span> </div>
       </div>
     <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
     <script src="../static/js/base_recorder.js"></script>
+    </div>
   </body>
 </html>

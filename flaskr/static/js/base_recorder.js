@@ -26,6 +26,7 @@ async function bellSound(){
 }
 
 function startRecording() {
+    document.getElementById("formats").innerHTML="Wait..."
 	console.log("recordButton clicked");
 
 	/*
@@ -62,7 +63,7 @@ function startRecording() {
 		audioContext = new AudioContext();
 
 		//update the format
-		document.getElementById("formats").innerHTML="Format: 1 channel pcm @ "+audioContext.sampleRate/1000+"kHz"
+		document.getElementById("formats").innerHTML="Go!"
 
 		/*  assign to gumStream for later use  */
 		gumStream = stream;
