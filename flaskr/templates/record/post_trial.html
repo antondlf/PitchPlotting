@@ -9,8 +9,6 @@
     <link rel="stylesheet" type="text/css" href="/static/stylejs.css"/>
 </head>
     <body>
-        <div class="row" id="user_data">
-          <div class="column">
             <h3> {{ sentence }} </h3>
             <audio id = "audio" controls>
                 <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
@@ -28,16 +26,13 @@
                 <source src="{{ url_for('/record.return_plot_file', dir='participants', filename=recording) }}" type="audio/wav">
             </audio>
             <!--ol id="recordingsList"></ol-->
-          </div>
 
-          <div class="column">
+
             {% if plot %}
             <div id="image">
-            <img class='NO-CACHE' src="{{ url_for('/record.return_plot_file', filename=plot) }}">
+            <img width="50%" class='NO-CACHE' src="{{ url_for('/record.return_plot_file', filename=plot) }}">
             </div>
             {% endif %}
-          </div>
-        </div>
         <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
         <script src="/static/js/app.js"></script>
     </body>

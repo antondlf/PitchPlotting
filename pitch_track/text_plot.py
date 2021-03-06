@@ -1,8 +1,8 @@
-import parselmouth
-import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from praatio import tgio
+import parselmouth
+import numpy as np
 
 
 
@@ -15,15 +15,16 @@ def midpoint(x, y):
     return point
 
 
-def draw_text_plot(audio, textgrid, plot_path,  jitter = 0.001, text_jitter = 10):
+def draw_text_plot(audio, textgrid, plot_path):#,  jitter = 0.001, text_jitter = 10):
 
     plt.clf()
 
-    pitch = parselmouth.Sound(audio).to_pitch()
+    pitch = parselmouth.Sound(audio).to_pitch(time_step=0.001)
 
     # Extract selected pitch contour, and
     pitch_values = pitch.selected_array['frequency']
     np.trim_zeros(pitch_values)
+    print(pitch_values)
 
     # Format textgrid
     tg = tgio.openTextgrid(textgrid)
@@ -48,6 +49,7 @@ def draw_text_plot(audio, textgrid, plot_path,  jitter = 0.001, text_jitter = 10
     # Summary statistics to remove outliers and noise
     deviation = np.std(pitch_values)
     average = np.mean(pitch_values)
+    maximum = max(pitch_values)
 
     pitch_min = min(pitch_values[pitch_values > 0])
 
@@ -65,7 +67,7 @@ def draw_text_plot(audio, textgrid, plot_path,  jitter = 0.001, text_jitter = 10
     #
     # Place the text right above the maximum value that sits within 2.5 standard
     # Deviations of the mean.
-    text_placement = max(pitch_values[pitch_values <= average+(deviation*2.5)]) + 10
+    #trace_max = max(pitch_values[pitch_values <= average+(deviation*2.5)])
 
     for interval in entryList:
     #     #plt.axvline(interval[0], linestyle='dotted')
@@ -74,7 +76,7 @@ def draw_text_plot(audio, textgrid, plot_path,  jitter = 0.001, text_jitter = 10
     #     # Place text at the start of each interval
         plt.text(
             round(interval[0], 2), #+ jitter,
-            text_placement,
+            pitch_min - 20,
             interval[2],
             fontsize=8,
             c='k'
@@ -88,10 +90,14 @@ def draw_text_plot(audio, textgrid, plot_path,  jitter = 0.001, text_jitter = 10
     plt.plot(time, pitch_values, 'o', markersize=5, color='w')
     plt.plot(time, pitch_values, 'o', markersize=2, color='b')
 
+    plt.xticks(time, '')
+    plt.yticks(pitch_values, '')
+
     plt.xlim(min(time), max(time))
     plt.grid(False)
-    plt.ylim(pitch_min - 30, text_placement + 30)
-    plt.ylabel("fundamental frequency [Hz]")
+    plt.ylim(pitch_min - 100, maximum+200)
+    plt.ylabel('Pitch')
+    plt.xlabel('Time')
     plt.tick_params(axis='x', which='both')
     plt.savefig(plot_path)
     # Optionally pre-emphasize the sound before calculating the spectrogram snd.pre_emphasize()

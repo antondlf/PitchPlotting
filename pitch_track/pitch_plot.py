@@ -26,23 +26,34 @@ def trim_recording(pitch:np.array) -> tuple:
 
     return trimmed_pitch, trimmed_time
 
+
+def get_summary(pitch):
+
+    average = np.mean(pitch)
+    deviation = np.std(pitch)
+
+    return average, deviation
+
+
 def pitch_difference(pitch_values_old, pitch_values_new):
     """Generate a number to add to pitch_values_old so that
     graphs don't clash."""
 
+    average_new, deviation_new = get_summary(pitch_values_new)
+    average_old, deviation_old = get_summary(pitch_values_old)
+    pitch_aver_new = np.mean(pitch_values_new[pitch_values_new <= average_new+(deviation_new*2)])
+    pitch_aver_old = np.mean(pitch_values_old[pitch_values_old <= average_old+(deviation_old*2)])
 
-    pitch_floor_new = min(pitch_values_new)
-    pitch_ceiling_old = max(pitch_values_old)
+    scaling_factor =  pitch_aver_old - pitch_aver_new
+    print(scaling_factor)
 
-    if  pitch_floor_new - 100 < pitch_ceiling_old:
-        scaling_factor = (pitch_ceiling_old - pitch_floor_new) + 100
-        pitch_values_new += scaling_factor
+    pitch_values_new = pitch_values_new + scaling_factor
 
-    return pitch_values_old
+    return pitch_values_new, scaling_factor
 
 
 
-def draw_pitch(new_pitch, old_pitch, path):
+def draw_pitch(new_pitch, old_pitch):#, path):
     """This function plots pitch from a praat sound object
     inputs
     _________________
@@ -53,26 +64,24 @@ def draw_pitch(new_pitch, old_pitch, path):
     # Clear figure to avoid cached plots
     #plt.clf()
 
-    # # Extract selected pitch contour, and
-    pitch_values_new, time_new = trim_recording(new_pitch)
-    # # replace unvoiced samples by NaN to not plot
-    pitch_values_new[pitch_values_new == 0] = np.nan
-
     # Repeat the actions above for the other pitch sample
     pitch_values_old, time_old = trim_recording(old_pitch)
-    pitch_values_old[pitch_values_old == 0] = np.nan
+
+    # # Extract selected pitch contour, and
+    pitch_values_new, time_new = trim_recording(new_pitch.to_pitch(time_step=0.001))
+
 
     # Make sure graphs don't clash
-    pitch_values_old = pitch_difference(pitch_values_old, pitch_values_new)
+    pitch_values_new, scaling_factor = pitch_difference(pitch_values_old, pitch_values_new)
 
+
+    # # replace unvoiced samples by NaN to not plot
+    pitch_values_old[pitch_values_old == 0] = np.nan
+    # Because we added the scaling factor the empty samples no longer equal 0
+    pitch_values_new[pitch_values_new == scaling_factor] = np.nan
     plt.clf()
 
-    # Make sure units are not included
-    plt.xticks(time_new, '')
-    plt.yticks(pitch_values_new, '')
-    # create a plot object for new_pitch with label "You"
-    plt.plot(time_new, pitch_values_new, 'o', markersize=5, color='w')
-    new_pitch_plot = plt.plot(time_new, pitch_values_new, 'o', label='You', markersize=2, color='y')
+    # First Plot the old pitch
 
     # Make sure units are not included
     plt.xticks(time_old, '')
@@ -82,17 +91,27 @@ def draw_pitch(new_pitch, old_pitch, path):
     plt.plot(time_old, pitch_values_old, 'o', markersize=5, color='w')
     old_pitch_plot = plt.plot(time_old, pitch_values_old, 'o', label='Target', markersize=2, color='b')
 
+
+    # Plot the new pitch over the old
+    # Make sure units are not included
+    plt.xticks(time_new, '')
+    plt.yticks(pitch_values_new, '')
+    # create a plot object for new_pitch with label "You"
+    plt.plot(time_new, pitch_values_new, 'o', markersize=5, color='w')
+    new_pitch_plot = plt.plot(time_new, pitch_values_new, 'o', label='You', markersize=2, color='y')
+
     # Create legends
     first_legend = plt.legend(handles=new_pitch_plot)
 
     plt.gca().add_artist(first_legend)
 
     # Second legend on the lower right corner
-    plt.legend(handles=old_pitch_plot, loc='lower right')
+    #plt.legend(handles=old_pitch_plot, loc='lower right')
     plt.grid(False)
     # Set the plot's bounds
-    plt.ylim(0, max(max(pitch_values_old), max(pitch_values_new)) + 10)
-    #plt.ylabel("fundamental frequency [Hz]")
+    plt.ylim(0,  max(max(pitch_values_old), max(pitch_values_new)) + 200)
+    plt.ylabel('Pitch')
+    plt.xlabel('Time')
     plt.savefig(path)
     return path
 

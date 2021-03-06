@@ -14,10 +14,11 @@
   </head>
   <body>
     <!--Sentence text to be rendered below-->
-    <div class="row" id="chapter_data">
-      <div class="column">
         <h3> {{ sentence }} </h3>
-        <audio id = "audio" controls>
+        <div id="textplot">
+        <img width="50%" src="{{ url_for('/record.return_textplot_file', chaptername=recording, filename=textplot) }}">
+        </div>
+        <audio id = "audio" hidden>
             <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
             <source src="{{ url_for('/audio.download_file', chaptername=recording)}}" type="audio/wav">
         </audio>
@@ -41,12 +42,6 @@
         </h1>
         <div>Recorder will initialize in <span id="time"></span> </div>
       </div>
-      <div class="column">
-        <div id="textplot">
-        <img width="100%" src="{{ url_for('/record.return_textplot_file', chaptername=recording, filename=textplot) }}">
-        </div>
-      </div>
-    </div>
     <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
     <script src="../static/js/app.js"></script>
   </body>
