@@ -109,7 +109,7 @@ def draw_pitch(new_pitch, old_pitch, path):
     #plt.legend(handles=old_pitch_plot, loc='lower right')
     plt.grid(False)
     # Set the plot's bounds
-    plt.ylim(0,  max(max(pitch_values_old), max(pitch_values_new)) + 200)
+    plt.ylim(0,  max(pitch_values_old) + 200)
     plt.ylabel('Pitch')
     plt.xlabel('Time')
     plt.savefig(path)
