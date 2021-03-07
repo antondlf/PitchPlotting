@@ -3,6 +3,8 @@ import seaborn as sns
 from praatio import tgio
 import parselmouth
 import numpy as np
+import os
+from pitch_track.pitch_plot import trim_recording
 
 
 
@@ -19,12 +21,13 @@ def draw_text_plot(audio, textgrid, plot_path):#,  jitter = 0.001, text_jitter =
 
     plt.clf()
 
-    pitch = parselmouth.Sound(audio).to_pitch(time_step=0.001)
+    pitch = parselmouth.Sound(audio).to_pitch(time_step=0.005)
 
-    # Extract selected pitch contour, and
-    pitch_values = pitch.selected_array['frequency']
-    np.trim_zeros(pitch_values)
-    print(pitch_values)
+
+    # Extract selected pitch contour, and trim the beginning zeroes
+    pitch_values, time = trim_recording(pitch)
+
+    pitch_values[pitch_values == 0] = np.nan
 
     # Format textgrid
     tg = tgio.openTextgrid(textgrid)
@@ -40,7 +43,6 @@ def draw_text_plot(audio, textgrid, plot_path):#,  jitter = 0.001, text_jitter =
     entryList = tg.tierDict[tier_key].entryList  # Get all intervals
 
     # Get time values rounded to correspond to correspond to textgrid values
-    time = pitch.xs()
     time = (np.around(time, decimals=2))
 
     # Color list for plotting
@@ -69,13 +71,17 @@ def draw_text_plot(audio, textgrid, plot_path):#,  jitter = 0.001, text_jitter =
     # Deviations of the mean.
     #trace_max = max(pitch_values[pitch_values <= average+(deviation*2.5)])
 
+    trim = entryList[0][0]
+
+    start_room = 0.5
+
     for interval in entryList:
     #     #plt.axvline(interval[0], linestyle='dotted')
     #     # Get start and end time for each boundary
     #     start, end = (np.where(time == round(interval[0], 2))[0], np.where(time == round(interval[1], 2))[0])
     #     # Place text at the start of each interval
         plt.text(
-            round(interval[0], 2), #+ jitter,
+            round(interval[0]-trim, 2) + start_room, #+ jitter,
             pitch_min - 20,
             interval[2],
             fontsize=8,
@@ -87,13 +93,16 @@ def draw_text_plot(audio, textgrid, plot_path):#,  jitter = 0.001, text_jitter =
     #     plt.plot(time[start[0]:end[0]], pitch_values[start[0]:end[0]], 'o', markersize=2, color=style)
     #     jitter += jitter
 
+    plt.xlim(min(time), max(time))
+
+    time = time + start_room
+
     plt.plot(time, pitch_values, 'o', markersize=5, color='w')
     plt.plot(time, pitch_values, 'o', markersize=2, color='b')
 
     plt.xticks(time, '')
     plt.yticks(pitch_values, '')
 
-    plt.xlim(min(time), max(time))
     plt.grid(False)
     plt.ylim(pitch_min - 100, maximum+200)
     plt.ylabel('Pitch')
@@ -101,3 +110,28 @@ def draw_text_plot(audio, textgrid, plot_path):#,  jitter = 0.001, text_jitter =
     plt.tick_params(axis='x', which='both')
     plt.savefig(plot_path)
     # Optionally pre-emphasize the sound before calculating the spectrogram snd.pre_emphasize()
+
+
+def preprocess_chapters(chapters_path):
+    """From path to Recordings add a pitch plot to every dir that starts with "Chapter_"."""
+
+    for dir in os.listdir(chapters_path):
+
+        chap_directory = os.path.join(chapters_path, dir)
+        print(chap_directory)
+
+        if dir.startswith('Chapter'):
+
+            for file in os.listdir(chap_directory):
+
+                if file.endswith('.TextGrid'):
+                    grid = os.path.join(chap_directory, file)
+
+                if file.endswith('.wav'):
+                    audio = os.path.join(chap_directory, file)
+                    pathname = os.path.join(chap_directory, audio.rsplit('.')[0] + '.png')
+
+            draw_text_plot(audio, grid, pathname)
+
+
+preprocess_chapters('/Users/anton/PycharmProjects/FlaskTutorial/Recordings')

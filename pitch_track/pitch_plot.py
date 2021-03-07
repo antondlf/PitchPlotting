@@ -68,7 +68,7 @@ def draw_pitch(new_pitch, old_pitch, path):
     pitch_values_old, time_old = trim_recording(old_pitch)
 
     # # Extract selected pitch contour, and
-    pitch_values_new, time_new = trim_recording(new_pitch.to_pitch(time_step=0.001))
+    pitch_values_new, time_new = trim_recording(new_pitch)
 
 
     # Make sure graphs don't clash
@@ -86,6 +86,11 @@ def draw_pitch(new_pitch, old_pitch, path):
     # Make sure units are not included
     plt.xticks(time_old, '')
     plt.yticks(pitch_values_old, '')
+
+    # Add some starting room from text_plot for both plots
+    start_room = 0.5
+    time_old += start_room
+    time_new += start_room
 
     # create a plot object for old_pitch with label "Target"
     plt.plot(time_old, pitch_values_old, 'o', markersize=5, color='w')
