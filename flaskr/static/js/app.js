@@ -20,7 +20,10 @@ var audioElem = document.getElementById("audio");
 var bellElem = document.getElementById("bell");
 var nextButton = document.getElementById('nextButton');
 
-playButton.addEventListener("click", playAudio)
+if (playButton){
+    console.log('Record button exists');
+    playButton.addEventListener("click", playAudio);
+}
 if (nextButton) {
     console.log('Trial done')
     nextButton.addEventListener("click", nextChapter);
