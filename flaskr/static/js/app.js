@@ -9,6 +9,7 @@ var input; 							//MediaStreamAudioSourceNode we'll be recording
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioContext //audio context to help us record
 
+var playButton = document.getElementById('playButton')
 var recordButton = document.getElementById("recordButton");
 var stopButton = document.getElementById("stopButton");
 //var pauseButton = document.getElementById("pauseButton");
@@ -18,6 +19,8 @@ var url = window.location.href
 var audioElem = document.getElementById("audio");
 var bellElem = document.getElementById("bell");
 var nextButton = document.getElementById('nextButton');
+
+playButton.addEventListener("click", playAudio)
 if (nextButton) {
     console.log('Trial done')
     nextButton.addEventListener("click", nextChapter);
@@ -33,7 +36,7 @@ else {
 
 //add events to those 2 buttons
 if (recordButton) {
-    recordButton.addEventListener("click", playAudio);
+    recordButton.addEventListener("click", startRecording);
 }
 
 if (stopButton) {
@@ -56,37 +59,19 @@ async function playAudio() {
   console.log(duration)
   try {
     await audioElem.play();
-    recordButton.classList.add("playing");
+    playButton.classList.add("playing");
   } catch(err) {
-    recordButton.classList.remove("playing");
+    playButton.classList.remove("playing");
   }
-  setTimeout(startTimer(5, document.getElementById('time')), (duration*1500));
-  console.log('timeout starts');
-}
-
-async function bellSound(){
-    bellElem.play();
-}
-
-function startTimer(duration, display) {
-    var timer = duration;
-    document.getElementById("formats").innerHTML="Wait..."
-    var func = setInterval(function () {
-        //console.log(timer);
-        display.textContent = timer;
-
-        if (--timer < 0) {
-            setTimeout(startRecording(), 5000)
-            display.textContent = '0'
-            clearInterval(func);
-        }
-    }, 1000);
+    playButton.disabled = true;
+    recordButton.disabled = false;
 }
 
 
 
 function startRecording() {
 	console.log("recordButton clicked");
+	document.getElementById("formats").innerHTML="Wait..."
 
 	/*
 		Simple constraints object, for more advanced audio features see
@@ -109,7 +94,6 @@ function startRecording() {
     	https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
 	*/
 
-    bellSound();
 	navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
 		console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
 
