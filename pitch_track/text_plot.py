@@ -133,4 +133,4 @@ def preprocess_chapters(chapters_path):
 
             draw_text_plot(audio, grid, pathname)
 
-preprocess_chapters('/Users/anton/PycharmProjects/FlaskTutorial/Recordings')
+#preprocess_chapters('/Users/anton/PycharmProjects/FlaskTutorial/Recordings')
