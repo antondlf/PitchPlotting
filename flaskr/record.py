@@ -203,8 +203,8 @@ def save_plot(filename, path, audio_data, is_baseline=False):
 
 
         # Calculate the pitch track with Parselmouth
-        new_pitch = sound.to_pitch(time_step=0.005)
-        old_pitch = praat.Sound(filename).to_pitch(time_step=0.005)
+        new_pitch = sound.to_pitch()
+        old_pitch = praat.Sound(filename).to_pitch()
         draw_pitch(new_pitch, old_pitch, plot_path)
 
         return plot_path, recording_path
