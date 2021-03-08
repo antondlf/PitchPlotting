@@ -34,9 +34,9 @@ def index():
     return render_template('blog/index.html', posts=posts)
 
 
-@bp.route('/record/<string:chaptername>', methods=['POST', 'GET'])
+@bp.route('/record/<string:chaptername>/<string:chapteroccurrence>', methods=['POST', 'GET'])
 @login_required
-def record(chaptername):
+def record(chaptername, chapteroccurrence):
     """Yields the template without a plot."""
 
     recordings = list()
@@ -87,30 +87,30 @@ def record(chaptername):
 
         if textplot_path == 'Baseline':
             is_baseline = True
-            process_recording(audio_path, chaptername, audio_data, is_baseline)
+            process_recording(audio_path, chaptername, audio_data, is_baseline, chapteroccurrence)
             return render_template('/record/baseline.html', sentence=text)
 
-        process_recording(audio_path, chaptername, audio_data, is_baseline)
+        process_recording(audio_path, chaptername, audio_data, is_baseline, chapteroccurrence)
 
 
-        return redirect(url_for('/record.post_trial', chapter_id=chaptername))
+        return redirect(url_for('/record.post_trial', chapter_id=chaptername, chapter_order=chapteroccurrence))
 
     return render_template(
             '/record/index.html', recording=chaptername, sentence=text, textplot=textplot, plot=plot_path, audio=recordings
         )
 
 
-@bp.route('/record/<string:chapter_id>/post_trial')
+@bp.route('/record/<string:chapter_id>/<string:chapter_order>/post_trial')
 @login_required
-def post_trial(chapter_id):
+def post_trial(chapter_id, chapter_order):
 
     db = get_db()
     user_id = g.user['id']
     user_audio = db.execute(
         'SELECT trial_id'
-        ' FROM recordings WHERE chapter_id=? AND user_id=?'
+        ' FROM recordings WHERE chapter_id=? AND user_id=? AND chapter_order=?'
         ' ORDER BY created DESC',
-        (chapter_id, user_id)
+        (chapter_id, user_id, chapter_order)
     ).fetchall()
     sentence = db.execute(
         'SELECT audio_path, text'
@@ -132,7 +132,7 @@ def post_trial(chapter_id):
     return render_template('/record/post_trial.html', sentence=text, recording=recording_path, plot=plot_path, original_audio=chapter_id)
 
 
-def process_recording(original_recording, chaptername, audio_data, is_baseline):
+def process_recording(original_recording, chaptername, audio_data, is_baseline, chapteroccurrence):
     """Yields the template with latest plot and posts recording info into db."""
     # First get a unique id for this recording
     trial_id = get_unique_id()
@@ -151,7 +151,7 @@ def process_recording(original_recording, chaptername, audio_data, is_baseline):
             error += 'Plot_path missing.'
     elif is_baseline == True:
         plot_path = 'Baseline' # TODO:get better solutions
-        recording_path = trial_path + '.wav'
+        recording_path = save_plot(original_recording, trial_path, audio_data, is_baseline=True)
 
     if not chapter_id:
         error += 'Chapter_id is missing.'
@@ -164,9 +164,9 @@ def process_recording(original_recording, chaptername, audio_data, is_baseline):
     else:
         db = get_db()
         db.execute(
-            'INSERT INTO recordings (chapter_id, user_id, trial_id, is_baseline)'
-            ' VALUES (?, ?, ?, ?)',
-            (chapter_id, user_id, trial_id, is_baseline)
+            'INSERT INTO recordings (chapter_id, user_id, chapter_order, trial_id, is_baseline)'
+            ' VALUES (?, ?, ?, ?, ?)',
+            (chapter_id, user_id, chapteroccurrence, trial_id, is_baseline)
         )
         db.commit()
     return plot_path, recording_path
@@ -181,25 +181,33 @@ def process_recording(original_recording, chaptername, audio_data, is_baseline):
 
 
 #@bp.route('/record/send/<string:filename>/<string:path>', methods=['POST'])
-def save_plot(filename, path, audio_data):
+def save_plot(filename, path, audio_data, is_baseline=False):
     """Uses temporary file to write wav file and process in praat into
     pitch plot saved on a given path."""
 
     recording_path = path + '.wav'
-    plot_path = path + '.png'
-    # Save the file that was sent, and read it into a parselmouth.Sound
-    with open(recording_path, 'wb') as out_file: # TODO: turn into path to participant_recordings
+    with open(recording_path, 'wb') as out_file:  # TODO: turn into path to participant_recordings
         out_file.write(audio_data)
-    sound = praat.Sound(recording_path)
+        print('recording saved')
+
+    if is_baseline is True:
+        plot_path = 'Baseline'
+        return plot_path, recording_path
+    else:
+        plot_path = path + '.png'
+        # Save the file that was sent, and read it into a parselmouth.Sound
+        with open(recording_path, 'wb') as out_file: # TODO: turn into path to participant_recordings
+            out_file.write(audio_data)
+        sound = praat.Sound(recording_path)
 
 
 
-    # Calculate the pitch track with Parselmouth
-    new_pitch = sound.to_pitch(time_step=0.005)
-    old_pitch = praat.Sound(filename).to_pitch(time_step=0.005)
-    draw_pitch(new_pitch, old_pitch, plot_path)
+        # Calculate the pitch track with Parselmouth
+        new_pitch = sound.to_pitch(time_step=0.005)
+        old_pitch = praat.Sound(filename).to_pitch(time_step=0.005)
+        draw_pitch(new_pitch, old_pitch, plot_path)
 
-    return plot_path, recording_path
+        return plot_path, recording_path
 
 
 
@@ -211,7 +219,7 @@ def return_plot_file(filename):
     dir = os.path.join(current_app.root_path, '../participant_recordings')
     return send_from_directory(dir, filename, as_attachment=True)
 
-@bp.route('/record/<string:chaptername>/<string:filename>')
+@bp.route('/textplot/<string:chaptername>/<string:filename>')
 @login_required
 def return_textplot_file(chaptername, filename):
     """Get the plot file from tmp directory."""
@@ -220,27 +228,57 @@ def return_textplot_file(chaptername, filename):
 
     return send_from_directory(path, filename, as_attachment=True)
 
-@bp.route('/record/<string:chaptername>/post_trial/next_chapter')
+@bp.route('/record/<string:chaptername>/<string:chapter_order>/post_trial/next_chapter')
 @login_required
-def next_chapter(chaptername): # TODO:create Baseline condition
+def next_chapter(chaptername, chapter_order): # TODO:create Baseline condition
 
+
+    terr_list = {
+        '0': 'Chapter_1', '1': 'Chapter_1',
+        '2': 'Chapter_2', '3': 'Chapter_2',
+        '4': 'Chapter_1', '5': 'Chapter_3',
+        '6': 'Chapter_3', '7': 'Chapter_2',
+        '8': 'Chapter_4', '9': 'Chapter_4',
+        '10': 'Chapter_3', '11': 'Chapter_4',
+    }
+
+
+
+    demo_list = {
+        '0': 'Chapter_1', '1': 'Chapter_1', '2': 'Chapter_2', '3': 'Chapter_2',
+        '4': 'Chapter_1', '5': 'Chapter_3', '6': 'Chapter_3', '7': 'Chapter_2',
+        '8': 'Chapter_4', '9': 'Chapter_4', '10': 'Chapter_3', '11': 'Chapter_5',
+        '12': 'Chapter_5', '13': 'Chapter_4', '14': 'Chapter_6', '15': 'Chapter_6',
+        '16': 'Chapter_5', '17': 'Chapter_7', '18': 'Chapter_7', '19': 'Chapter_6',
+        '20': 'Chapter_8', '21': 'Chapter_8', '22': 'Chapter_7', '23': 'Chapter_8'
+    }
+
+
+    user_id = int(g.user['id'])
+    if user_id <= 4:
+        order_list = terr_list
+    else:
+        order_list = demo_list
 
     index_dir = os.path.join(current_app.root_path, '../Recordings')
     name_sections = chaptername.rsplit('_', 1)
-    new_chapter = ''.join([name_sections[0], '_', str(int(name_sections[-1]) + 1)])
-
-    if new_chapter in os.listdir(index_dir):
-        print('chapter exists')
-        return redirect(url_for('/record.record', chaptername=new_chapter))
-    else:
-        if name_sections[0] == 'Baseline': #TODO: add intermediate message between baseline and chapters
-            print('chapter does not exist')
-            # TODO: create 'Go to Next chapter' template
-            return redirect(url_for('/record.record', chaptername='Chapter_1'))
+    if name_sections[0] == 'Baseline':  # TODO: add intermediate message between baseline and chapters
+        new_chapter = ''.join([name_sections[0], '_', str(int(name_sections[-1]) + 1)])
+        if new_chapter in os.listdir(index_dir):
+            print('chapter exists')
+            chapter_order = 0
+            return redirect(url_for('/record.record', chaptername=new_chapter, chapteroccurrence=chapter_order))
         else:
-            print('chapter does not exist, redirect')
-            return redirect(url_for('/record.end_message'))
+            print('Baseline completed')
 
+            return redirect(url_for('/record.record', chaptername=order_list[0], chapteroccurrence=chapter_order))
+    else:
+        if chapter_order in order_list.keys():
+            new_chapter = order_list[chapter_order]
+            chapter_order = str(int(chapter_order) + 1)
+            return redirect(url_for('/record.record', chaptername=new_chapter, chapteroccurrence=chapter_order))
+        else:
+            return redirect(url_for('/record.end_message'))
 
 
 @bp.route('/done')

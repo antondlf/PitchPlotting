@@ -12,7 +12,7 @@ CREATE TABLE user (
 CREATE TABLE userdata (
     user_id TEXT UNIQUE NOT NULL,
     experimental_condition TEXT NOT NULL,
-    chapter_list TEXT NOT NULL,
+    chapter_list TEXT NOT NULL
 );
 
 CREATE TABLE recordings (
@@ -20,6 +20,7 @@ CREATE TABLE recordings (
   user_id INTEGER NOT NULL,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   chapter_id TEXT NOT NULL,
+  chapter_order TEXT NOT NULL,
   trial_id TEXT NOT NULL,
   is_baseline TEXT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES user (id)
