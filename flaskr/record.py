@@ -271,7 +271,7 @@ def next_chapter(chaptername, chapter_order): # TODO:create Baseline condition
         else:
             print('Baseline completed')
 
-            return redirect(url_for('/record.record', chaptername=order_list[0], chapteroccurrence=chapter_order))
+            return redirect(url_for('/record.record', chaptername=order_list['0'], chapteroccurrence=chapter_order))
     else:
         if chapter_order in order_list.keys():
             new_chapter = order_list[chapter_order]
