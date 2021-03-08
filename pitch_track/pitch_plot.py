@@ -23,6 +23,11 @@ def trim_recording(pitch:np.array) -> tuple:
     norm = min(trimmed_time)
     trimmed_time = trimmed_time - norm
 
+    # Do the same for the trailing zeroes
+    trimmed_pitch = np.trim_zeros(trimmed_pitch, 'b')
+    trailing_trim = trimmed_pitch.shape[0]
+    trimmed_time = trimmed_time[:trailing_trim]
+
 
     return trimmed_pitch, trimmed_time
 
@@ -33,6 +38,24 @@ def get_summary(pitch):
     deviation = np.std(pitch)
 
     return average, deviation
+
+
+def adjust_time_samples(new_time, old_time):
+    """Get a resample of the new_pitch array to match the old pitch array."""
+
+
+    new_time_normalized = new_time/(new_time.max()/old_time.max())
+
+    return new_time_normalized
+
+
+def preprocess_audio(new_pitch, old_pitch):
+
+    pitch_new, time_new = trim_recording(new_pitch)
+    pitch_old, time_old = trim_recording(old_pitch)
+    new_time_normalized = adjust_time_samples(time_new, time_old)
+
+    return pitch_new, pitch_old, new_time_normalized, time_old
 
 
 def pitch_difference(pitch_values_old, pitch_values_new):
@@ -64,11 +87,10 @@ def draw_pitch(new_pitch, old_pitch, path):
     # Clear figure to avoid cached plots
     #plt.clf()
 
-    # Repeat the actions above for the other pitch sample
-    pitch_values_old, time_old = trim_recording(old_pitch)
-
-    # # Extract selected pitch contour, and
-    pitch_values_new, time_new = trim_recording(new_pitch)
+    # Process audio
+    pitch_values_new, pitch_values_old, time_new, time_old = preprocess_audio(
+        new_pitch, old_pitch
+    )
 
 
     # Make sure graphs don't clash
