@@ -17,7 +17,6 @@ var stopButton = document.getElementById("stopButton");
 //get url from html
 var url = window.location.href
 var audioElem = document.getElementById("audio");
-var bellElem = document.getElementById("bell");
 var nextButton = document.getElementById('nextButton');
 
 if (playButton){

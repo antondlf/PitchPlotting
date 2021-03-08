@@ -8,7 +8,6 @@ var input; 							//MediaStreamAudioSourceNode we'll be recording
 // shim for AudioContext when it's not avb.
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioContext //audio context to help us record
-var bellElem = document.getElementById("bell")
 
 var recordButton = document.getElementById("recordButton");
 var stopButton = document.getElementById("stopButton");
@@ -21,9 +20,7 @@ stopButton.addEventListener("click", stopRecording);
 //sendButton.addEventListener("click", sendAudioEvent);
 nextButton.addEventListener("click", nextChapter);
 
-async function bellSound(){
-    bellElem.play();
-}
+
 
 function startRecording() {
     document.getElementById("formats").innerHTML="Wait..."
@@ -50,7 +47,6 @@ function startRecording() {
     	We're using the standard promise based getUserMedia()
     	https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
 	*/
-	bellSound()
 
 	navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
 		console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
