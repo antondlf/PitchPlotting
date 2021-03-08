@@ -64,10 +64,10 @@ def pitch_difference(pitch_values_old, pitch_values_new):
 
     average_new, deviation_new = get_summary(pitch_values_new)
     average_old, deviation_old = get_summary(pitch_values_old)
-    pitch_aver_new = np.mean(pitch_values_new[pitch_values_new <= average_new+(deviation_new*2)])
-    pitch_aver_old = np.mean(pitch_values_old[pitch_values_old <= average_old+(deviation_old*2)])
+    pitch_aver_new = np.mean(pitch_values_new[pitch_values_new <= average_new+(deviation_new*2.5)])
+    pitch_aver_old = np.mean(pitch_values_old[pitch_values_old <= average_old+(deviation_old*2.5)])
 
-    scaling_factor =  pitch_aver_old - pitch_aver_new
+    scaling_factor = pitch_aver_old - pitch_aver_new
     print(scaling_factor)
 
     pitch_values_new = pitch_values_new + scaling_factor
