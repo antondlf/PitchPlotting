@@ -17,11 +17,17 @@ var stopButton = document.getElementById("stopButton");
 //get url from html
 var url = window.location.href
 var audioElem = document.getElementById("audio");
+var useraudioElem = document.getElementById('useraudio');
 var nextButton = document.getElementById('nextButton');
+var replayButton = document.getElementById('replayButton')
 
 if (playButton){
     console.log('Record button exists');
     playButton.addEventListener("click", playAudio);
+}
+if (replayButton){
+    console.log('User Audio button exists');
+    replayButton.addEventListener("click", playUserAudio);
 }
 if (nextButton) {
     console.log('Trial done')
@@ -67,6 +73,18 @@ async function playAudio() {
   }
     playButton.disabled = true;
     recordButton.disabled = false;
+}
+
+async function playUserAudio() {
+  console.log('Playing User Audio')
+  try {
+    await useraudioElem.play();
+    replayButton.classList.add("playing");
+  } catch(err) {
+    replayButton.classList.remove("playing");
+  }
+    replayButton.disabled = true;
+    nextButton.disabled = false;
 }
 
 

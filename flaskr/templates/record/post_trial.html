@@ -10,7 +10,7 @@
 </head>
     <body>
             <h3> {{ sentence }} </h3>
-            <audio id = "audio" controls>
+            <audio id = "audio" hidden>
                 <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
                 <source src="{{ url_for('/audio.download_file', chaptername=original_audio)}}" type="audio/wav">
             </audio>
@@ -19,10 +19,11 @@
             <p>This demo uses <a href="https://github.com/mattdiamond/Recorderjs" target="_blank">Recorder.js</a> to record wav/PCM audio directly in the browser. Matt Diamond‘s <a target="_blank" href="https://github.com/mattdiamond/Recorderjs">Recorder.js</a> is a popular JavaScript library for recording audio in the browser as uncompressed pcm audio in .wav containers. Before it, the only way to record audio was to use Flash.</p>
             <p>Check out the <a href="https://github.com/addpipe/simpl-recorderjs-demo" target="_blank">code on GitHub</a> and <a href="https://addpipe.com/blog/using-recorder-js-to-capture-wav-audio-in-your-html5-web-site/" target="_blank">our blog post on using Recorder.js to capture WAV audio</a>.</p>-->
             <div id="controls">
-             <button id="nextButton">Next Activity</button>
+                <button id="replayButton">Listen To Yourself</button>
+             <button id="nextButton" disabled>Next Activity</button>
             </div>
             <p><strong>Recording:</strong></p>
-            <audio controls>
+            <audio id = "useraudio" hidden>
                 <source src="{{ url_for('/record.return_plot_file', dir='participants', filename=recording) }}" type="audio/wav">
             </audio>
             <!--ol id="recordingsList"></ol-->
