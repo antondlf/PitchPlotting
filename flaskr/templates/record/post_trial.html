@@ -18,22 +18,20 @@
             <p><small>Made by the <a href="https://addpipe.com" target="_blank">Pipe Video Recording Platform</a></small></p>
             <p>This demo uses <a href="https://github.com/mattdiamond/Recorderjs" target="_blank">Recorder.js</a> to record wav/PCM audio directly in the browser. Matt Diamond‘s <a target="_blank" href="https://github.com/mattdiamond/Recorderjs">Recorder.js</a> is a popular JavaScript library for recording audio in the browser as uncompressed pcm audio in .wav containers. Before it, the only way to record audio was to use Flash.</p>
             <p>Check out the <a href="https://github.com/addpipe/simpl-recorderjs-demo" target="_blank">code on GitHub</a> and <a href="https://addpipe.com/blog/using-recorder-js-to-capture-wav-audio-in-your-html5-web-site/" target="_blank">our blog post on using Recorder.js to capture WAV audio</a>.</p>-->
-            <div id="controls">
-                <button id="replayButton">Listen To Yourself</button>
-             <button id="nextButton" disabled>Next Activity</button>
-            </div>
-            <p><strong>Recording:</strong></p>
-            <audio id = "useraudio" hidden>
-                <source src="{{ url_for('/record.return_plot_file', dir='participants', filename=recording) }}" type="audio/wav">
-            </audio>
-            <!--ol id="recordingsList"></ol-->
-
-
             {% if plot %}
             <div id="image">
             <img width="50%" class='NO-CACHE' src="{{ url_for('/record.return_plot_file', filename=plot) }}">
             </div>
             {% endif %}
+            <div id="controls">
+                <button id="replayButton">Listen To Yourself</button>
+             <button id="nextButton" disabled>Next Activity</button>
+            </div>
+            <audio id = "useraudio" hidden>
+                <source src="{{ url_for('/record.return_plot_file', dir='participants', filename=recording) }}" type="audio/wav">
+            </audio>
+            <!--ol id="recordingsList"></ol-->
+
         <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
         <script src="/static/js/app.js"></script>
     </body>

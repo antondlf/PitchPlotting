@@ -132,5 +132,3 @@ def preprocess_chapters(chapters_path):
                     pathname = os.path.join(chap_directory, audio.rsplit('.')[0] + '.png')
 
             draw_text_plot(audio, grid, pathname)
-
-preprocess_chapters('/Users/anton/PycharmProjects/FlaskTutorial/Recordings')
