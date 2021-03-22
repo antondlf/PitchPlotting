@@ -93,9 +93,9 @@ def draw_text_plot(audio, textgrid, plot_path):#,  jitter = 0.001, text_jitter =
     #     plt.plot(time[start[0]:end[0]], pitch_values[start[0]:end[0]], 'o', markersize=2, color=style)
     #     jitter += jitter
 
-    plt.xlim(min(time), max(time))
+    # plt.xlim(min(time), max(time))
 
-    time = time + start_room
+    time += start_room
 
     plt.plot(time, pitch_values, 'o', markersize=5, color='w')
     plt.plot(time, pitch_values, 'o', markersize=2, color='b')
@@ -104,7 +104,7 @@ def draw_text_plot(audio, textgrid, plot_path):#,  jitter = 0.001, text_jitter =
     plt.yticks(pitch_values, '')
 
     plt.grid(False)
-    plt.ylim(pitch_min - 100, maximum+200)
+    plt.ylim(0, maximum+200)
     plt.ylabel('Pitch')
     plt.xlabel('Time')
     plt.tick_params(axis='x', which='both')
@@ -133,4 +133,4 @@ def preprocess_chapters(chapters_path):
 
             draw_text_plot(audio, grid, pathname)
 
-#preprocess_chapters('/Users/anton/PycharmProjects/FlaskTutorial/Recordings')
+preprocess_chapters('/Users/anton/PycharmProjects/FlaskTutorial/Recordings')
