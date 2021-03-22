@@ -134,6 +134,8 @@ def post_trial(chapter_id, chapter_order):
 
 def process_recording(original_recording, chaptername, audio_data, is_baseline, chapteroccurrence):
     """Yields the template with latest plot and posts recording info into db."""
+
+    print(original_recording)
     # First get a unique id for this recording
     trial_id = get_unique_id()
 
@@ -146,12 +148,23 @@ def process_recording(original_recording, chaptername, audio_data, is_baseline, 
     trial_path = os.path.join(current_app.root_path, '../participant_recordings', trial_id)
     error = None
     if is_baseline == False:
-        plot_path, recording_path = save_plot(original_recording, trial_path, audio_data)
+        plot_path, recording_path = save_plot(
+            original_recording,
+            trial_path,
+            audio_data,
+            chaptername,
+            chapteroccurrence
+        )
         if not plot_path:
             error += 'Plot_path missing.'
     elif is_baseline == True:
-        plot_path = 'Baseline' # TODO:get better solutions
-        recording_path = save_plot(original_recording, trial_path, audio_data, is_baseline=True)
+
+        plot_path, recording_path = save_plot(
+            original_recording, trial_path,
+            audio_data, chaptername,
+            chapteroccurrence,
+            is_baseline=True
+        )
 
     if not chapter_id:
         error += 'Chapter_id is missing.'
@@ -181,23 +194,29 @@ def process_recording(original_recording, chaptername, audio_data, is_baseline, 
 
 
 #@bp.route('/record/send/<string:filename>/<string:path>', methods=['POST'])
-def save_plot(filename, path, audio_data, is_baseline=False):
+def save_plot(filename, path, audio_data, chapter_name, trial_num, is_baseline=False):
     """Uses temporary file to write wav file and process in praat into
     pitch plot saved on a given path."""
 
     recording_path = path + '.wav'
-    with open(recording_path, 'wb') as out_file:  # TODO: turn into path to participant_recordings
+    with open(recording_path, 'wb') as out_file:
         out_file.write(audio_data)
         print('recording saved')
+
+    def is_empty_file(fpath):
+        return os.path.isfile(fpath) and os.path.getsize(fpath) > 0
+
+    if is_empty_file(recording_path):
+
+        flash("No audio was recorded.", 'error')
+        redirect(url_for('/record.record', chaptername=chapter_name, chapteroccurrence=trial_num))
 
     if is_baseline is True:
         plot_path = 'Baseline'
         return plot_path, recording_path
     else:
         plot_path = path + '.png'
-        # Save the file that was sent, and read it into a parselmouth.Sound
-        with open(recording_path, 'wb') as out_file: # TODO: turn into path to participant_recordings
-            out_file.write(audio_data)
+
         sound = praat.Sound(recording_path)
 
 
