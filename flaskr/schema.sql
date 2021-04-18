@@ -34,3 +34,22 @@ CREATE TABLE chapters (
   textplot_path TEXT NOT NULL,
   text TEXT NOT NULL
 );
+
+CREATE TABLE judgment_questions (
+  id INTEGER PRIMARY KEY AUTOINCREMENT;
+  question_num INTEGER NOT NULL;
+  speaker TEXT NOT NULL;
+  chapter TEXT NOT NULL;
+  is_baseline TEXT NOT NULL;
+  native TEXT NOT NULL;
+  text TEXT NOT NULL;
+);
+
+CREATE TABLE judgment_responses (
+  id INTEGER PRIMARY KEY AUTOINCREMENT;
+  user_id TEXT NOT NULL;
+  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+  speaker TEXT NOT NULL;
+  question_num INTEGER NOT NULL;
+  sentence TEXT NOT NULL;
+);

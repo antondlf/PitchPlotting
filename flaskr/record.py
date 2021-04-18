@@ -34,6 +34,7 @@ def index():
     return render_template('blog/index.html', posts=posts)
 
 
+
 @bp.route('/record/<string:chaptername>/<string:chapteroccurrence>', methods=['POST', 'GET'])
 @login_required
 def record(chaptername, chapteroccurrence):

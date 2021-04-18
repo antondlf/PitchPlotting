@@ -44,6 +44,10 @@ def create_app(test_config=None):
     app.register_blueprint(audio.bp)
     app.add_url_rule('/', endpoint='audio')
 
+    from . import native_survey
+    app.register_bluepring(native_survey.bp)
+    app.add_url_rule('/', endpoint='judgments')
+
     return app
 
 
