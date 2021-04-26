@@ -8,7 +8,7 @@ import os
 bp = Blueprint('/audio', __name__)
 
 @bp.route('/Recordings/<string:chaptername>', methods=['GET'])
-def download_file(chaptername): # TODO: change to access database for paths
+def download_file(chaptername):
     audio = get_db().execute(
         'SELECT audio_path FROM chapters WHERE chapter_title=?',
         (chaptername,)
