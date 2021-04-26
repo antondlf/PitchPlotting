@@ -25,31 +25,39 @@ bp = Blueprint('/record', __name__)
 @bp.route('/')
 @login_required
 def index():
+
     db = get_db()
+
     posts = db.execute(
         'SELECT created, chapter_title, audio_path' 
         ' FROM chapters'# p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC'
     ).fetchall()
+
     return render_template('blog/index.html', posts=posts)
 
 
 @bp.route('/record/<string:chaptername>/<string:chapteroccurrence>', methods=['POST', 'GET'])
 @login_required
 def record(chaptername, chapteroccurrence):
-    """Yields the template without a plot."""
+    """Yields record template with audio."""
 
     recordings = list()
     db = get_db()
+
     sentence = db.execute(
         'SELECT audio_path, text, textplot_path'
         ' FROM chapters WHERE chapter_title=?'  # p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC',
         (chaptername,)
     ).fetchall()
+
+    # Make sure there is only one identified sentence
     if not len(sentence) == 1:
         print(sentence)
         abort(404, "Audio '{0}' doesn't exist or database entry is corrupt.".format(chaptername))
+
+    # Get paths and text
     audio_path, text, textplot_path = sentence[0]
 
     is_baseline = False
@@ -57,6 +65,7 @@ def record(chaptername, chapteroccurrence):
     # make sure textplot only contains the name of the file
     textplot = textplot_path.rsplit('/', 1)[-1]
     user_id = g.user['id']
+
     if request.method == 'GET':
         user_audio = db.execute(
             'SELECT trial_id'
@@ -64,11 +73,7 @@ def record(chaptername, chapteroccurrence):
             ' ORDER BY created DESC',
             (chaptername, user_id)
         ).fetchall()
-        # if len (user_audio) < 1:
-        #     #render_template()
-        #
-        #     plot_path = None
-        #else:
+
         if textplot_path == 'Baseline':
             return render_template('/record/baseline.html', sentence=text)
         if len(user_audio) > 0:
@@ -77,12 +82,10 @@ def record(chaptername, chapteroccurrence):
             plot_path = None
 
         recordings = [row['trial_id'] + '.wav' for row in user_audio]
-        # if len(recordings) > 1:
-        #     recordings = recordings[-1]
 
-        #return render_template('/record/index.html', recording=chaptername, sentence=text, plot=plot_path)
 
     elif request.method == 'POST':
+
         audio_data = request.data
 
         if textplot_path == 'Baseline':
@@ -137,10 +140,8 @@ def process_recording(original_recording, chaptername, audio_data, is_baseline, 
 
     print(original_recording)
     # First get a unique id for this recording
-    trial_id = get_unique_id()
+    trial_id = get_unique_id() # TODO: better naming system
 
-    #plot_id = '{}.png'.format(trial_id)
-    #recording_id = '{}.wav'.format(trial_id)
 
     # Chaptername passed to the function
     chapter_id = chaptername
@@ -185,15 +186,6 @@ def process_recording(original_recording, chaptername, audio_data, is_baseline, 
     return plot_path, recording_path
 
 
-# @bp.route('/recorded/<string:filename>')
-# def recorded(filename):
-#     return render_template()
-
-
-#bp = Blueprint('pitch_track', __name__, url_prefix='/pitch_track')
-
-
-#@bp.route('/record/send/<string:filename>/<string:path>', methods=['POST'])
 def save_plot(filename, path, audio_data, chapter_name, trial_num, is_baseline=False):
     """Uses temporary file to write wav file and process in praat into
     pitch plot saved on a given path."""
