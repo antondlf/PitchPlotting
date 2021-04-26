@@ -41,5 +41,5 @@ def get_questions(question_num):
     return sentence
 
 
-def
+# TODO: Create function to select given question
     speaker, chapter, is_baseline, native, text = sentence[]
