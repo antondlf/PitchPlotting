@@ -16,8 +16,6 @@ import parselmouth as praat
 import os
 
 
-bp = Blueprint('/audio_process', __name__)
-
 def process_recording(original_recording, chaptername, audio_data, is_baseline, chapteroccurrence):
     """Yields the template with latest plot and posts recording info into db."""
 
@@ -57,7 +55,7 @@ def process_recording(original_recording, chaptername, audio_data, is_baseline, 
     if not trial_path:
         error += 'trial_path missing.'
     if error is not None:
-        flash(error)
+        return flash(error) # TODO: test error message
     else:
         db = get_db()
         db.execute(
@@ -69,7 +67,7 @@ def process_recording(original_recording, chaptername, audio_data, is_baseline, 
     return plot_path, recording_path
 
 
-def save_plot(filename, path, audio_data, chapter_name, trial_num, is_baseline=False):
+def save_plot(filename, path, audio_data, chaptername, trial_num, is_baseline=False):
     """Uses temporary file to write wav file and process in praat into
     pitch plot saved on a given path."""
 
@@ -78,13 +76,10 @@ def save_plot(filename, path, audio_data, chapter_name, trial_num, is_baseline=F
         out_file.write(audio_data)
         print('recording saved')
 
-    def is_empty_file(fpath):
-        return os.path.isfile(fpath) and os.path.getsize(fpath) > 0
-
-    if is_empty_file(recording_path):
+    if os.path.isfile(fpath) and os.path.getsize(fpath) > 0: #TODO: fix error message here
 
         flash("No audio was recorded.", 'error')
-        redirect(url_for('/record.record', chaptername=chapter_name, chapteroccurrence=trial_num))
+        return redirect(url_for('/record.record', chaptername=chaptername, chapteroccurrence=trial_num))
 
     if is_baseline is True:
         plot_path = 'Baseline'
