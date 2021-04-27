@@ -76,7 +76,7 @@ def save_plot(filename, path, audio_data, chaptername, trial_num, is_baseline=Fa
         out_file.write(audio_data)
         print('recording saved')
 
-    if os.path.isfile(fpath) and os.path.getsize(fpath) > 0: #TODO: fix error message here
+    if os.path.isfile(recording_path) and os.path.getsize(recording_path) > 0: #TODO: fix error message here
 
         flash("No audio was recorded.", 'error')
         return redirect(url_for('/record.record', chaptername=chaptername, chapteroccurrence=trial_num))
