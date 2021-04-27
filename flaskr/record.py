@@ -185,6 +185,22 @@ def next_chapter(chaptername, chapter_order): # TODO:create Baseline condition
             return redirect(url_for('/record.end_message'))
 
 
+@bp.route('/audio_process/participant_recordings/<string:filename>')
+@login_required
+def return_plot_file(filename):
+    """Get the plot file from tmp directory."""
+    dir = os.path.join(current_app.root_path, '../participant_recordings')
+    return send_from_directory(dir, filename, as_attachment=True)
+
+@bp.route('/textplot/<string:chaptername>/<string:filename>')
+@login_required
+def return_textplot_file(chaptername, filename):
+    """Get the plot file from tmp directory."""
+
+    path = os.path.join(current_app.root_path, '../Recordings/', chaptername)
+
+    return send_from_directory(path, filename, as_attachment=True)
+
 @bp.route('/done')
 @login_required
 
