@@ -42,7 +42,7 @@ def record(chaptername, chapteroccurrence):
     db = get_db()
 
     sentence = db.execute(
-        'SELECT audio_path, text, textplot_path'
+        'SELECT audio_path, text, textplot_path' #TODO: get all variables necessary
         ' FROM chapters WHERE chapter_title=?'  # p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC',
         (chaptername,)

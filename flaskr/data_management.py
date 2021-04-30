@@ -55,6 +55,7 @@ def init_chapters(database):
                     return print("Error: filesystem corrupt")
 
             if title and text:
+                # TODO: get new variables from schema
                 database.execute(
                     'INSERT INTO chapters (chapter_title, audio_path, textplot_path, text)'
                     ' VALUES (?, ?, ?, ?)',

@@ -16,10 +16,10 @@ import parselmouth as praat
 import os
 
 
-def process_recording(original_recording, chaptername, audio_data, is_baseline, chapteroccurrence):
+def process_recording(original_audio_path, chaptername, audio_data, is_baseline, chapteroccurrence):
     """Yields the template with latest plot and posts recording info into db."""
 
-    print(original_recording)
+    print(original_audio_path)
     # First get a unique id for this recording
     trial_id = get_unique_id() # TODO: better naming system
 
@@ -31,7 +31,7 @@ def process_recording(original_recording, chaptername, audio_data, is_baseline, 
     error = None
     if is_baseline == False:
         plot_path, recording_path = save_plot(
-            original_recording,
+            original_audio_path,
             trial_path,
             audio_data,
             chaptername,
@@ -42,7 +42,7 @@ def process_recording(original_recording, chaptername, audio_data, is_baseline, 
     elif is_baseline == True:
 
         plot_path, recording_path = save_plot(
-            original_recording, trial_path,
+            original_audio_path, trial_path,
             audio_data, chaptername,
             chapteroccurrence,
             is_baseline=True
