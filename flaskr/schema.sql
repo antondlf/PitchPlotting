@@ -33,12 +33,11 @@ CREATE TABLE recordings (
 
 CREATE TABLE chapters (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  sent_group TEXT NOT NULL --TODO: decide if this should be encoded (prosodic groups)
+  sent_group TEXT NOT NULL,
   sent_type TEXT NOT NULL,
-  sent_id TEXT NOT NULL, --TODO: Delete this and replace with the one below
-  --sentence_identifies TEXT NOT NULL,
+  sent_id TEXT NOT NULL,
   text TEXT NOT NULL,
   audio_path TEXT NOT NULL,
   textplot_path TEXT NOT NULL,
-  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
