@@ -1,49 +1,70 @@
 from flask import (
-    Blueprint, flash, current_app, g, redirect, render_template, request, url_for, send_from_directory
+    Blueprint, current_app, g, redirect, render_template, request, url_for, send_from_directory
 )
 from flaskr.auth import login_required
 
 from flaskr.db import get_db
 
-from flaskr.audio import download_file
-
 from werkzeug.exceptions import abort
 
-from audio_processing import process_recording
+from pitch_track.audio_processing import process_recording
 
 import os
 
-
+user_dict = {
+    '1': {
+        'condition': 'a',
+        'order': {
+            'Session 1': {
+                'pre_train': {'0': 'Chapter_1', '1': 'Chapter_2'},
+                'training': {'0': 'Chapter_5', '1': 'Chapter_6'},
+                'post_train': {'0': 'Chapter_3', '1': 'Baseline_4'}
+            },
+            'Session_2': {
+                'pre_train': {'0': 'Chapter_1', '1': 'Chapter_2'},
+                'training': {'0': 'Chapter_5', '1': 'Chapter_6'},
+                'post_train': {'0': 'Chapter_3', '1': 'Baseline_4'}
+            },
+            'Session_3': {
+                'generalization': {'0': 'Chapter_7', '1': 'Chapter_8'}
+            }
+        },
+    }
+} # TODO: Query this from database
 bp = Blueprint('/record', __name__)
 
 @bp.route('/')
 @login_required
 def index():
 
-    db = get_db()
-
-    posts = db.execute(
-        'SELECT created, chapter_title, audio_path' 
-        ' FROM chapters'# p JOIN user u ON p.author_id = u.id'
-        ' ORDER BY created DESC'
-    ).fetchall()
+    posts = ['Session 1', 'Session 2', 'Session 3']
 
     return render_template('blog/index.html', posts=posts)
 
 
-@bp.route('/record/<string:chaptername>/<string:chapteroccurrence>', methods=['POST', 'GET'])
+@bp.route('/record/<string:session>/<string:trial_type>/<string:chapterorder>', methods=['POST', 'GET'])
 @login_required
-def record(chaptername, chapteroccurrence):
+def record(session, trial_type, chapterorder): # TODO: maybe session and chapterorder and trial_type
     """Extracts relevant information from database and then
     yields record html template with audio."""
 
-    #
+    print(session, chapterorder)
+    # TODO: add functionality to access order from user table.
+    user_id = g.user['id']
+    print(user_id)
+    # Query database here for dict
+    # user_dict = some sql query
+    # Query dict for session, condition, and order
+    current_user = user_dict[str(user_id)]
+    condition = current_user['condition']
+    chaptername = current_user['order'][session][trial_type][chapterorder]
+
     recordings = list()
     db = get_db()
 
     sentence = db.execute(
-        'SELECT audio_path, text, textplot_path' #TODO: get all variables necessary
-        ' FROM chapters WHERE chapter_title=?'  # p JOIN user u ON p.author_id = u.id'
+        'SELECT sent_group, sent_type, text, audio_path, textplot_path' #TODO: get all variables necessary
+        ' FROM chapters WHERE sent_id=?'  # p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC',
         (chaptername,)
     ).fetchall()
@@ -54,23 +75,24 @@ def record(chaptername, chapteroccurrence):
         abort(404, "Audio '{0}' doesn't exist or database entry is corrupt.".format(chaptername))
 
     # Get paths and text
-    audio_path, text, textplot_path = sentence[0]
-
-    is_baseline = False
+    sent_group,\
+        sent_type,\
+        text,\
+        audio_path,\
+        textplot_path = sentence[0]
 
     # make sure textplot only contains the name of the file
     textplot = textplot_path.rsplit('/', 1)[-1]
-    user_id = g.user['id']
 
     if request.method == 'GET':
         user_audio = db.execute(
             'SELECT trial_id'
-            ' FROM recordings WHERE chapter_id=? AND user_id=?'
+            ' FROM recordings WHERE sent_id=? AND user_id=? AND session_number=? AND sent_order=?'
             ' ORDER BY created DESC',
-            (chaptername, user_id)
+            (chaptername, user_id, session, chapterorder)
         ).fetchall()
 
-        if textplot_path == 'Baseline':
+        if trial_type != 'training':
             return render_template('/record/baseline.html', sentence=text)
         if len(user_audio) > 0:
             plot_path = user_audio[0]['trial_id'] + '.png'
@@ -83,28 +105,38 @@ def record(chaptername, chapteroccurrence):
     elif request.method == 'POST':
 
         audio_data = request.data
+        database_inputs = (user_id,
+                             chapterorder,  # sent_order in schema
+                             condition,
+                             session,
+                             trial_type,
+                             sent_group,
+                             sent_type,
+                             chaptername,  # sent_id in schema
+                             False) #TODO: figure out how to get rep info
+        process_recording(audio_path, audio_data, chaptername, database_inputs)
 
-        if textplot_path == 'Baseline':
-            is_baseline = True
-            process_recording(audio_path, chaptername, audio_data, is_baseline, chapteroccurrence)
+        if trial_type != 'training':
             return render_template('/record/baseline.html', sentence=text)
 
-        process_recording(audio_path, chaptername, audio_data, is_baseline, chapteroccurrence)
-
-
-        return redirect(url_for('/record.post_trial', chapter_id=chaptername, chapter_order=chapteroccurrence))
+        return redirect(url_for('/record.post_trial', trial_type=trial_type, chapter_order=chapterorder))
 
     return render_template(
             '/record/index.html', recording=chaptername, sentence=text, textplot=textplot, plot=plot_path, audio=recordings
-        )
+        ) #TODO: fix index.html to reflect changes
 
 
-@bp.route('/record/<string:chapter_id>/<string:chapter_order>/post_trial')
+@bp.route('/record/<string:session>/<string:trial_type>/<string:chapter_order>/post_trial')
 @login_required
-def post_trial(chapter_id, chapter_order):
+# TODO: figure out arguments necessary to query
+# Variables I need at the end of this function:
+#   session, trial_type, chapter_order
+# Repetition is probably necessary
+def post_trial(session, trial_type, chapter_order):
 
     db = get_db()
     user_id = g.user['id']
+    # TODO: change database queries to align with new sql schema
     user_audio = db.execute(
         'SELECT trial_id'
         ' FROM recordings WHERE chapter_id=? AND user_id=? AND chapter_order=?'
@@ -132,41 +164,32 @@ def post_trial(chapter_id, chapter_order):
 
 
 
-@bp.route('/record/<string:chaptername>/<string:chapter_order>/post_trial/next_chapter')
+@bp.route('/record/<string:session>/<string:chaptername>/<string:chapter_order>/post_trial/next_chapter')
 @login_required
-def next_chapter(chaptername, chapter_order): # TODO:create Baseline condition
+def next_chapter(session, trial_type, chapter_order): # TODO: revamp this function
 
 
-    terr_list = {
-        '0': 'Chapter_1', '1': 'Chapter_1',
-        '2': 'Chapter_2', '3': 'Chapter_2',
-        '4': 'Chapter_1', '5': 'Chapter_3',
-        '6': 'Chapter_3', '7': 'Chapter_2',
-        '8': 'Chapter_4', '9': 'Chapter_4',
-        '10': 'Chapter_3', '11': 'Chapter_4',
+    sequence = {
+        'pre_train': 8,
+        'training': 32,
+        'post_train': 8
     }
 
+    # I need the following variables at the end of this function:
+    # session, trial_type, chapterorder
+    # session only changes
 
-
-    demo_list = {
-        '0': 'Chapter_1', '1': 'Chapter_1', '2': 'Chapter_2', '3': 'Chapter_2',
-        '4': 'Chapter_1', '5': 'Chapter_3', '6': 'Chapter_3', '7': 'Chapter_2',
-        '8': 'Chapter_4', '9': 'Chapter_4', '10': 'Chapter_3', '11': 'Chapter_5',
-        '12': 'Chapter_5', '13': 'Chapter_4', '14': 'Chapter_6', '15': 'Chapter_6',
-        '16': 'Chapter_5', '17': 'Chapter_7', '18': 'Chapter_7', '19': 'Chapter_6',
-        '20': 'Chapter_8', '21': 'Chapter_8', '22': 'Chapter_7', '23': 'Chapter_8'
-    }
-
+    if trial_type == 'pre_train':
 
     user_id = int(g.user['id'])
     if user_id <= 4:
-        order_list = terr_list
+        order_list =
     else:
-        order_list = demo_list
+        order_list =
 
     index_dir = os.path.join(current_app.root_path, '../Recordings')
-    name_sections = chaptername.rsplit('_', 1)
-    if name_sections[0] == 'Baseline':  # TODO: add intermediate message between baseline and chapters
+    name_sections = trial_type.rsplit('_', 1)
+    if trial_type == 'Baseline':  # TODO: add intermediate message between baseline and chapters
         new_chapter = ''.join([name_sections[0], '_', str(int(name_sections[-1]) + 1)])
         if new_chapter in os.listdir(index_dir):
             print('chapter exists')
