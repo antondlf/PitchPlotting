@@ -16,7 +16,7 @@ import parselmouth as praat
 import os
 
 
-def process_recording(original_audio_path, chaptername, audio_data, is_baseline, chapteroccurrence):
+def process_recording(original_audio_path, audio_data, chaptername, database_inputs):
     """Yields the template with latest plot and posts recording info into db."""
 
     print(original_audio_path)
@@ -40,7 +40,8 @@ def process_recording(original_audio_path, chaptername, audio_data, is_baseline,
         if not plot_path:
             error += 'Plot_path missing.'
     elif is_baseline == True:
-
+        # TODO: split into save_plot and save_audio
+        # TODO: add condition for save_plot
         plot_path, recording_path = save_plot(
             original_audio_path, trial_path,
             audio_data, chaptername,
@@ -60,6 +61,8 @@ def process_recording(original_audio_path, chaptername, audio_data, is_baseline,
         db = get_db()
         db.execute(
             'INSERT INTO recordings (chapter_id, user_id, chapter_order, trial_id, is_baseline)'
+            # 'user_id, sent_order, experimental_condition, session_number, trial_type, sent_group,'
+            # 'sent_type, sent_id, repetition, trial_id'
             ' VALUES (?, ?, ?, ?, ?)',
             (chapter_id, user_id, chapteroccurrence, trial_id, is_baseline)
         )
