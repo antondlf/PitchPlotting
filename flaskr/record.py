@@ -17,16 +17,22 @@ user_dict = {
         'order': {
             'Session 1': {
                 'pre_train': {'0': 'Chapter_1', '1': 'Chapter_2'},
-                'training': {'0': 'Chapter_5', '1': 'Chapter_6'},
+                'training': {
+                    '0': 'Chapter_5', '1': 'Chapter_6',
+                    '2':'Chapter_7', '3': 'Chapter_8'
+                },
                 'post_train': {'0': 'Chapter_3', '1': 'Baseline_4'}
             },
             'Session_2': {
                 'pre_train': {'0': 'Chapter_1', '1': 'Chapter_2'},
-                'training': {'0': 'Chapter_5', '1': 'Chapter_6'},
+                'training': {
+                    '0': 'Chapter_5', '1': 'Chapter_6',
+                    '2':'Chapter_7', '3': 'Chapter_8'
+                },
                 'post_train': {'0': 'Chapter_3', '1': 'Baseline_4'}
             },
-            'Session_3': {
-                'generalization': {'0': 'Chapter_7', '1': 'Chapter_8'}
+            'Session 3': {
+                'pre_train': {'0': 'Chapter_7', '1': 'Chapter_8'}
             }
         },
     }
@@ -175,49 +181,49 @@ def post_trial(session, trial_type, chapter_order):
 
 
 
-@bp.route('/record/<string:session>/<string:chaptername>/<string:chapter_order>/post_trial/next_chapter')
+@bp.route('/record/<string:session>/<string:trial_type>/<string:chapter_order>/post_trial/next_chapter')
 @login_required
 def next_chapter(session, trial_type, chapter_order): # TODO: revamp this function
 
-
+    # zero indexing so one less than real length
+    # sequence = {
+    #     'pre_train': 7,
+    #     'training': 31,
+    #     'post_train': 7
+    # }
+    # TODO: Remember to change this to actual sequence for experiment
     sequence = {
-        'pre_train': 8,
-        'training': 32,
-        'post_train': 8
+     'pre_train': 1,
+     'training': 3,
+     'post_train': 1,
     }
 
-    # I need the following variables at the end of this function:
-    # session, trial_type, chapterorder
-    # session only changes
-    #
-    # if trial_type == 'pre_train':
-    #
-    #     user_id = int(g.user['id'])
-    #
-    # if user_id <= 4:
-    #     order_list =
-    # else:
-    #     order_list =
+    # Get the list of trial types for this session.
+    user_id = str(g.user['id'])
+    trial_type_list = \
+        user_dict[user_id] \
+            ['order'] \
+            [session].keys()
 
-    index_dir = os.path.join(current_app.root_path, '../Recordings')
-    name_sections = trial_type.rsplit('_', 1)
-    if trial_type == 'Baseline':  # TODO: add intermediate message between baseline and chapters
-        new_chapter = ''.join([name_sections[0], '_', str(int(name_sections[-1]) + 1)])
-        if new_chapter in os.listdir(index_dir):
-            print('chapter exists')
-            chapter_order = 0
-            return redirect(url_for('/record.record', chaptername=new_chapter, chapteroccurrence=chapter_order))
-        else:
-            print('Baseline completed')
+    # Cast to int in order to run int operations
+    chapter_order_int = int(chapter_order)
+    if chapter_order_int < int(sequence[trial_type]):
 
-            return redirect(url_for('/record.record', chaptername=order_list['0'], chapteroccurrence=chapter_order))
-    else:
-        if chapter_order in order_list.keys():
-            chapter_order = str(int(chapter_order) + 1)
-            new_chapter = order_list[chapter_order]
-            return redirect(url_for('/record.record', chaptername=new_chapter, chapteroccurrence=chapter_order))
-        else:
+        chapter_order_int += 1
+        chapter_order = str(chapter_order_int)
+        return redirect(url_for('/record.record', chapterorder=chapter_order, session=session, trial_type=trial_type))
+
+    elif chapter_order == sequence[trial_type]:
+        if trial_type == trial_type_list[-1]:
             return redirect(url_for('/record.end_message'))
+        else:
+            new_trial_type_index = \
+                trial_type_list.index(trial_type) + 1
+            new_trial_type = trial_type_list[new_trial_type_index]
+
+            return redirect(url_for('/record.record', chapterorder=chapter_order, session=session, trial_type=new_trial_type))
+    else:
+        return redirect(url_for('/record.end_message'))
 
 
 @bp.route('/audio_process/participant_recordings/<string:filename>')
