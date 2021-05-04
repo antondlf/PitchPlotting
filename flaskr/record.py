@@ -13,7 +13,7 @@ import os
 
 user_dict = {
     '1': {
-        'condition': 'a',
+        'condition': 'b',
         'order': {
             'Session 1': {
                 'pre_train': {'0': 'Chapter_1', '1': 'Chapter_2'},
@@ -134,9 +134,14 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
 
         return redirect(url_for('/record.post_trial', session=session, trial_type=trial_type, chapter_order=chapterorder))
 
-    return render_template(
-            '/record/index.html', recording=chaptername, sentence=text, textplot=textplot, plot=plot_path, audio=recordings
-        ) #TODO: fix index.html to reflect changes Done?
+    if condition == 'a':
+        return render_template(
+                '/record/index.html', recording=chaptername, sentence=text, textplot=textplot, plot=plot_path, audio=recordings
+            ) #TODO: fix index.html to reflect changes Done?
+    else:
+        return render_template(
+                '/record/index.html', recording=chaptername, sentence=text, textplot=None, plot=None, audio=recordings
+            )
 
 
 @bp.route('/record/<string:session>/<string:trial_type>/<string:chapter_order>/post_trial')
@@ -148,7 +153,9 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
 def post_trial(session, trial_type, chapter_order):
 
     db = get_db()
-    user_id = g.user['id']
+    user_id = str(g.user['id'])
+    condition = user_dict[user_id]['condition']
+
     # TODO: change database queries to align with new sql schema
     user_audio = db.execute(
         'SELECT trial_id, sent_id'
@@ -176,8 +183,11 @@ def post_trial(session, trial_type, chapter_order):
     recording_path = user_audio[0]['trial_id'] + '.wav'
 
     text = sentence[0]['text']
+    if condition == 'a':
+        return render_template('/record/post_trial.html', sentence=text, recording=recording_path, plot=plot_path, original_audio=sent_id)
 
-    return render_template('/record/post_trial.html', sentence=text, recording=recording_path, plot=plot_path, original_audio=sent_id)
+    elif condition == 'b':
+        return render_template('/record/post_trial.html', sentence=text, recording=recording_path, plot=None, original_audio=sent_id)
 
 
 
