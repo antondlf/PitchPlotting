@@ -14,33 +14,28 @@
   </head>
   <body>
     <!--Sentence text to be rendered below-->
+    <div class="row" id="chapter_data">
+      <div class="column">
         <h3> {{ sentence }} </h3>
-        {% if plot %}
-        <div id="textplot">
-        <img width="50%" src="{{ url_for('/record.return_textplot_file', chaptername=recording, filename=textplot) }}">
-        </div>
-        {% endif %}
-        <audio id = "audio" hidden>
-            <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
-            <source src="{{ url_for('/audio.download_file', chaptername=recording)}}" type="audio/wav">
-        </audio>
-        <audio id="bell" hidden>
-          <source src="{{ url_for('/audio.get_bell')}}" type="audio/wav">
-        </audio>
         <!--<h1>Simple Recorder.js demo</h1>
         <p><small>Made by the <a href="https://addpipe.com" target="_blank">Pipe Video Recording Platform</a></small></p>
         <p>This demo uses <a href="https://github.com/mattdiamond/Recorderjs" target="_blank">Recorder.js</a> to record wav/PCM audio directly in the browser. Matt Diamond‘s <a target="_blank" href="https://github.com/mattdiamond/Recorderjs">Recorder.js</a> is a popular JavaScript library for recording audio in the browser as uncompressed pcm audio in .wav containers. Before it, the only way to record audio was to use Flash.</p>
         <p>Check out the <a href="https://github.com/addpipe/simpl-recorderjs-demo" target="_blank">code on GitHub</a> and <a href="https://addpipe.com/blog/using-recorder-js-to-capture-wav-audio-in-your-html5-web-site/" target="_blank">our blog post on using Recorder.js to capture WAV audio</a>.</p>-->
         <div id="controls">
-         <button id="playButton">Play Recording</button>
-         <button id="recordButton" disabled>Record</button>
-         <!--button id="pauseButton" disabled>Pause</button-->
+         <button id="recordButton">Start</button>
          <button id="stopButton" disabled>Stop</button>
+          <!--button id="sendButton" disabled>Send</button-->
+          <button id="nextButton" disabled>Next Activity</button>
         </div>
+        <audio id="bell" hidden>
+          <source src="{{ url_for('/audio.get_bell')}}" type="audio/wav">
+        </audio>
         <h1>
           <font size="+5" id="formats"></font>
         </h1>
+      </div>
     <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
-    <script src="/static/js/app.js"></script>
+    <script src="/static/js/base_recorder.js"></script>
+    </div>
   </body>
 </html>

@@ -9,21 +9,89 @@ var input; 							//MediaStreamAudioSourceNode we'll be recording
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioContext //audio context to help us record
 
+var playButton = document.getElementById('playButton')
 var recordButton = document.getElementById("recordButton");
 var stopButton = document.getElementById("stopButton");
-var pauseButton = document.getElementById("pauseButton");
-var sendButton = document.getElementById("sendButton");
+//var pauseButton = document.getElementById("pauseButton");
+//var sendButton = document.getElementById("sendButton");
 //get url from html
-var url = window.location.href //TODO: Remove hardcoding
+var url = window.location.href
+var audioElem = document.getElementById("audio");
+var useraudioElem = document.getElementById('useraudio');
+var nextButton = document.getElementById('nextButton');
+var replayButton = document.getElementById('replayButton')
+
+if (playButton){
+    console.log('Record button exists');
+    playButton.addEventListener("click", playAudio);
+}
+if (replayButton){
+    console.log('User Audio button exists');
+    replayButton.addEventListener("click", playUserAudio);
+}
+if (nextButton) {
+    console.log('Trial done')
+    nextButton.addEventListener("click", nextChapter);
+    if (recordButton){
+        recordButton.disabled = true;
+    }
+
+
+}
+else {
+    console.log('trial in progress')
+}
 
 //add events to those 2 buttons
-recordButton.addEventListener("click", startRecording);
-stopButton.addEventListener("click", stopRecording);
-pauseButton.addEventListener("click", pauseRecording);
-sendButton.addEventListener("click", sendAudioEvent);
+if (recordButton) {
+    recordButton.addEventListener("click", startRecording);
+}
+
+if (stopButton) {
+    stopButton.addEventListener("click", stopRecording);
+}
+//pauseButton.addEventListener("click", pauseRecording);
+//sendButton.addEventListener("click", sendAudioEvent);
+//if (nextButton != "undefined") {
+//   nextButton.addEventListener("click", nextChapter);
+//}
+
+
+
+//playButton.addEventListener("click", handlePlayButton, false);
+//playVideo();
+
+async function playAudio() {
+  console.log('Audio Playing')
+  var duration = document.getElementById("audio").duration;
+  console.log(duration)
+  try {
+    await audioElem.play();
+    playButton.classList.add("playing");
+  } catch(err) {
+    playButton.classList.remove("playing");
+  }
+    playButton.disabled = true;
+    recordButton.disabled = false;
+}
+
+async function playUserAudio() {
+  console.log('Playing User Audio')
+  try {
+    await useraudioElem.play();
+    replayButton.classList.add("playing");
+  } catch(err) {
+    replayButton.classList.remove("playing");
+  }
+    replayButton.disabled = true;
+    nextButton.disabled = false;
+}
+
+
 
 function startRecording() {
 	console.log("recordButton clicked");
+	document.getElementById("formats").innerHTML="Wait..."
 
 	/*
 		Simple constraints object, for more advanced audio features see
@@ -38,8 +106,8 @@ function startRecording() {
 
 	recordButton.disabled = true;
 	stopButton.disabled = false;
-	pauseButton.disabled = false;
-	sendButton.disabled = true;
+	//pauseButton.disabled = false;
+	//sendButton.disabled = true;
 
 	/*
     	We're using the standard promise based getUserMedia() 
@@ -55,11 +123,12 @@ function startRecording() {
 			the sampleRate defaults to the one set in your OS for your playback device
 
 		*/
+
 		audioContext = new AudioContext();
 		console.log("audioContext initialized");
 
 		//update the format 
-		document.getElementById("formats").innerHTML="Format: 1 channel pcm @ "+audioContext.sampleRate/1000+"kHz"
+		document.getElementById("formats").innerHTML="Go!"
         console.log("getElementById done");
 
 		/*  assign to gumStream for later use  */
@@ -83,9 +152,10 @@ function startRecording() {
 
 	}).catch(function(err) {
 	  	//enable the record button if getUserMedia() fails
+	  	console.log(err);
     	recordButton.disabled = false;
     	stopButton.disabled = true;
-    	pauseButton.disabled = true
+    	//pauseButton.disabled = true;
 	});
 }
 
@@ -108,12 +178,12 @@ function stopRecording() {
 
 	//disable the stop button, enable the record too allow for new recordings
 	stopButton.disabled = true;
-	recordButton.disabled = false;
-	pauseButton.disabled = true;
-	sendButton.disabled = false;
+	recordButton.disabled = true;
+	//pauseButton.disabled = true;
+	//sendButton.disabled = false;
 
 	//reset button just in case the recording is stopped while paused
-	pauseButton.innerHTML="Pause";
+	//pauseButton.innerHTML="Pause";
 	console.log("innerHTML.")
 	
 	//tell the recorder to stop the recording
@@ -127,6 +197,7 @@ function stopRecording() {
 	//create the wav blob and pass it on to createDownloadLink
 	rec.exportWAV(createDownloadLink);
 	console.log('Exported Audio');
+	sendAudioEvent();
 }
 
 function createDownloadLink(blob) {
@@ -202,4 +273,13 @@ function sendAudio(data) {
 
 function sendAudioEvent() {
     rec.exportWAV(sendAudio);
+}
+
+function nextChapter() {
+    console.log('redirect_started')
+    console.log(window.location.href)
+    var new_address = window.location.href + '/next_chapter'
+    var new_page = new URL(new_address)
+    console.log(new_address)
+    window.location.replace(new_page);
 }
