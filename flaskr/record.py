@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, current_app, g, redirect, render_template, request, url_for, send_from_directory
+    Blueprint, flash,  current_app, g, redirect, render_template, request, url_for, send_from_directory
 )
 from flaskr.auth import login_required
 
@@ -114,16 +114,23 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
                              sent_type,
                              chaptername,  # sent_id in schema
                              False) #TODO: figure out how to get rep info
-        process_recording(audio_path, audio_data, chaptername, database_inputs)
 
+        recording_path = process_recording(audio_path, audio_data, chaptername, database_inputs)
+
+        # Make sure the microphone picked up a recording
+        if recording_path == None:
+            flash("No audio was recorded.", 'error')
+            return redirect(url_for('/record.record', session=session, trial_type=trial_type, chapterorder=chapterorder))
+
+        # If it's not a training trial no post_trial necessary
         if trial_type != 'training':
             return render_template('/record/baseline.html', sentence=text)
 
-        return redirect(url_for('/record.post_trial', trial_type=trial_type, chapter_order=chapterorder))
+        return redirect(url_for('/record.post_trial', session=session, trial_type=trial_type, chapter_order=chapterorder))
 
     return render_template(
             '/record/index.html', recording=chaptername, sentence=text, textplot=textplot, plot=plot_path, audio=recordings
-        ) #TODO: fix index.html to reflect changes
+        ) #TODO: fix index.html to reflect changes Done?
 
 
 @bp.route('/record/<string:session>/<string:trial_type>/<string:chapter_order>/post_trial')
@@ -138,16 +145,20 @@ def post_trial(session, trial_type, chapter_order):
     user_id = g.user['id']
     # TODO: change database queries to align with new sql schema
     user_audio = db.execute(
-        'SELECT trial_id'
-        ' FROM recordings WHERE chapter_id=? AND user_id=? AND chapter_order=?'
+        'SELECT trial_id, sent_id'
+        ' FROM recordings WHERE session_number=? AND user_id=? AND sent_order=?'
         ' ORDER BY created DESC',
-        (chapter_id, user_id, chapter_order)
+        (session, user_id, chapter_order)
     ).fetchall()
+
+
+    sent_id = user_audio[0]['sent_id']
+
     sentence = db.execute(
         'SELECT audio_path, text'
-        ' FROM chapters WHERE chapter_title=?'  # p JOIN user u ON p.author_id = u.id'
+        ' FROM chapters WHERE sent_id=?'  # p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC',
-        (chapter_id,)
+        (sent_id,)
     ).fetchall()
 
     if len(user_audio) > 0:
@@ -160,7 +171,7 @@ def post_trial(session, trial_type, chapter_order):
 
     text = sentence[0]['text']
 
-    return render_template('/record/post_trial.html', sentence=text, recording=recording_path, plot=plot_path, original_audio=chapter_id)
+    return render_template('/record/post_trial.html', sentence=text, recording=recording_path, plot=plot_path, original_audio=sent_id)
 
 
 
@@ -178,14 +189,15 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
     # I need the following variables at the end of this function:
     # session, trial_type, chapterorder
     # session only changes
-
-    if trial_type == 'pre_train':
-
-    user_id = int(g.user['id'])
-    if user_id <= 4:
-        order_list =
-    else:
-        order_list =
+    #
+    # if trial_type == 'pre_train':
+    #
+    #     user_id = int(g.user['id'])
+    #
+    # if user_id <= 4:
+    #     order_list =
+    # else:
+    #     order_list =
 
     index_dir = os.path.join(current_app.root_path, '../Recordings')
     name_sections = trial_type.rsplit('_', 1)
