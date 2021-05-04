@@ -195,13 +195,10 @@ def save_plot(filename, path, audio_data, chapter_name, trial_num, is_baseline=F
         out_file.write(audio_data)
         print('recording saved')
 
-    def is_empty_file(fpath):
-        return os.path.isfile(fpath) and os.path.getsize(fpath) > 0
-
-    if is_empty_file(recording_path):
-
+    if os.path.isfile(recording_path) and os.path.getsize(recording_path) > 0:
         flash("No audio was recorded.", 'error')
         redirect(url_for('/record.record', chaptername=chapter_name, chapteroccurrence=trial_num))
+        return None
 
     if is_baseline is True:
         plot_path = 'Baseline'
