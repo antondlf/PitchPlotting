@@ -13,7 +13,7 @@ import os
 
 user_dict = {
     '1': {
-        'condition': 'b',
+        'condition': 'a',
         'order': {
             'Session 1': {
                 'pre_train': {'0': 'Chapter_1', '1': 'Chapter_2'},
@@ -210,10 +210,12 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
 
     # Get the list of trial types for this session.
     user_id = str(g.user['id'])
-    trial_type_list = \
+    trial_type_keys = \
         user_dict[user_id] \
             ['order'] \
             [session].keys()
+
+    trial_type_list = list(trial_type_keys)
 
     # Cast to int in order to run int operations
     chapter_order_int = int(chapter_order)
@@ -223,13 +225,21 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
         chapter_order = str(chapter_order_int)
         return redirect(url_for('/record.record', chapterorder=chapter_order, session=session, trial_type=trial_type))
 
-    elif chapter_order == sequence[trial_type]:
+    elif session == 'Session 3':
         if trial_type == trial_type_list[-1]:
             return redirect(url_for('/record.end_message'))
+
+    elif int(chapter_order) == int(sequence[trial_type]):
+
+        if trial_type == trial_type_list[-1]:
+            print(trial_type_list)
+            return redirect(url_for('/record.end_message'))
+
         else:
             new_trial_type_index = \
                 trial_type_list.index(trial_type) + 1
             new_trial_type = trial_type_list[new_trial_type_index]
+            chapter_order = 0
 
             return redirect(url_for('/record.record', chapterorder=chapter_order, session=session, trial_type=new_trial_type))
     else:
