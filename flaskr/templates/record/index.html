@@ -15,9 +15,11 @@
   <body>
     <!--Sentence text to be rendered below-->
         <h3> {{ sentence }} </h3>
+        {% if plot %}
         <div id="textplot">
         <img width="50%" src="{{ url_for('/record.return_textplot_file', chaptername=recording, filename=textplot) }}">
         </div>
+        {% endif %}
         <audio id = "audio" hidden>
             <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
             <source src="{{ url_for('/audio.download_file', chaptername=recording)}}" type="audio/wav">
