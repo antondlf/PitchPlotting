@@ -154,7 +154,7 @@ def process_recording(text, original_recording, chaptername, audio_data, is_base
     trial_path = os.path.join(current_app.root_path, '../participant_recordings', trial_id)
     error = None
 
-    plot_path, recording_path = save_plot(
+    save_plot(
         original_recording, trial_path,
         audio_data, chaptername,
         chapteroccurrence,
@@ -177,7 +177,6 @@ def process_recording(text, original_recording, chaptername, audio_data, is_base
             (chapter_id, user_id, chapteroccurrence, trial_id, is_baseline)
         )
         db.commit()
-    return plot_path, recording_path
 
 
 def save_plot(filename, path, audio_data, chapter_name, trial_num, is_baseline=False):
