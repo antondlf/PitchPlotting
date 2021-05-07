@@ -139,12 +139,13 @@ def process_recording(text, original_recording, chaptername, audio_data, is_base
     """Yields the template with latest plot and posts recording info into db."""
 
     print(original_recording)
+    user_id = g.user['id']
     # First get a unique id for this recording
     toks = text.split(' ')
     sent_name = toks[0] + '_' + toks[1]
     sent_type = 'QUESTION' if toks[-1][-1] == '?' else 'STATEMENT'
     unique_identifier = get_unique_id()
-    trial_id = sent_name + '_' + sent_type + '_' + unique_identifier # TODO: better naming system
+    trial_id = user_id + '_' + sent_name + '_' + sent_type + '_' + unique_identifier # TODO: better naming system
 
 
 
