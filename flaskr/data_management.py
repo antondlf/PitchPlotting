@@ -18,31 +18,82 @@ def init_chapters(database): # TODO: make only one class of sentence
     sent_id = None
     text = None
     sentence_text_exists = False
-    # Get chapter directory
-    for dirname in os.listdir(recordings_dir):
-        print(dirname)
-        chap_directory = os.path.join(recordings_dir, dirname)
+    sentences = {'matched': {
+        'set_1': {
+            '1': 'Mario vola',
+            '2': 'Delia guida',
+            '3': 'Livia dorme',
+            '4': 'Barbara vive',
+            '5': 'Angelo giunge',
+            '6': 'Debora gira', '7': 'Daria brinda'
+        },
+        'set_2': {
+            '1': 'Adriana beve',
+            '2': 'Giuliana mangia',
+            '3': 'Damiano morde',
+            '4': 'Amedeo lava',
+            '5': 'Edoardo vede',
+            '6': 'Loredana vende',
+            '7': 'Gabriele ama'
+        },
+        'set_3': {'1': 'Il lago',
+                  '2': 'Il brodo',
+                  '3': 'La legna',
+                  '4': 'La rana',
+                  '5': 'Il ladro',
+                  '6': 'La via',
+                  '7': 'Il nome'},
+        'set_4': {'1': 'Il giornale',
+                  '2': 'La balena',
+                  '3': 'Il melone',
+                  '4': 'La bambina',
+                  '5': 'La ragione',
+                  '6': 'Il rumore',
+                  '7': 'La bevanda'},
+    }, 'unmatched': {'1': 'Anna lavora', '2': 'Emilia arriva', '3': 'Bernardo viene', '4': 'Andrea rimane',
+                     '5': 'Luigi odia', '6': 'Elena guarda', '7': 'Giovanni ruba', '8': 'Irene disegna'}
+    }
+    question_tag = '(Q)'
+    statement_tag = '(S)'
+
+    # Get matched sentences in db
+
+    for set in sentences['matched'].keys():
+
+        sent_group = set
+        set_sents = sentences['matched'][set]
+
+        for n in set_sents.keys():
+
+            current_sent = sentences['matched'][set][n]
+
+            input_sent_pair(recordings_dir, sent_group, current_sent, database)
+
+    for n in sentences['unmatched'].keys():
+
+        current_sent = sentences['unmatched'][n]
+        sent_group = 'unmatched'
+
+        input_sent_pair(recordings_dir, sent_group, current_sent, database)
+
+
+def input_sent_pair(recordings_dir, sent_group, current_sent, database):
+
+    for sent_type in ['Q', 'S']:
+
+        sent_id = current_sent + '(' + sent_type + ')'
+
+        chap_directory = os.path.join(recordings_dir, sent_id)
 
         # Check that it is a directory
         if os.path.isdir(chap_directory):
-            sent_id = dirname
             item_pair = os.listdir(chap_directory)
-            print(item_pair)
-            item_pair.sort(key=lambda f: f.rsplit('.')[-1], reverse=True)
-            print('after sort:')
-            print(item_pair)
             for file in item_pair:
-
-                sent_group = 'Group' # TODO: figure out where to source
 
                 if file.endswith('.txt'):
                     with open(os.path.join(chap_directory, file)) as in_file:
                         text = in_file.read()
                         sentence_text_exists = True
-                    if text.endswith('?'):
-                        sent_type = 'Q'
-                    else:
-                        sent_type = 'S'
 
                     if not sentence_text_exists:
                         return print('Error: missing text in baseline')

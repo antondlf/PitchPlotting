@@ -6,6 +6,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from flaskr.db import get_db
 
+from user_dict.py import create_user_dict
+
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @bp.route('register', methods=('GET', 'POST'))
@@ -31,6 +33,15 @@ def register():
                 (username, generate_password_hash(password))
             )
             db.commit()
+            user_id = db.execute(
+                'SELECT id FROM user WHERE username=?',
+                (username,)
+            ).fetchall()[0]['id']
+            user_dict = create_user_dict(user_id)
+            db.execute(
+                'INSERT INTO userdata (user_id, user_dict) VALUES (?, ?)',
+                (user_id, user_dict)
+            )
             return redirect(url_for('auth.login'))
         flash(error)
     return render_template('auth/register.html')
