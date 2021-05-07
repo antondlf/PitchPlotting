@@ -90,10 +90,10 @@ def record(chaptername, chapteroccurrence):
 
         if textplot_path == 'Baseline':
             is_baseline = True
-            process_recording(audio_path, chaptername, audio_data, is_baseline, chapteroccurrence)
+            process_recording(text, audio_path, chaptername, audio_data, is_baseline, chapteroccurrence)
             return render_template('/record/baseline.html', sentence=text)
 
-        process_recording(audio_path, chaptername, audio_data, is_baseline, chapteroccurrence)
+        process_recording(text, audio_path, chaptername, audio_data, is_baseline, chapteroccurrence)
 
 
         return redirect(url_for('/record.post_trial', chapter_id=chaptername, chapter_order=chapteroccurrence))
@@ -135,12 +135,17 @@ def post_trial(chapter_id, chapter_order):
     return render_template('/record/post_trial.html', sentence=text, recording=recording_path, plot=plot_path, original_audio=chapter_id)
 
 
-def process_recording(original_recording, chaptername, audio_data, is_baseline, chapteroccurrence):
+def process_recording(text, original_recording, chaptername, audio_data, is_baseline, chapteroccurrence):
     """Yields the template with latest plot and posts recording info into db."""
 
     print(original_recording)
     # First get a unique id for this recording
-    trial_id = get_unique_id() # TODO: better naming system
+    toks = text.split(' ')
+    sent_name = toks[0] + '_' + toks[1]
+    sent_type = 'QUESTION' if toks[-1][-1] == '?' else 'STATEMENT'
+    unique_identifier = get_unique_id()
+    trial_id = sent_name + '_' + sent_type + '_' + unique_identifier # TODO: better naming system
+
 
 
     # Chaptername passed to the function
@@ -148,24 +153,13 @@ def process_recording(original_recording, chaptername, audio_data, is_baseline, 
     user_id = g.user['id']
     trial_path = os.path.join(current_app.root_path, '../participant_recordings', trial_id)
     error = None
-    if is_baseline == False:
-        plot_path, recording_path = save_plot(
-            original_recording,
-            trial_path,
-            audio_data,
-            chaptername,
-            chapteroccurrence
-        )
-        if not plot_path:
-            error += 'Plot_path missing.'
-    elif is_baseline == True:
 
-        plot_path, recording_path = save_plot(
-            original_recording, trial_path,
-            audio_data, chaptername,
-            chapteroccurrence,
-            is_baseline=True
-        )
+    plot_path, recording_path = save_plot(
+        original_recording, trial_path,
+        audio_data, chaptername,
+        chapteroccurrence,
+        is_baseline=True
+    )
 
     if not chapter_id:
         error += 'Chapter_id is missing.'
@@ -244,33 +238,6 @@ def return_textplot_file(chaptername, filename):
 def next_chapter(chaptername, chapter_order): # TODO:create Baseline condition
 
 
-    terr_list = {
-        '0': 'Chapter_1', '1': 'Chapter_1',
-        '2': 'Chapter_2', '3': 'Chapter_2',
-        '4': 'Chapter_1', '5': 'Chapter_3',
-        '6': 'Chapter_3', '7': 'Chapter_2',
-        '8': 'Chapter_4', '9': 'Chapter_4',
-        '10': 'Chapter_3', '11': 'Chapter_4',
-    }
-
-
-
-    demo_list = {
-        '0': 'Chapter_1', '1': 'Chapter_1', '2': 'Chapter_2', '3': 'Chapter_2',
-        '4': 'Chapter_1', '5': 'Chapter_3', '6': 'Chapter_3', '7': 'Chapter_2',
-        '8': 'Chapter_4', '9': 'Chapter_4', '10': 'Chapter_3', '11': 'Chapter_5',
-        '12': 'Chapter_5', '13': 'Chapter_4', '14': 'Chapter_6', '15': 'Chapter_6',
-        '16': 'Chapter_5', '17': 'Chapter_7', '18': 'Chapter_7', '19': 'Chapter_6',
-        '20': 'Chapter_8', '21': 'Chapter_8', '22': 'Chapter_7', '23': 'Chapter_8'
-    }
-
-
-    user_id = int(g.user['id'])
-    if user_id <= 4:
-        order_list = terr_list
-    else:
-        order_list = demo_list
-
     index_dir = os.path.join(current_app.root_path, '../Recordings')
     name_sections = chaptername.rsplit('_', 1)
     if name_sections[0] == 'Baseline':  # TODO: add intermediate message between baseline and chapters
@@ -282,13 +249,6 @@ def next_chapter(chaptername, chapter_order): # TODO:create Baseline condition
         else:
             print('Baseline completed')
 
-            return redirect(url_for('/record.record', chaptername=order_list['0'], chapteroccurrence=chapter_order))
-    else:
-        if chapter_order in order_list.keys():
-            chapter_order = str(int(chapter_order) + 1)
-            new_chapter = order_list[chapter_order]
-            return redirect(url_for('/record.record', chaptername=new_chapter, chapteroccurrence=chapter_order))
-        else:
             return redirect(url_for('/record.end_message'))
 
 
