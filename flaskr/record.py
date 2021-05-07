@@ -145,9 +145,9 @@ def process_recording(text, original_recording, chaptername, audio_data, is_base
     sent_name = toks[0] + '_' + toks[1]
     sent_type = 'QUESTION' if toks[-1][-1] == '?' else 'STATEMENT'
     unique_identifier = get_unique_id()
-    trial_id = user_id + '_' + sent_name + '_' + sent_type + '_' + unique_identifier # TODO: better naming system
+    trial_id = str(user_id) + '_' + sent_name + '_' + sent_type + '_' + unique_identifier # TODO: better naming system
 
-
+    print(trial_id)
 
     # Chaptername passed to the function
     chapter_id = chaptername
