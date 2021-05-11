@@ -18,40 +18,37 @@ def init_chapters(database): # TODO: make only one class of sentence
     sent_id = None
     text = None
     sentence_text_exists = False
-    sentences = {'matched': {
-        'set_1': {
-            '1': 'Mario vola',
-            '2': 'Delia guida',
-            '3': 'Livia dorme',
-            '4': 'Barbara vive',
-            '5': 'Angelo giunge',
-            '6': 'Debora gira', '7': 'Daria brinda'
-        },
-        'set_2': {
-            '1': 'Adriana beve',
-            '2': 'Giuliana mangia',
-            '3': 'Damiano morde',
-            '4': 'Amedeo lava',
-            '5': 'Edoardo vede',
-            '6': 'Loredana vende',
-            '7': 'Gabriele ama'
-        },
-        'set_3': {'1': 'Il lago',
-                  '2': 'Il brodo',
-                  '3': 'La legna',
-                  '4': 'La rana',
-                  '5': 'Il ladro',
-                  '6': 'La via',
-                  '7': 'Il nome'},
-        'set_4': {'1': 'Il giornale',
-                  '2': 'La balena',
-                  '3': 'Il melone',
-                  '4': 'La bambina',
-                  '5': 'La ragione',
-                  '6': 'Il rumore',
-                  '7': 'La bevanda'},
-    }, 'unmatched': {'1': 'Anna lavora', '2': 'Emilia arriva', '3': 'Bernardo viene', '4': 'Andrea rimane',
-                     '5': 'Luigi odia', '6': 'Elena guarda', '7': 'Giovanni ruba', '8': 'Irene disegna'}
+    sentences = {
+        'matched':
+            {'set_1': {
+                '1': 'Mario_vola','2': 'Delia_guida',
+                '3': 'Livia_dorme', '4': 'Barbara_vive',
+                '5': 'Angelo_giunge', '6': 'Debora_gira',
+                '7': 'Daria_brinda'
+            },
+                'set_2': {
+                '1': 'Adriana_beve', '2': 'Giuliana_mangia',
+                '3': 'Damiano_morde', '4': 'Amedeo_lava',
+                '5': 'Edoardo_vede', '6': 'Loredana_vende',
+                '7': 'Gabriele_ama'
+            },
+                'set_3': {
+                    '1': 'Il_lago', '2': 'Il_brodo',
+                    '3': 'La_legna', '4': 'La_rana',
+                    '5': 'Il_ladro', '6': 'La_via',
+                    '7': 'Il_nome'
+                },
+                'set_4': {
+                    '1': 'Il_giornale', '2': 'La_balena',
+                    '3': 'Il_melone', '4': 'La_bambina',
+                    '5': 'La_ragione', '6': 'Il_rumore',
+                    '7': 'La_bevanda'
+                }},
+        'unmatched': {
+            '1': 'Anna_lavora', '2': 'Emilia_arriva',
+            '3': 'Bernardo_viene', '4': 'Andrea_rimane',
+            '5': 'Luigi_odia', '6': 'Elena_guarda',
+            '7': 'Giovanni_ruba', '8': 'Irene_disegna'}
     }
     question_tag = '(Q)'
     statement_tag = '(S)'
@@ -99,18 +96,20 @@ def input_sent_pair(recordings_dir, sent_group, current_sent, database):
                         return print('Error: missing text in baseline')
 
                 # Extract the name and path of wav file
-                elif file.endswith('.wav'):
-                    audio_path = os.path.join(chap_directory, file)
-
-                elif file.endswith('.TextGrid'):
-                    textgrid_path = os.path.join(chap_directory, file)
-                elif file.endswith('.png'):
-                    textplot_path = os.path.join(chap_directory, file)
+                # elif file.endswith('.wav'):
+                #     audio_path = os.path.join(chap_directory, file)
+                #
+                # elif file.endswith('.TextGrid'):
+                #     textgrid_path = os.path.join(chap_directory, file)
+                # elif file.endswith('.png'):
+                #     textplot_path = os.path.join(chap_directory, file)
 
                 elif file == '.DS_Store':
                     pass
                 else:
                     return print("Error: filesystem corrupt")
+
+            audio_path, textplot_path = ('NAN', 'NAN')
 
             if sent_id and text:
                 # TODO: get new variables from schema

@@ -10,8 +10,12 @@ CREATE TABLE user (
 );
 
 CREATE TABLE userdata (
-    user_id TEXT UNIQUE NOT NULL,
-    user_dict TEXT NOT NULL --TODO: link with functionality for randomization
+    user_id TEXT NOT NULL,
+    experimental_condition TEXT NOT NULL,
+    session_number TEXT NOT NULL,
+    trial_type TEXT NOT NULL,
+    sent_order TEXT NOT NULL,
+    sent_id TEXT NOT NULL
 );
 
 CREATE TABLE recordings (

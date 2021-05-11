@@ -9,6 +9,8 @@ from werkzeug.exceptions import abort
 
 from pitch_track.audio_processing import process_recording
 
+from pitch_track.user_dict import get_current_state
+
 import os
 
 user_dict = {
@@ -55,30 +57,25 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
     yields record html template with audio."""
 
     print(session, chapterorder)
-    # TODO: add functionality to access order from user table.
-    user_id = g.user['id']
-    print(user_id)
-    # Query database here for dict
-    # user_dict = some sql query
-    # Query dict for session, condition, and order
-    current_user = user_dict[str(user_id)]
-    condition = current_user['condition']
-    chaptername = current_user['order'][session][trial_type][chapterorder]
-
-    recordings = list()
     db = get_db()
+    user_id = g.user['id']
+
+    sent_id, condition = get_current_state(
+        user_id, session, trial_type, chapterorder
+    )
+    recordings = list()
 
     sentence = db.execute(
         'SELECT sent_group, sent_type, text, audio_path, textplot_path' #TODO: get all variables necessary
         ' FROM chapters WHERE sent_id=?'  # p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC',
-        (chaptername,)
+        (sent_id,)
     ).fetchall()
 
     # Make sure there is only one identified sentence
     if not len(sentence) == 1:
         print(sentence)
-        abort(404, "Audio '{0}' doesn't exist or database entry is corrupt.".format(chaptername))
+        abort(404, "Audio '{0}' doesn't exist or database entry is corrupt.".format(sent_id))
 
     # Get paths and text
     sent_group,\
@@ -95,7 +92,7 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
             'SELECT trial_id'
             ' FROM recordings WHERE sent_id=? AND user_id=? AND session_number=? AND sent_order=?'
             ' ORDER BY created DESC',
-            (chaptername, user_id, session, chapterorder)
+            (sent_id, user_id, session, chapterorder)
         ).fetchall()
 
         if trial_type != 'training':
@@ -118,10 +115,10 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
                              trial_type,
                              sent_group,
                              sent_type,
-                             chaptername,  # sent_id in schema
+                             sent_id,  # sent_id in schema
                              False) #TODO: figure out how to get rep info
 
-        recording_path = process_recording(audio_path, audio_data, chaptername, database_inputs)
+        recording_path = process_recording(audio_path, audio_data, sent_id, database_inputs)
 
         # Make sure the microphone picked up a recording
         if recording_path == None:
@@ -136,11 +133,11 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
 
     if condition == 'a':
         return render_template(
-                '/record/index.html', recording=chaptername, sentence=text, textplot=textplot, plot=plot_path, audio=recordings
+                '/record/index.html', recording=sent_id, sentence=text, textplot=textplot, plot=plot_path, audio=recordings
             ) #TODO: fix index.html to reflect changes Done?
     else:
         return render_template(
-                '/record/index.html', recording=chaptername, sentence=text, textplot=None, plot=None, audio=recordings
+                '/record/index.html', recording=sent_id, sentence=text, textplot=None, plot=None, audio=recordings
             )
 
 
@@ -154,7 +151,9 @@ def post_trial(session, trial_type, chapter_order):
 
     db = get_db()
     user_id = str(g.user['id'])
-    condition = user_dict[user_id]['condition']
+
+    user_dict = get_user_dict(user_id)
+    condition = user_dict['condition']
 
     # TODO: change database queries to align with new sql schema
     user_audio = db.execute(
@@ -210,10 +209,7 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
 
     # Get the list of trial types for this session.
     user_id = str(g.user['id'])
-    trial_type_keys = \
-        user_dict[user_id] \
-            ['order'] \
-            [session].keys()
+    trial_type_keys = user_dict['order'][session].keys()
 
     trial_type_list = list(trial_type_keys)
 
