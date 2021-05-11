@@ -11,8 +11,7 @@ CREATE TABLE user (
 
 CREATE TABLE userdata (
     user_id TEXT UNIQUE NOT NULL,
-    experimental_condition TEXT NOT NULL,
-    chapter_list TEXT NOT NULL --TODO: link with functionality for randomization
+    user_dict TEXT NOT NULL --TODO: link with functionality for randomization
 );
 
 CREATE TABLE recordings (
