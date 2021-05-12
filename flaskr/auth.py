@@ -37,11 +37,7 @@ def register():
                 'SELECT id FROM user WHERE username=?',
                 (username,)
             ).fetchall()[0]['id']
-            user_dict = create_user_dict(user_id)
-            db.execute(
-                'INSERT INTO userdata (user_id, user_dict) VALUES (?, ?)',
-                (user_id, user_dict)
-            )
+            create_user_dict(user_id)
             return redirect(url_for('auth.login'))
         flash(error)
     return render_template('auth/register.html')

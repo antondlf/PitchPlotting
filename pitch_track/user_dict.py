@@ -74,7 +74,8 @@ def create_user_dict(user_id):
     for sent in statement_list:
 
         group, id = (sent['sent_group'], sent['sent_id'])
-        question_list.append(question for question in sentences[group]['Q'] if sent['sent_id'] == id)
+        gen_id = id[:-3]
+        question_list += [question for question in sentences[group]['Q'] if sent['sent_id'][:-3] == gen_id]
 
     user_dict = dict()
 
@@ -126,15 +127,21 @@ def create_user_dict(user_id):
     for i in range(8):
 
         group = random.choice(group_list)
-        statement = random.choice(sentences[group]['S']),
-        question = (
-            sent for sent in sentences[group]['Q'] if\
-            sent['sent_id'] == statement['sent_id'])
+        statement = random.choice(sentences[group]['S'])
+        print('This is the statement')
+        print(statement)
+        print()
+        for sent in sentences[group]['Q']:
+            if sent['sent_id'][:-3] == statement['sent_id'][:-3]:
+                question = sent
+        print('this is the question')
+        print(question)
+        print()
 
-        order_dict['Session 1']['training'][i] = statement
-        order_dict['Session 1']['training'][i] = question
-        order_dict['Session 2']['training'][i] = statement
-        order_dict['Session 2']['training'][i] = question
+        order_dict['Session 1']['training'][i] = statement['sent_id']
+        order_dict['Session 1']['training'][i] = question['sent_id']
+        order_dict['Session 2']['training'][i] = statement['sent_id']
+        order_dict['Session 2']['training'][i] = question['sent_id']
 
     user_dict['order'] = order_dict
 
@@ -145,11 +152,40 @@ def create_user_dict(user_id):
             for order in orders.keys():
                 sent_id = orders[order]
                 condition = user_dict['condition']
+                print('Order')
+                print(
+                    order,
+                    type(order))
+                print('User_id')
+                print(
+                    user_id,
+                    type(user_id))
+                print('condition')
+                print(
+                    condition,
+                    type(condition))
+                print('session')
+                print(
+                    session,
+                    type(session))
+                print('trial_type')
+                print(
+                    trial_type,
+                    type(trial_type))
+                print('order')
+                print(
+                    order,
+                    type(order))
+                print(sent_id)
+                print(
+                    sent_id,
+                    type(sent_id)
+                )
                 db = get_db()
                 db.execute(
                     'INSERT INTO userdata (user_id, experimental_condition, session_number, trial_type, sent_order, sent_id)'
                     'VALUES (?, ?, ?, ?, ?, ?)',
-                    (user_id, condition, session, trial_type, str(order), sent_id)
+                    (int(user_id), condition, session, trial_type, str(order), sent_id)
                 )
 
 def get_current_state(user_id, session, trial_type, order):
