@@ -9,36 +9,17 @@ from werkzeug.exceptions import abort
 
 from pitch_track.audio_processing import process_recording
 
-from pitch_track.user_dict import get_current_state
+from pitch_track.user_dict import user_state
 
 import os
 
-user_dict = {
-    '1': {
-        'condition': 'a',
-        'order': {
-            'Session 1': {
-                'pre_train': {'0': 'Chapter_1', '1': 'Chapter_2'},
-                'training': {
-                    '0': 'Chapter_5', '1': 'Chapter_6',
-                    '2':'Chapter_7', '3': 'Chapter_8'
-                },
-                'post_train': {'0': 'Chapter_3', '1': 'Baseline_4'}
-            },
-            'Session_2': {
-                'pre_train': {'0': 'Chapter_1', '1': 'Chapter_2'},
-                'training': {
-                    '0': 'Chapter_5', '1': 'Chapter_6',
-                    '2':'Chapter_7', '3': 'Chapter_8'
-                },
-                'post_train': {'0': 'Chapter_3', '1': 'Baseline_4'}
-            },
-            'Session 3': {
-                'pre_train': {'0': 'Chapter_7', '1': 'Chapter_8'}
-            }
-        },
-    }
-} # TODO: Query this from database
+
+def get_user_state(user_id):
+    if 'user_dict' not in g:
+        g.user_dict = user_state(user_id)
+
+    return g.user_dict
+
 bp = Blueprint('/record', __name__)
 
 @bp.route('/')
@@ -59,10 +40,9 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
     print(session, chapterorder)
     db = get_db()
     user_id = g.user['id']
-
-    sent_id, condition = get_current_state(
-        user_id, session, trial_type, chapterorder
-    )
+    user_dict = get_user_state(user_id)
+    sent_id = user_dict.get_current_state(session, trial_type, chapterorder)
+    condition = user_dict.get_condition()
     recordings = list()
 
     sentence = db.execute(
@@ -150,10 +130,10 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
 def post_trial(session, trial_type, chapter_order):
 
     db = get_db()
-    user_id = str(g.user['id'])
+    user_id = g.user['id']
 
-    user_dict = get_user_dict(user_id)
-    condition = user_dict['condition']
+    user_dict = get_user_state(user_id)
+    condition = user_dict.get_condition()
 
     # TODO: change database queries to align with new sql schema
     user_audio = db.execute(
@@ -209,7 +189,8 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
 
     # Get the list of trial types for this session.
     user_id = str(g.user['id'])
-    trial_type_keys = user_dict['order'][session].keys()
+    user_dict = get_user_state(user_id)
+    trial_type_keys = user_dict.get_session_dict(session).keys()
 
     trial_type_list = list(trial_type_keys)
 

@@ -11,11 +11,7 @@ CREATE TABLE user (
 
 CREATE TABLE userdata (
     user_id INT NOT NULL,
-    experimental_condition TEXT NOT NULL,
-    session_number TEXT NOT NULL,
-    trial_type TEXT NOT NULL,
-    sent_order TEXT NOT NULL,
-    sent_id TEXT NOT NULL
+    user_dict BLOB NOT NULL
 );
 
 CREATE TABLE recordings (

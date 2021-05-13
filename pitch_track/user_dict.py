@@ -1,5 +1,8 @@
 from flaskr.db import get_db
+from flask import g
+import pickle
 import random
+from io import BytesIO
 
 
 def is_odd(n):
@@ -124,7 +127,8 @@ def create_user_dict(user_id):
     order_dict['Session 1']['training'] = dict()
     order_dict['Session 2']['training'] = dict()
 
-    for i in range(8):
+    i = 0
+    for n in range(8):
 
         group = random.choice(group_list)
         statement = random.choice(sentences[group]['S'])
@@ -137,66 +141,77 @@ def create_user_dict(user_id):
         print('this is the question')
         print(question)
         print()
+        for rep in range(2):
 
-        order_dict['Session 1']['training'][i] = statement['sent_id']
-        order_dict['Session 1']['training'][i] = question['sent_id']
-        order_dict['Session 2']['training'][i] = statement['sent_id']
-        order_dict['Session 2']['training'][i] = question['sent_id']
+            # i+rep = i in first iter, i+1 in second iter
+            # rep=0 and i=0 then i+rep = 0, rep=1 and i=2 then i+rep=3
+            # This scales as i grows
+            order_dict['Session 1']['training'][i+rep] = statement['sent_id']
+            order_dict['Session 2']['training'][i+rep] = statement['sent_id']
+            i += 1
+            # i = 1, i+rep = i in first iter i+1 in second iter
+            # i+rep =
+            order_dict['Session 1']['training'][i+rep] = question['sent_id']
+            order_dict['Session 2']['training'][i+rep] = question['sent_id']
+            i += 1
+            # i = 2
 
     user_dict['order'] = order_dict
 
-    for session in order_dict.keys():
-        session_dict = order_dict[session]
-        for trial_type in session_dict.keys():
-            orders = session_dict[trial_type]
-            for order in orders.keys():
-                sent_id = orders[order]
-                condition = user_dict['condition']
-                print('Order')
-                print(
-                    order,
-                    type(order))
-                print('User_id')
-                print(
-                    user_id,
-                    type(user_id))
-                print('condition')
-                print(
-                    condition,
-                    type(condition))
-                print('session')
-                print(
-                    session,
-                    type(session))
-                print('trial_type')
-                print(
-                    trial_type,
-                    type(trial_type))
-                print('order')
-                print(
-                    order,
-                    type(order))
-                print(sent_id)
-                print(
-                    sent_id,
-                    type(sent_id)
-                )
-                db = get_db()
-                db.execute(
-                    'INSERT INTO userdata (user_id, experimental_condition, session_number, trial_type, sent_order, sent_id)'
-                    'VALUES (?, ?, ?, ?, ?, ?)',
-                    (int(user_id), condition, session, trial_type, str(order), sent_id)
-                )
+    print(user_dict)
 
-def get_current_state(user_id, session, trial_type, order):
+    pdata = pickle.dumps(user_dict)
 
     db = get_db()
+    db.execute(
+        'INSERT INTO userdata (user_id, user_dict) VALUES (?, ?)',
+        (user_id, pdata)
+    )
+    db.commit()
 
-    condition, sent_id = db.execute(
-        'SELECT (condition, sent_id)'
-        ' FROM userdata WHERE user_id=?'
-        'session=?, trial_type=?, order=?',
-        (user_id, session, trial_type, order)
-    ).fetchall()[0]
 
-    return condition, sent_id
+    # for session in order_dict.keys():
+    #     session_dict = order_dict[session]
+    #     for trial_type in session_dict.keys():
+    #         orders = session_dict[trial_type]
+    #         for order in orders.keys():
+    #             sent_id = orders[order]
+    #             condition = user_dict['condition']
+    #
+    #             db = get_db()
+    #             db.execute(
+    #                 'INSERT INTO userdata (user_id, experimental_condition, session_number, trial_type, sent_order, sent_id)'
+    #                 'VALUES (?, ?, ?, ?, ?, ?)',
+    #                 (int(user_id), condition, session, trial_type, str(order), sent_id)
+    #             )
+    # db.commit()
+
+class user_state:
+
+    def __init__(self, user_id):
+        db = get_db()
+        user_dict_pickle = db.execute(
+            'SELECT user_dict FROM userdata WHERE user_id=?',
+            (user_id,)
+        ).fetchall()[0]['user_dict']
+        self.user_dict = pickle.load(BytesIO(user_dict_pickle))
+
+    def get_condition(self):
+        return self.user_dict['condition']
+
+    def get_session_dict(self, session):
+
+        order_dict = self.user_dict['order']
+
+        return order_dict[session]
+
+    def get_current_order(self, session, trial_type):
+
+        session_dict = self.get_session_dict(session)
+        return session_dict[trial_type]
+
+    def get_current_state(self, session, trial_type, order):
+
+        current_order_dict = self.get_current_order(session, trial_type)
+        current_sent_id = current_order_dict[int(order)]
+        return current_sent_id
