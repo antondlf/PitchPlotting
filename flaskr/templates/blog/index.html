@@ -6,6 +6,13 @@
 {% endblock %}
 
 {% block content %}
+    <article class="post">
+      <header>
+        <div>
+          <h1><a class="action" href="{{ url_for('/instructions.intro') }}">Instructions</a></h1>
+        </div>
+      </header>
+    </article>
   {% for post in posts %}
     <article class="post">
       <header>

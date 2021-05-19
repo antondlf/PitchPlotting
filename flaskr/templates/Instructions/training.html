@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Training</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<p>
+    Once you’re done with the initial recordings,
+    you will be automatically taken to the training
+    section of the module, which features the following interface:
+</p>
+{% if condition == 'a' %}
+<img width=25% src="{{ url_for('/instructions.get_image', filename='training_interface.png') }}">
+<p>
+    In this interface you will be shown a plot of the intonation with
+    the words aligned at their corresponding intonational events.
+    Examine this plot and try to pronounce the sentence for yourself.
+    Then, you should press the “Play Recording” button,
+    which will play a recording of a native speaker pronouncing
+    the sentence. Press “Record”, wait for the “Go!” sign,
+    and try to imitate the native speaker’s production.
+    Once you press “Stop”, you will be redirected to another page
+    (this may take a few seconds to process).
+</p>
+<img width="25%" src="{{ url_for('/instructions.get_image', filename='post_trial.png') }}">
+<p>
+    This page will display a plot of your intonation against
+    the native speaker, so you can compare both traces and see
+    what you did right and what you did wrong. The example
+    here is from a learner who hasn't quite hit the right intonation
+    pattern but is almost there. You can see that the second syllable
+    has quite a different intonation when compared to the native speaker,
+    but the rest of the sentence aligns. You can evaluate your own intonation
+    visually like this, and you also have the opportunity to listen to the native
+    speaker again to get a better idea of where you went wrong by listening
+    back to yourself.
+</p>
+{% elif condition == 'b' %}
+<img width="25%" src="{{ url_for('/instructions.get_image', filename='control_training.png') }}">
+<p>
+    In this interface you will be asked to listen to a native speaker,
+    which you can do by pressing “Play Recording”.
+    You should try to pronounce the sentence,
+    listen to the native speaker, and then record yourself
+    (using the “Record” button) imitating the native speaker’s intonation.
+</p>
+<img width="25%" src="{{ url_for('/instructions.get_image', filename='control_post.png') }}">
+<p>
+    You will then be redirected to another page where you will be able
+    to listen to the native speaker once more before moving on to the
+    next sentence.
+</p>
+{% endif %}
+
+<a href="{{ url_for('/record.index') }}">Back to Menu</a>
+
+</body>
+</html>

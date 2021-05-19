@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Overview</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<p>
+    This study is aimed at understanding
+    how people learn intonation in a second language.
+    You will be asked to complete two training sessions
+    and a follow up. Each session will be conducted in this website.
+</p>
+<p>
+    Things you'll need:
+</p>
+<ul>
+    <li>A quiet space to work in.</li>
+    <li>A microphone (if you have a quality mic that is best).</li>
+    <li>An internet connection</li>
+</ul>
+<p>
+    For each session, you will log in to the website
+    with the username and password that have been provided to you.
+    This will take you to a home page listing all of the sessions,
+    click on the appropriate section for that day.
+</p>
+<a href={{url_for('/instructions.test_recordings')}}>Next: Test Recordings</a>
+</body>
+</html>
