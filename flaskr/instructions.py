@@ -37,6 +37,8 @@ def test_recordings():
 def training():
     user_id = g.user['id']
     condition = get_user_state(user_id).get_condition()
+    if condition == None:
+        return flash('Error, user not properly registered. Contact the support email to get a new account.')
 
     return render_template('Instructions/training.html', condition=condition)
 
