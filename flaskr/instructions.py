@@ -25,12 +25,12 @@ bp = Blueprint('/instructions', __name__)
 @bp.route('/instructions/intro')
 @login_required
 def intro():
-    return render_template('Instructions/Introduction.html')
+    return render_template('/Instructions/Introduction.html')
 
 @bp.route('/instructions/test_recordings')
 @login_required
 def test_recordings():
-    return render_template('Instructions/Test_instructions.html')
+    return render_template('/Instructions/Test_instructions.html')
 
 @bp.route('/instructions/training')
 @login_required
@@ -38,7 +38,7 @@ def training():
     user_id = g.user['id']
     condition = get_user_state(user_id).get_condition()
 
-    return render_template('Instructions/training.html', condition=condition)
+    return render_template('/Instructions/training.html', condition=condition)
 
 @bp.route('/instructions/<string:filename>')
 @login_required
