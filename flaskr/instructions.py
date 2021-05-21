@@ -43,5 +43,5 @@ def training():
 @bp.route('/instructions/<string:filename>')
 @login_required
 def get_image(filename):
-    path = os.path.join(current_app.root_path, '../instructions_pics')
+    path = os.path.join(current_app.root_path, 'instructions_pics')
     return send_from_directory(path, filename, as_attachment=True)
