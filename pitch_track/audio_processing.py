@@ -21,8 +21,6 @@ def process_recording(original_audio_path, audio_data, chaptername, database_inp
     """Yields the template with latest plot and posts recording info into db."""
 
     print(original_audio_path)
-    # First get a unique id for this recording
-    trial_id = get_unique_id() # TODO: better naming system
 
 
     error = None
