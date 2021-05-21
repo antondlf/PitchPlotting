@@ -96,23 +96,21 @@ def input_sent_pair(recordings_dir, sent_group, current_sent, database):
                         return print('Error: missing text in baseline')
 
                 # Extract the name and path of wav file
-                # elif file.endswith('.wav'):
-                #     audio_path = os.path.join(chap_directory, file)
-                #
-                # elif file.endswith('.TextGrid'):
-                #     textgrid_path = os.path.join(chap_directory, file)
-                # elif file.endswith('.png'):
-                #     textplot_path = os.path.join(chap_directory, file)
+                elif file.endswith('.wav'):
+                    audio_path = os.path.join(chap_directory, file)
+
+                elif file.endswith('.TextGrid'):
+                    textgrid_path = os.path.join(chap_directory, file)
+                elif file.endswith('.png'):
+                    textplot_path = os.path.join(chap_directory, file)
 
                 elif file == '.DS_Store':
                     pass
                 else:
                     return print("Error: filesystem corrupt")
 
-            audio_path, textplot_path = ('NAN', 'NAN')
-
             if sent_id and text:
-                # TODO: get new variables from schema
+
                 database.execute(
                     'INSERT INTO chapters (sent_group, sent_type, sent_id, text, audio_path, textplot_path)'
                     ' VALUES (?, ?, ?, ?, ?, ?)',
