@@ -64,9 +64,9 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
         audio_path,\
         textplot_path = sentence[0]
 
-    if chapterorder+1 % 4 == 0:
+    if int(chapterorder)+1 % 4 == 0:
         repetition = '1'
-    elif chapterorder+2 % 4 == 0:
+    elif int(chapterorder)+2 % 4 == 0:
         repetition = '1'
     else:
         repetition = '0'
@@ -120,11 +120,11 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
 
     if condition == 'a':
         return render_template(
-                '/record/index.html', recording=sent_id, sentence=text, textplot=textplot, plot=plot_path, audio=recordings
+                '/record/index.html', recording=sent_id, sentence=text, textplot=textplot, audio=recordings
             ) #TODO: fix index.html to reflect changes Done?
     else:
         return render_template(
-                '/record/index.html', recording=sent_id, sentence=text, textplot=None, plot=None, audio=recordings
+                '/record/index.html', recording=sent_id, sentence=text, textplot=None, audio=recordings
             )
 
 
@@ -152,6 +152,7 @@ def post_trial(session, trial_type, chapter_order):
 
 
     sent_id = user_audio[0]['sent_id']
+    trial_id = user_audio[0]['trial_id']
 
     sentence = db.execute(
         'SELECT audio_path, text'
@@ -160,8 +161,8 @@ def post_trial(session, trial_type, chapter_order):
         (sent_id,)
     ).fetchall()
 
-    if len(user_audio) > 0:
-        plot_path = user_audio[0]['trial_id'] + '.png'
+    if trial_id:
+        plot_path = trial_id + '.png'
     else:
         print("No audio was processed")
         plot_path = None
@@ -189,17 +190,16 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
     # }
     # TODO: Remember to change this to actual sequence for experiment
     sequence = {
-     'pre_train': 1,
-     'training': 3,
-     'post_train': 1,
+     'pre_train': 7,
+     'training': 31,
+     'post_train': 7,
     }
 
     # Get the list of trial types for this session.
     user_id = str(g.user['id'])
     user_dict = get_user_state(user_id)
-    trial_type_keys = user_dict.get_session_dict(session).keys()
 
-    trial_type_list = list(trial_type_keys)
+    trial_type_list = ['pre_train', 'training', 'post_train']
 
     # Cast to int in order to run int operations
     chapter_order_int = int(chapter_order)
@@ -215,17 +215,17 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
 
     elif int(chapter_order) == int(sequence[trial_type]):
 
-        if trial_type == trial_type_list[-1]:
-            print(trial_type_list)
-            return redirect(url_for('/record.end_message'))
-
-        else:
+        if trial_type != trial_type_list[-1]:
             new_trial_type_index = \
                 trial_type_list.index(trial_type) + 1
             new_trial_type = trial_type_list[new_trial_type_index]
             chapter_order = 0
 
             return redirect(url_for('/record.record', chapterorder=chapter_order, session=session, trial_type=new_trial_type))
+
+        else:
+            print(trial_type_list)
+            return redirect(url_for('/record.end_message'))
     else:
         return redirect(url_for('/record.end_message'))
 
