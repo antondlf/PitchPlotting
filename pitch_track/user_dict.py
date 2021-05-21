@@ -22,7 +22,10 @@ def sample_remove(x):
     return choice
 
 def get_sentences():
-
+    """Get the sentences from the database and return a dictionary with
+    all the sentence dictionaries as well as a list of all the sentence
+    dictionaries.
+    """
     db = get_db()
 
     sentences = db.execute(
@@ -56,14 +59,33 @@ def get_sentences():
                                (sent['sent_group'] == group) and (sent['sent_type'] == 'S')]
 
     print(sent_dict)
-    return sent_dict
+    return sent_dict, sent_dict_list
 
+def get_pair_tuples(sent_dict_list):
+    """use the list of dictionaries to get a list of Question-Statement pairs"""
+
+    statement_list = list()
+    question_list = list()
+    for sent in sent_dict_list:
+        if sent['sent_type'] == 'S':
+            statement_list.append(sent)
+        elif sent['sent_type'] == 'Q':
+            question_list.append(sent)
+
+    sentence_pairs = list()
+    for statement in statement_list:
+        for question in question_list:
+            if statement['sent_id'][:-3] == question['sent_id'][:-3]:
+                sentence_pairs.append((statement, question))
+    return sentence_pairs
 
 def create_user_dict(user_id):
 
-    sentences = get_sentences()
+    # Get the sentence dictionary and the list of sentence dictionaries.
+    sentences, sent_dict_list = get_sentences()
 
-
+    # Get the sentence pair list
+    sentence_pairs = get_pair_tuples(sent_dict_list)
 
     group_list = ['set_1', 'set_2', 'set_3', 'set_4', 'unmatched']
 
@@ -79,11 +101,13 @@ def create_user_dict(user_id):
         group, id = (sent['sent_group'], sent['sent_id'])
         gen_id = id[:-3]
         question_list += [question for question in sentences[group]['Q'] if sent['sent_id'][:-3] == gen_id]
-
+    # Initialize state dictionary
     user_dict = dict()
 
+    # Initialie order dictionary
     order_dict = dict()
 
+    # Give the state dictionary an experimental condition
     if is_odd(user_id):
         user_dict['condition'] = 'a'
     else:
@@ -104,9 +128,9 @@ def create_user_dict(user_id):
     # pre_train and post_train dicts
     for group in sentences.keys():
 
-        i += 1
 
-        # First get a statement
+        # First get 5 statements for this group and distribute them
+        # to all of the non-training conditions.
         choices = random.choices(sentences[group]['S'], k=5)
         order_dict['Session 1']['pre_train'][i] = choices[0]['sent_id']
         order_dict['Session 1']['post_train'][i] = choices[1]['sent_id']
@@ -114,52 +138,66 @@ def create_user_dict(user_id):
         order_dict['Session 2']['post_train'][i] = choices[3]['sent_id']
         order_dict['Session 3']['post_train'][i] = choices[4]['sent_id']
 
-
+        # add 1 to i for question
         i += 1
+        # Get 5 statements and do the same as above
         choices = random.choices(sentences[group]['Q'], k=5)
         order_dict['Session 1']['pre_train'][i] = choices[0]['sent_id']
         order_dict['Session 1']['post_train'][i] = choices[1]['sent_id']
         order_dict['Session 2']['pre_train'][i] = choices[2]['sent_id']
         order_dict['Session 2']['post_train'][i] = choices[3]['sent_id']
         order_dict['Session 3']['post_train'][i] = choices[4]['sent_id']
+        # Add 1 to i for next iter
+        i += 1
 
-
+    # Initialize the dictionary for training
     order_dict['Session 1']['training'] = dict()
     order_dict['Session 2']['training'] = dict()
 
-    i = 0
+
+    # For the training order we want to do it in Question-statement pairs
+    # That we can pick from a specific group.
+    # We need 8 sentence pairs that repeat once.
+
+    # Duplicate group list so that we can iterate 8 times.
+    group_list_iter = group_list*2
     for n in range(8):
 
-        group = random.choice(group_list)
-        statement = random.choice(sentences[group]['S'])
-        print('This is the statement')
-        print(statement)
-        print()
-        for sent in sentences[group]['Q']:
-            if sent['sent_id'][:-3] == statement['sent_id'][:-3]:
-                question = sent
-        print('this is the question')
-        print(question)
-        print()
+        # Get the group
+        group = group_list_iter[n]
+        # Pick pair for session 1
+        sent_pair1 = random.choice(sentence_pairs)
+        # Make sure its from the right group
+        while sent_pair1[0]['sent_group'] != group:
+            sent_pair1 = random.choice(sentence_pairs)
+
+        # Pick pair for session 2
+        sent_pair2 = random.choice(sentence_pairs)
+        # Make sure its from the right group
+        while sent_pair2[0]['sent_group'] != group:
+            sent_pair2 = random.choice(sentence_pairs)
+
+        # We want the index 'i' here to be relative to what numbered pair
+        # we are at (e.g. i should be 4 for our second pair of sentences
+        # because it will range from the 5th to the 8th spot in the order).
+        i = n*4
         for rep in range(2):
 
-            # i+rep = i in first iter, i+1 in second iter
-            # rep=0 and i=0 then i+rep = 0, rep=1 and i=2 then i+rep=3
-            # This scales as i grows
-            order_dict['Session 1']['training'][i+rep] = statement['sent_id']
-            order_dict['Session 2']['training'][i+rep] = statement['sent_id']
+            # i is n*4 in the first iteration and (n*4)+2 in the second iteration
+            order_dict['Session 1']['training'][i] = sent_pair1[0]['sent_id']
+            order_dict['Session 2']['training'][i] = sent_pair2[0]['sent_id']
             i += 1
-            # i = 1, i+rep = i in first iter i+1 in second iter
-            # i+rep =
-            order_dict['Session 1']['training'][i+rep] = question['sent_id']
-            order_dict['Session 2']['training'][i+rep] = question['sent_id']
+            order_dict['Session 1']['training'][i] = sent_pair1[1]['sent_id']
+            order_dict['Session 2']['training'][i] = sent_pair2[1]['sent_id']
             i += 1
-            # i = 2
 
+    # input the order_dict into user_dict
     user_dict['order'] = order_dict
 
     print(user_dict)
 
+    # serialize the user_dictionary using pickle so that it can be
+    # input into the database.
     pdata = pickle.dumps(user_dict)
 
     db = get_db()
