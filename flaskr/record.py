@@ -194,6 +194,7 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
 
     trial_type_list = list(trial_type_keys)
 
+
     # Cast to int in order to run int operations
     chapter_order_int = int(chapter_order)
     if chapter_order_int < int(sequence[trial_type]):
@@ -218,6 +219,7 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
             new_trial_type = trial_type_list[new_trial_type_index]
             chapter_order = 0
 
+
             return redirect(url_for('/record.record', chapterorder=chapter_order, session=session, trial_type=new_trial_type))
     else:
         return redirect(url_for('/record.end_message'))
@@ -238,6 +240,7 @@ def return_textplot_file(chaptername, filename):
     path = os.path.join(current_app.root_path, '../Recordings/', chaptername)
 
     return send_from_directory(path, filename, as_attachment=True)
+
 
 @bp.route('/done')
 @login_required

@@ -105,9 +105,11 @@ function stopRecording() {
 
 	//disable the stop button, enable the record too allow for new recordings
 	stopButton.disabled = true;
-	recordButton.disabled = true;
+	recordButton.disabled = false;
 	//sendButton.disabled = false;
 	nextButton.disabled = false;
+
+	document.getElementById("formats").innerHTML="wait..."
 
 	//reset button just in case the recording is stopped while paused
 	//pauseButton.innerHTML="Pause";
@@ -192,7 +194,7 @@ function sendAudio(data) {
 //            )
             .then(response => {
                 if (response.redirected) {window.location = response.url;}
-                else {throw Error(`Server returned ${response.status}: ${response.statusText}`)}
+//                else {throw Error(`Server returned ${response.status}: ${response.statusText}`)}
             })
             //.then(response => console.log(response.text()))
             .catch(err => {
