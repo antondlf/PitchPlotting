@@ -8,7 +8,7 @@ from flask.cli import with_appcontext
 import flaskr.db
 
 def get_unique_id():
-    return str(uuid.uuid1())
+    return str(uuid.uuid1())[:4]
 
 
 def init_chapters(database): # TODO: make only one class of sentence
