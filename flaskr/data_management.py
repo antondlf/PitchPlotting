@@ -107,7 +107,7 @@ def input_sent_pair(recordings_dir, sent_group, current_sent, database):
                     textplot_path = os.path.join(chap_directory, file)
 
                 elif file == '.DS_Store':
-                    pass
+                    continue
                 else:
                     return print("Error: filesystem corrupt")
 
