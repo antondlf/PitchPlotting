@@ -36,9 +36,9 @@ def create_app(test_config=None):
     app.register_blueprint(record.bp)
     app.add_url_rule('/', endpoint='index')
 
-    # from . import record
-    # app.register_blueprint(record.bp)
-    # app.add_url_rule('/', endpoint='record')
+    from . import instructions
+    app.register_blueprint(instructions.bp)
+    app.add_url_rule('/', endpoint='instructions')
 
     from . import audio
     app.register_blueprint(audio.bp)

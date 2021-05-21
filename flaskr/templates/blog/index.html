@@ -6,14 +6,21 @@
 {% endblock %}
 
 {% block content %}
-  <article class="post">
-    <header>
-      <div>
-        <!--TODO: figure out hardcoding here-->
-        <h1><a class="action" href="{{ url_for('/record.record', chaptername='Baseline_1', chapteroccurrence=0) }}">Start Activites</a></h1>
-      </div>
-    </header>
-    <!--p class="body"></p-->
-  </article>
-      <hr>
+    <article class="post">
+      <header>
+        <div>
+          <h1><a class="action" href="{{ url_for('/instructions.intro') }}">Instructions</a></h1>
+        </div>
+      </header>
+    </article>
+  {% for post in posts %}
+    <article class="post">
+      <header>
+        <div>
+          <!--TODO: remember session 3 only has generalization as condition-->
+          <h1><a class="action" href="{{ url_for('/record.record', session=post, trial_type='pre_train', chapterorder=0) }}">{{ post }}</a></h1>
+        </div>
+      </header>
+    </article>
+  {% endfor %}
 {% endblock %}
