@@ -64,6 +64,13 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
         audio_path,\
         textplot_path = sentence[0]
 
+    if chapterorder+1 % 4 == 0:
+        repetition = '1'
+    elif chapterorder+2 % 4 == 0:
+        repetition = '1'
+    else:
+        repetition = '0'
+
     # make sure textplot only contains the name of the file
     textplot = textplot_path.rsplit('/', 1)[-1]
 
@@ -96,7 +103,7 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
                              sent_group,
                              sent_type,
                              sent_id,  # sent_id in schema
-                             False) #TODO: figure out how to get rep info
+                             repetition) #TODO: figure out how to get rep info
 
         recording_path = process_recording(audio_path, audio_data, sent_id, database_inputs)
 
