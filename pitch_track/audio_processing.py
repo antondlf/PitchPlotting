@@ -25,14 +25,15 @@ def process_recording(original_audio_path, audio_data, chaptername, database_inp
     trial_id = get_unique_id() # TODO: better naming system
 
 
-
-    trial_path = os.path.join(current_app.root_path, '../participant_recordings', trial_id)
     error = None
 
     # Unpack database inputs
     user_id, sent_order, experimental_condition, \
     session, trial_type, sent_group, \
     sent_type, sent_id, repetition = database_inputs
+
+    trial_id = user_id + '_' + sent_id + '_' + sent_type + '_' + repetition + '_' + get_unique_id()
+    trial_path = os.path.join(current_app.root_path, '../participant_recordings', trial_id)
 
 
     recording_path = save_audio(trial_path, audio_data)

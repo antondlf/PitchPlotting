@@ -95,7 +95,7 @@ def draw_text_plot(audio, textgrid, plot_path):#,  jitter = 0.001, text_jitter =
 
     # plt.xlim(min(time), max(time))
 
-    time += start_room
+    time += time/10
 
     plt.plot(time, pitch_values, 'o', markersize=5, color='w')
     plt.plot(time, pitch_values, 'o', markersize=2, color='b')
@@ -119,8 +119,8 @@ def preprocess_chapters(chapters_path):
 
         chap_directory = os.path.join(chapters_path, dir)
         print(chap_directory)
-
-        if dir.startswith('Chapter'):
+        if chap_directory != 'Recordings/.DS_Store':
+            pass
 
             for file in os.listdir(chap_directory):
 
@@ -129,6 +129,10 @@ def preprocess_chapters(chapters_path):
 
                 if file.endswith('.wav'):
                     audio = os.path.join(chap_directory, file)
-                    pathname = os.path.join(chap_directory, audio.rsplit('.')[0] + '.png')
+                    pathname = os.path.join(chap_directory, file.rsplit('.')[0] + '.png')
+                    print(pathname)
 
             draw_text_plot(audio, grid, pathname)
+
+if __name__ == '__main__':
+    preprocess_chapters('Recordings')

@@ -1,6 +1,4 @@
-
-from datetime import datetime
-from uuid import uuid4
+import uuid
 
 import os
 import click
@@ -10,8 +8,7 @@ from flask.cli import with_appcontext
 import flaskr.db
 
 def get_unique_id():
-    eventid = str(uuid4())[0:4]
-    return eventid
+    return str(uuid.uuid1())
 
 
 def init_chapters(database): # TODO: make only one class of sentence
