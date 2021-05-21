@@ -103,7 +103,7 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
                              sent_group,
                              sent_type,
                              sent_id,  # sent_id in schema
-                             repetition) #TODO: figure out how to get rep info
+                             repetition)
 
         recording_path = process_recording(audio_path, audio_data, sent_id, database_inputs)
 
