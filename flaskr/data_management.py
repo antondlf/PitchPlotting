@@ -86,6 +86,7 @@ def input_sent_pair(recordings_dir, sent_group, current_sent, database):
         if os.path.isdir(chap_directory):
             item_pair = os.listdir(chap_directory)
             for file in item_pair:
+                print(file)
 
                 if file.endswith('.txt'):
                     with open(os.path.join(chap_directory, file)) as in_file:
@@ -102,6 +103,7 @@ def input_sent_pair(recordings_dir, sent_group, current_sent, database):
                 elif file.endswith('.TextGrid'):
                     textgrid_path = os.path.join(chap_directory, file)
                 elif file.endswith('.png'):
+
                     textplot_path = os.path.join(chap_directory, file)
 
                 elif file == '.DS_Store':
