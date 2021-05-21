@@ -231,8 +231,12 @@ class user_state:
         user_dict_pickle = db.execute(
             'SELECT user_dict FROM userdata WHERE user_id=?',
             (user_id,)
-        ).fetchall()[0]['user_dict']
-        self.user_dict = pickle.load(BytesIO(user_dict_pickle))
+        ).fetchall()
+        if len(user_dict_pickle) == 0:
+            error = 'Error, user not properly registered. Contact the support email to get a new account.'
+            return error
+        else:
+            self.user_dict = pickle.load(BytesIO(user_dict_pickle[0]['user_dict']))
 
     def get_condition(self):
         return self.user_dict['condition']
