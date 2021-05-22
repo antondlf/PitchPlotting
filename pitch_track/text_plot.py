@@ -95,7 +95,7 @@ def draw_text_plot(audio, textgrid, plot_path):#,  jitter = 0.001, text_jitter =
 
     # plt.xlim(min(time), max(time))
 
-    time += time/10
+    time += start_room
 
     plt.plot(time, pitch_values, 'o', markersize=5, color='w')
     plt.plot(time, pitch_values, 'o', markersize=2, color='b')
