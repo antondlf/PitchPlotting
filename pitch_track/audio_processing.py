@@ -30,7 +30,7 @@ def process_recording(original_audio_path, audio_data, chaptername, database_inp
     session, trial_type, sent_group, \
     sent_type, sent_id, repetition = database_inputs
 
-    trial_id = user_id + '_' + sent_id + '_' + sent_type + '_' + repetition + '_' + get_unique_id()
+    trial_id = str(user_id) + '_' + str(sent_id) + '_' + str(sent_type) + '_' + str(repetition) + '_' + str(get_unique_id())
     trial_path = os.path.join(current_app.root_path, '../participant_recordings', trial_id)
 
 
