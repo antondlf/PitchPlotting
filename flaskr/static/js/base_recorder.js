@@ -105,7 +105,7 @@ function stopRecording() {
 
 	//disable the stop button, enable the record too allow for new recordings
 	stopButton.disabled = true;
-	recordButton.disabled = false;
+	recordButton.disabled = true;
 	//sendButton.disabled = false;
 	nextButton.disabled = false;
 
