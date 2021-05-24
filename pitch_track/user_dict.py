@@ -121,7 +121,7 @@ def create_user_dict(user_id):
     order_dict['Session 2']['pre_train'] = dict()
     order_dict['Session 1']['post_train'] = dict()
     order_dict['Session 2']['post_train'] = dict()
-    order_dict['Session 3']['post_train'] = dict()
+    order_dict['Session 3']['pre_train'] = dict()
 
     # Counter to keep track of order
     i = -1
@@ -136,7 +136,7 @@ def create_user_dict(user_id):
         order_dict['Session 1']['post_train'][i] = choices[1]['sent_id']
         order_dict['Session 2']['pre_train'][i] = choices[2]['sent_id']
         order_dict['Session 2']['post_train'][i] = choices[3]['sent_id']
-        order_dict['Session 3']['post_train'][i] = choices[4]['sent_id']
+        order_dict['Session 3']['pre_train'][i] = choices[4]['sent_id']
 
         # add 1 to i for question
         i += 1
@@ -146,7 +146,7 @@ def create_user_dict(user_id):
         order_dict['Session 1']['post_train'][i] = choices[1]['sent_id']
         order_dict['Session 2']['pre_train'][i] = choices[2]['sent_id']
         order_dict['Session 2']['post_train'][i] = choices[3]['sent_id']
-        order_dict['Session 3']['post_train'][i] = choices[4]['sent_id']
+        order_dict['Session 3']['pre_train'][i] = choices[4]['sent_id']
         # Add 1 to i for next iter
         i += 1
 
