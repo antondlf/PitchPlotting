@@ -79,6 +79,24 @@ def get_pair_tuples(sent_dict_list):
                 sentence_pairs.append((statement, question))
     return sentence_pairs
 
+def get_user_list(order_dict):
+
+    order_list = list()
+
+    sessions = ['Session 1', 'Session 2', 'Session 3']
+    trial_type = ['pre_train', 'training', 'post_train']
+
+    for session in sessions:
+
+        current_sesh = order_dict[session]
+        for trial in trial_type:
+            current_trial = current_sesh[trial]
+            for order in current_trial.keys():
+
+                order_list.append(current_trial[order])
+
+    return order_list
+
 def create_user_dict(user_id):
 
     # Get the sentence dictionary and the list of sentence dictionaries.
@@ -206,6 +224,8 @@ def create_user_dict(user_id):
         (user_id, pdata)
     )
     db.commit()
+
+    return get_user_list(order_dict)
 
 
     # for session in order_dict.keys():
