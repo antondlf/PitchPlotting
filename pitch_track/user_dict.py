@@ -202,11 +202,11 @@ def create_user_dict(user_id):
         for rep in range(2):
 
             # i is n*4 in the first iteration and (n*4)+2 in the second iteration
-            order_dict['Session 1']['training'][i] = sent_pair1[0]['sent_id']
-            order_dict['Session 2']['training'][i] = sent_pair2[0]['sent_id']
+            order_dict['Session 1']['training'][i] = sent_pair1[rep]['sent_id']
+            order_dict['Session 2']['training'][i] = sent_pair2[rep]['sent_id']
             i += 1
-            order_dict['Session 1']['training'][i] = sent_pair1[1]['sent_id']
-            order_dict['Session 2']['training'][i] = sent_pair2[1]['sent_id']
+            order_dict['Session 1']['training'][i] = sent_pair1[rep]['sent_id']
+            order_dict['Session 2']['training'][i] = sent_pair2[rep]['sent_id']
             i += 1
 
     # input the order_dict into user_dict
