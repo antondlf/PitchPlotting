@@ -94,8 +94,9 @@ def get_user_list(order_dict):
             for order in current_trial.keys():
 
                 order_list.append(current_trial[order])
+                if session == 'Session 3':
 
-    return order_list
+                    return order_list
 
 def create_user_dict(user_id):
 
