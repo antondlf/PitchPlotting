@@ -215,8 +215,10 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
             return redirect(url_for('/record.end_message'))
 
     elif int(chapter_order) == int(sequence[trial_type]):
-
-        if trial_type != trial_type_list[-1]:
+        if session == 'Session 1':
+            if trial_type == 'pre_train':
+                return redirect(url_for('/instructions.training', is_session=True))
+        elif trial_type != trial_type_list[-1]:
             new_trial_type_index = \
                 trial_type_list.index(trial_type) + 1
             new_trial_type = trial_type_list[new_trial_type_index]

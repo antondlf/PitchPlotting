@@ -32,15 +32,24 @@ def intro():
 def test_recordings():
     return render_template('Instructions/Test_instructions.html')
 
-@bp.route('/instructions/training')
+@bp.route('/instructions/training/<string:is_session>')
 @login_required
-def training():
+def training(is_session):
     user_id = g.user['id']
     condition = get_user_state(user_id).get_condition()
     if condition == 'Error, user not properly registered. Contact the support email to get a new account.':
         return flash(condition)
 
-    return render_template('Instructions/training.html', condition=condition)
+    if is_session == 'True':
+        print('session is true')
+        what_next = 'training'
+    elif is_session == 'False':
+        what_next = 'menu'
+
+    return render_template(
+            'Instructions/training.html',
+            condition=condition,
+            next_panel=what_next)
 
 @bp.route('/instructions/<string:filename>')
 @login_required
