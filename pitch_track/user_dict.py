@@ -142,7 +142,7 @@ def create_user_dict(user_id):
     order_dict['Session 3']['pre_train'] = dict()
 
     # Counter to keep track of order
-    i = -1
+    i = 0
     # pre_train and post_train dicts
     for group in sentences.keys():
 
@@ -202,6 +202,7 @@ def create_user_dict(user_id):
         for rep in range(2):
 
             # i is n*4 in the first iteration and (n*4)+2 in the second iteration
+            # when rep=0 we get the Statement, when rep=1 we get the question
             order_dict['Session 1']['training'][i] = sent_pair1[rep]['sent_id']
             order_dict['Session 2']['training'][i] = sent_pair2[rep]['sent_id']
             i += 1
