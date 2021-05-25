@@ -54,7 +54,10 @@
 </p>
 {% endif %}
 
-<a href="{{ url_for('/record.index') }}">Back to Menu</a>
-
+{% if next_panel == 'training' %}
+    <a href="{{ url_for('/record.record', session='Session 1', trial_type='training', chapterorder='0') }}">Continue to training</a>
+{% elif next_panel == 'menu' %}
+    <a href="{{ url_for('/record.index') }}">Back to menu</a>
+{% endif %}
 </body>
 </html>
