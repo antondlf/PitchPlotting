@@ -6,20 +6,16 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+<h1>Training</h1>
 <p>
-    Once you’re done with the initial recordings,
-    you will be automatically taken to the training
-    section of the module, which features the following interface:
+    In this section,  you will listen to a native speaker of Italian and try to match their intonation.
+    Press the “Play Recording” to listen to a recording of a native speaker pronouncing
+    the sentence.
 </p>
 {% if condition == 'a' %}
 <img width=25% src="{{ url_for('/instructions.get_image', filename='training_interface.png') }}">
 <p>
-    In this interface you will be shown a plot of the intonation with
-    the words aligned at their corresponding intonational events.
-    Examine this plot and try to pronounce the sentence for yourself.
-    Then, you should press the “Play Recording” button,
-    which will play a recording of a native speaker pronouncing
-    the sentence. Press “Record”, wait for the “Go!” sign,
+    Press “Record”, wait for the “Go!” sign,
     and try to imitate the native speaker’s production.
     Once you press “Stop”, you will be redirected to another page
     (this may take a few seconds to process).
@@ -33,23 +29,22 @@
     pattern but is almost there. You can see that the second syllable
     has quite a different intonation when compared to the native speaker,
     but the rest of the sentence aligns. You can evaluate your own intonation
-    visually like this, and you also have the opportunity to listen to the native
-    speaker again to get a better idea of where you went wrong by listening
-    back to yourself.
+    visually like this, and you also have the opportunity to listen to yourself
+    by pressing "Listen to yourself". Try to order get a better idea of where
+    you went wrong by listening to your recording and comparing the pitch traces.
 </p>
 {% elif condition == 'b' %}
 <img width="25%" src="{{ url_for('/instructions.get_image', filename='control_training.png') }}">
 <p>
-    In this interface you will be asked to listen to a native speaker,
-    which you can do by pressing “Play Recording”.
-    You should try to pronounce the sentence,
-    listen to the native speaker, and then record yourself
-    (using the “Record” button) imitating the native speaker’s intonation.
+    Press “Record”, wait for the “Go!” sign,
+    and try to imitate the native speaker’s production.
+    Once you press “Stop”, you will be redirected to another page
+    (this may take a few seconds to process).
 </p>
 <img width="25%" src="{{ url_for('/instructions.get_image', filename='control_post.png') }}">
 <p>
     You will then be redirected to another page where you will be able
-    to listen to the native speaker once more before moving on to the
+    to listen to the recording you just made before moving on to the
     next sentence.
 </p>
 {% endif %}

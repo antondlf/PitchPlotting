@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+<h1>Learning Italian Intonation</h1>
 <p>
     This study is aimed at understanding
     how people learn intonation in a second language.
@@ -23,9 +24,10 @@
 <p>
     For each session, you will log in to the website
     with the username and password that have been provided to you.
-    This will take you to a home page listing all of the sessions,
-    click on the appropriate section for that day.
+    Each session consists of three parts, first you will make recordings
+    of you reading a few sentences outloud, then you will do a training, and
+    finally you will record some more sentences at the end.
 </p>
-<a href={{url_for('/instructions.test_recordings')}}>Next: Test Recordings</a>
+    <a href="{{ url_for('/record.index') }}">Back to menu</a>
 </body>
 </html>

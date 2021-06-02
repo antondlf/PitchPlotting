@@ -6,17 +6,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+<h1>Test Recordings</h1>
 <p>
-    Once you click on that button you will be directed
-    to the following interface:
+    In this section you will read Italian statements and questions out loud.
 </p>
 <img width=25% src="{{ url_for('/instructions.get_image', filename='baseline_interface.png') }}">
 <p>
-    Here, you are asked to make some preliminary recordings so
-    that we can measure where you are in the learning process.
-    The interface has  three buttons, only one which will be available
-    at a time. The first button “Start” will tell your browser to start
-    recording. Your browser will probably ask you if you want to allow
+    Click 'Start' to start recording. Your browser will probably ask you if you want to allow
     the website to use your microphone. Once you allow this the recorder
     will initialize. This can take a few seconds, so a “Wait…” message
     will appear under the controls.
@@ -24,7 +20,8 @@
 <img width=25% src="{{ url_for('/instructions.get_image', filename='wait_message.png') }}">
 <p>
     The recording won’t start until this
-    message turns to “Go!”.
+    message turns to “Go!”. While recording, try to make sure you, or anyone
+    around you don't make any noise since it could interfere with the processing.
 </p>
 <img width=25% src="{{ url_for('/instructions.get_image', filename='Go_message.png') }}">
 <p>
@@ -33,7 +30,11 @@
     This button should also make the “Next Activity” button available,
     which will take you to the next sentence.
 </p>
-<a href="{{ url_for('/instructions.training', is_session=False) }}">Next: Training</a>
 
+{% if next_panel == 'pre_train' %}
+    <a href="{{ url_for('/record.record', session='Session 1', trial_type='pre_train', chapterorder='0') }}">Continue to Session</a>
+{% elif next_panel == 'menu' %}
+    <a href="{{ url_for('/instructions.training', is_session=False) }}">Next: Training</a>
+{% endif %}
 </body>
 </html>
