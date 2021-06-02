@@ -7,7 +7,7 @@ from flaskr.db import get_db
 
 from werkzeug.exceptions import abort
 
-from pitch_track.audio_processing import process_recording
+from flaskr.audio_processing import process_recording
 
 from pitch_track.user_dict import user_state
 

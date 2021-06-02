@@ -1,13 +1,7 @@
 from flask import (
-    Blueprint, flash,  current_app, g, redirect, render_template, request, url_for, send_from_directory
+    Blueprint, flash, current_app, g, render_template, send_from_directory
 )
 from flaskr.auth import login_required
-
-from flaskr.db import get_db
-
-from werkzeug.exceptions import abort
-
-from pitch_track.audio_processing import process_recording
 
 from pitch_track.user_dict import user_state
 
