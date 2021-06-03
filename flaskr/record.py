@@ -26,7 +26,7 @@ bp = Blueprint('/record', __name__)
 @login_required
 def index():
 
-    posts = ['Session 1', 'Session 2', 'Session 3']
+    posts = ['Session 1']
 
     return render_template('blog/index.html', posts=posts)
 
