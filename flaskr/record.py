@@ -189,7 +189,7 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
     #     'post_train': 7
     # }
     # TODO: Remember to change this to actual sequence for experiment
-    sequence = {
+    trial_length = {
      'pre_train': 7,
      'training': 30,
      'post_train': 7,
@@ -197,15 +197,15 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
 
     # Get the list of trial types for this session.
     user_id = str(g.user['id'])
-    user_dict = get_user_state(user_id)
-    sequence = list(user_dict.get_current_order(session, trial_type).keys())[-1]
+    user_dict = user_state(user_id)
+    trial_length = user_dict.get_trial_length(session, trial_type)
 
     trial_type_list = ['pre_train', 'training', 'post_train']
 
 
     # Cast to int in order to run int operations
     chapter_order_int = int(chapter_order)
-    if chapter_order_int < int(sequence):
+    if chapter_order_int < int(trial_length):
 
         chapter_order_int += 1
         chapter_order = str(chapter_order_int)
@@ -215,7 +215,7 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
         if trial_type == trial_type_list[-1]:
             return redirect(url_for('/record.end_message'))
 
-    elif int(chapter_order) == int(sequence):
+    elif int(chapter_order) == int(trial_length):
         if session == 'Session 1':
             if trial_type == 'pre_train':
                 return redirect(url_for('/instructions.training', is_session=True))
