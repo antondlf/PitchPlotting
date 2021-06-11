@@ -13,6 +13,14 @@
         </div>
       </header>
     </article>
+      <article class="post">
+      <header>
+        <div>
+          <!--TODO: remember session 3 only has generalization as condition-->
+          <h1><a class="action" href="{{ url_for('/instructions.test_recordings', is_session='True') }}">Session 1</a></h1>
+        </div>
+      </header>
+    </article>
   {% for post in posts %}
     <article class="post">
       <header>
