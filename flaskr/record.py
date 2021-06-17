@@ -26,7 +26,7 @@ bp = Blueprint('/record', __name__)
 @login_required
 def index():
 
-    posts = ['Session 2']
+    posts = ['Session 2', 'Session 3']
 
     return render_template('blog/index.html', posts=posts)
 
@@ -212,7 +212,7 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
         return redirect(url_for('/record.record', chapterorder=chapter_order, session=session, trial_type=trial_type))
 
     elif session == 'Session 3':
-        if trial_type == trial_type_list[-1]:
+        if trial_type == 'pre_train':
             return redirect(url_for('/record.end_message'))
 
     elif int(chapter_order) == int(trial_length):
