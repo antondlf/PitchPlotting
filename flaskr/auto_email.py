@@ -39,7 +39,7 @@ def generate_email(stage, is_reminder=False, is_reminder_2=False):
         if stage == 'Session 1':
 
             # TODO: get session specific urls
-            url = 'prosody.delafuentealvarez.com'
+            url = 'prosody.delafuentealvarez.com/' + stage
             text = MIMEText("Hello! \n\n" \
                    "This is an example automated email:\n"
                             "Welcome to Italian Prosody Training.\n" \
