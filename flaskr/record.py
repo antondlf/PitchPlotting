@@ -26,7 +26,19 @@ bp = Blueprint('/record', __name__)
 @login_required
 def index():
 
-    posts = ['Session 2', 'Session 3']
+    posts = ['Session 1', 'Session 2', 'Session 3']
+
+    return render_template('blog/index.html', posts=posts)
+
+
+# TODO: decide if this is the way to send url or if user identifier
+@bp.route('/<session>')
+@login_required
+def specific_index(session):
+
+    session_dict = {'sesh_1': 'Session 1', 'sesh_2': 'Session 2', 'sesh_3': 'Session 3'}
+
+    posts = [session_dict[session]]
 
     return render_template('blog/index.html', posts=posts)
 
