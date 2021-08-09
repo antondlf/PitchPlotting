@@ -101,8 +101,7 @@ def start_experiment(email_list):
 
     emails = read_email_list(email_list)
     create_accounts(emails)
-    for email in emails:
-        notify('Session 1', emails)
+    notify('Session 1', emails)
 
     click.echo('Users registered and notifications sent.')
 

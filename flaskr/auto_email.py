@@ -14,41 +14,46 @@ def generate_email(stage, is_reminder=False, is_reminder_2=False):
 
     if is_reminder:
         reminder = ' reminder'
-        text = MIMEText("Hello!\n\n"
-                        "This is an automated email\n\n"
-                        "This is a reminder that you still have not completed" + stage + "for the Italian prosody learning course\n"
-                        "Please complete the course at your earliest convenience,"
-                        "You will receive one more reminder in case you can't complete this in the next two days.\n"
-                        "If cannot complete the rest of the study or would rather unenroll, let either of the contact emails know.\n\n"
-                        "Thank you for your contribution to our study,\n\n"
-                                                                                         "Regards,\n\n"
-                                                                                         "Antón de la Fuente and Catherine Scanlon")
+        text = "Hello!\n\n"\
+                        "This is an automated email\n\n"\
+                        "This is a reminder that you still have not completed" + stage + "for the Italian prosody learning course\n"\
+                        "Please complete the course at your earliest convenience,"\
+                        "You will receive one more reminder in case you can't complete this in the next two days.\n"\
+                        "If cannot complete the rest of the study or would rather unenroll, let either of the contact emails know.\n\n"\
+                        "Thank you for your contribution to our study,\n\n"\
+                        "Regards,\n\n"\
+                        "Antón de la Fuente and Catherine Scanlon"
     elif is_reminder_2:
         reminder = ' last reminder'
-        text = MIMEText("Hello!\n\n"
-                        "This is an automated email\n\n"
-                        "This is a reminder that you still have not completed " + stage + " for the Italian prosody learning course\n"
-                        "Please complete the course at your earliest convenience."
-                        "You will not receive any more reminders for this stage, but if you do not intend to finish the course please\n"
-                        "notify us at either of the contact emails.\n\n"
-                        "Thank you for your contribution to our study,\n\n"
-                                                                                         "Regards,\n\n"
-                                                                                         "Antón de la Fuente and Catherine Scanlon")
+        text = "Hello!\n\n"\
+                        "This is an automated email\n\n"\
+                        "This is a reminder that you still have not completed " + stage + " for the Italian prosody learning course\n"\
+                        "Please complete the course at your earliest convenience."\
+                        "You will not receive any more reminders for this stage, but if you do not intend to finish the course please\n"\
+                        "notify us at either of the contact emails.\n\n"\
+                        "Thank you for your contribution to our study,\n\n"\
+                         "Regards,\n\n"\
+                         "Antón de la Fuente and Catherine Scanlon"
     else:
         reminder = ''
         if stage == 'Session 1':
 
             # TODO: get session specific urls
             url = 'prosody.delafuentealvarez.com/' + stage
-            text = MIMEText("Hello! \n\n" \
-                   "This is an example automated email:\n"
-                            "Welcome to Italian Prosody Training.\n" \
+
+            text = "Hello! \n\n" \
+                   "This is an example automated email:\n"\
+                    "Welcome to Italian Prosody Training.\n" \
                    "Here you will learn how Native Italian Speakers use their intonation, and you will have a chance to compare it to yours." \
-                   "To get started, go to the following url:",  url, \
-                   "We hope you enjoy our training module. \n\n" \
+                   "To get started, go to the following url: "+  url + \
+                   " We hope you enjoy our training module. \n\n" \
                    "If you run into any issues, contact ...\n\n\n" \
                    "Regards \n\n\n" \
-                   "Antón de la Fuente and Catherine Scanlon")
+                   "Antón de la Fuente and Catherine Scanlon"
+
+    #text = MIMEText(message)
+
+    print(text)
 
     if (contains_non_ascii_characters(text)):
         plain_text = MIMEText(text.encode('utf-8'), 'plain', 'utf-8')
@@ -61,7 +66,7 @@ def generate_email(stage, is_reminder=False, is_reminder_2=False):
     return msg
     
 
-def send_email(msg, sender, receiver):
+def send_email(msg, sender, receiver_list):
     """Sends message object msg to some email server."""
 
     # initialize connection to our email server, we will use Outlook here
@@ -70,18 +75,19 @@ def send_email(msg, sender, receiver):
         smtp.ehlo()  # send the extended hello to our server
         smtp.starttls()  # tell server we want to communicate with TLS encryption
 
-        # Password issue
+        # TODO: solve Password issue
         smtp.login(sender, input('Password:'))  # login to our email server
 
-        # send our email message 'msg' to our boss
-        smtp.sendmail(sender,
-                      receiver,
-                      msg.as_string())
 
-def notify(session, receiver):
+        for receiver in receiver_list:
+            smtp.sendmail(sender,
+                          receiver,
+                          msg.as_string())
+
+def notify(session, receiver_list):
 
     msg = generate_email(session)
-    send_email(msg, 'testdummyprosody@gmail.com', receiver)
+    send_email(msg, 'testdummyprosody@gmail.com', receiver_list)
 
 
 def main():
