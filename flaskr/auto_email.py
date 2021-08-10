@@ -53,7 +53,6 @@ def generate_email(stage, is_reminder=False, is_reminder_2=False):
 
     #text = MIMEText(message)
 
-    print(text)
 
     if (contains_non_ascii_characters(text)):
         plain_text = MIMEText(text.encode('utf-8'), 'plain', 'utf-8')
@@ -84,9 +83,9 @@ def send_email(msg, sender, receiver_list):
                           receiver,
                           msg.as_string())
 
-def notify(session, receiver_list):
+def notify(session, receiver_list, is_reminder=False):
 
-    msg = generate_email(session)
+    msg = generate_email(session, is_reminder)
     send_email(msg, 'testdummyprosody@gmail.com', receiver_list)
 
 

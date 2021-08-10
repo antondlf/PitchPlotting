@@ -25,7 +25,7 @@ def input_email_db(username, email):
     db = get_db()
 
     db.execute(
-        'INSERT INTO email (username, email)'
+        'INSERT INTO email_data (username, email)'
         ' VALUES (?, ?)',
         (username, email)
     )

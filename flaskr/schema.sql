@@ -1,13 +1,21 @@
 DROP TABLE IF EXISTS email;
+DROP TABLE IF EXISTS notifications;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS recordings;
 DROP TABLE IF EXISTS chapters;
 DROP TABLE IF EXISTS userdata;
 
 
-CREATE TABLE email (
+CREATE TABLE email_data (
     username TEXT UNIQUE NOT NULL,
     email TEXT UNIQUE NOT NULL
+);
+
+CREATE TABLE notifications(
+    email INTEGER,
+    notification_time BLOB NOT NULL,
+    next_session TEXT NOT NULL,
+    is_reminder TEXT NOT NULL
 );
 
 CREATE TABLE user (
