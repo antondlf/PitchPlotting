@@ -1,5 +1,5 @@
-import smtplib, ssl
-from flaskr.email_generator import get_email_text
+import smtplib
+from notify_users.email_generator import get_email_text
 from future.backports.email.mime.multipart import MIMEMultipart
 from future.backports.email.mime.text import MIMEText
 

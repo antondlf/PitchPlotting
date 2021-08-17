@@ -1,13 +1,12 @@
-import os
 import click
 import random
 import diceware
-from flask import app, Blueprint
+from flask import Blueprint
 from flask.cli import with_appcontext
 from flaskr.db import get_db
 from werkzeug.security import generate_password_hash
 from pitch_track.user_dict import create_user_dict
-from flaskr.auto_email import notify
+from notify_users.auto_email import notify
 
 bp = Blueprint('notify', __name__, url_prefix='/notify')
 

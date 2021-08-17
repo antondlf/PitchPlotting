@@ -44,7 +44,7 @@ def create_app(test_config=None):
     app.register_blueprint(audio.bp)
     app.add_url_rule('/', endpoint='audio')
 
-    from . import email_management
+    from notify_users import email_management
     app.register_blueprint(email_management.bp)
     email_management.init_notification_system(app)
 
