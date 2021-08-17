@@ -1,4 +1,5 @@
 import smtplib, ssl
+from flaskr.email_generator import get_email_text
 from future.backports.email.mime.multipart import MIMEMultipart
 from future.backports.email.mime.text import MIMEText
 
@@ -10,48 +11,10 @@ def contains_non_ascii_characters(str):
     return not all(ord(c) < 128 for c in str)
 
 
-def generate_email(stage, is_reminder=False, is_reminder_2=False):
+def generate_email(stage, username=None, password=None, is_reminder=False):
 
-    if is_reminder:
-        reminder = ' reminder'
-        text = "Hello!\n\n"\
-                        "This is an automated email\n\n"\
-                        "This is a reminder that you still have not completed" + stage + "for the Italian prosody learning course\n"\
-                        "Please complete the course at your earliest convenience,"\
-                        "You will receive one more reminder in case you can't complete this in the next two days.\n"\
-                        "If cannot complete the rest of the study or would rather unenroll, let either of the contact emails know.\n\n"\
-                        "Thank you for your contribution to our study,\n\n"\
-                        "Regards,\n\n"\
-                        "Antón de la Fuente and Catherine Scanlon"
-    elif is_reminder_2:
-        reminder = ' last reminder'
-        text = "Hello!\n\n"\
-                        "This is an automated email\n\n"\
-                        "This is a reminder that you still have not completed " + stage + " for the Italian prosody learning course\n"\
-                        "Please complete the course at your earliest convenience."\
-                        "You will not receive any more reminders for this stage, but if you do not intend to finish the course please\n"\
-                        "notify us at either of the contact emails.\n\n"\
-                        "Thank you for your contribution to our study,\n\n"\
-                         "Regards,\n\n"\
-                         "Antón de la Fuente and Catherine Scanlon"
-    else:
-        reminder = ''
-        if stage == 'Session 1':
+    subject, text = get_email_text(stage, username, password, is_reminder=is_reminder)
 
-            # TODO: get session specific urls
-            url = 'prosody.delafuentealvarez.com/' + stage
-
-            text = "Hello! \n\n" \
-                   "This is an example automated email:\n"\
-                    "Welcome to Italian Prosody Training.\n" \
-                   "Here you will learn how Native Italian Speakers use their intonation, and you will have a chance to compare it to yours." \
-                   "To get started, go to the following url: "+  url + \
-                   " We hope you enjoy our training module. \n\n" \
-                   "If you run into any issues, contact ...\n\n\n" \
-                   "Regards \n\n\n" \
-                   "Antón de la Fuente and Catherine Scanlon"
-
-    #text = MIMEText(message)
 
 
     if (contains_non_ascii_characters(text)):
@@ -60,8 +23,9 @@ def generate_email(stage, is_reminder=False, is_reminder_2=False):
         plain_text = MIMEText(text, 'plain')
 
     msg = MIMEMultipart()
-    msg['Subject'] = 'Italian Prosody Project ' + stage + reminder
+    msg['Subject'] = subject
     msg.attach(plain_text)
+
     return msg
     
 
@@ -83,15 +47,30 @@ def send_email(msg, sender, receiver_list):
                           receiver,
                           msg.as_string())
 
-def notify(session, receiver_list, is_reminder=False):
+def notify(session, receiver_list, username=None, password=None, is_reminder=False):
 
-    msg = generate_email(session, is_reminder)
+
+    msg = generate_email(session, username=username, password=password, is_reminder=is_reminder)
     send_email(msg, 'testdummyprosody@gmail.com', receiver_list)
 
 
 def main():
-    msg = generate_email('Session 1')
-    send_email(msg, 'testdummyprosody@gmail.com', input('Who will receive this email?\n'))
+
+    with smtplib.SMTP('smtp.gmail.com', port='587') as smtp:
+
+        smtp.ehlo()  # send the extended hello to our server
+        smtp.starttls()  # tell server we want to communicate with TLS encryption
+
+        # TODO: solve Password issue
+        smtp.login('testdummyprosody@gmail.com', input('Password:'))  # login to our email server
+        receiver = input('Who will receive this email?\n')
+        for sesh in ['Session_1', 'Session_2', 'Session_3']:
+            for remind in [True, False]:
+                msg = generate_email(sesh, is_reminder=remind, username="test", password="Testpassword", url='www.dummyurl.com')
+                smtp.sendmail('testdummyprosody@gmail.com',
+                              receiver,
+                              msg.as_string())
+                #send_email(msg, 'testdummyprosody@gmail.com', receiver)
 
 if __name__ == '__main__':
     main()

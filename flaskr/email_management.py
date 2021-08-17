@@ -54,6 +54,9 @@ def generate_group(group_list, username_list, db):
         input_email_db(username, group_list[i])
         register_account(username, password)
 
+        # Notify the user to start the experiment
+        notify("Session_1", group_list[i], username=username, password=password, is_reminder=False)
+
         # Generate user_dict
         user_id = db.execute(
             'SELECT id FROM user WHERE username=?',
@@ -101,7 +104,6 @@ def start_experiment(email_list):
 
     emails = read_email_list(email_list)
     create_accounts(emails)
-    notify('Session 1', emails)
 
     click.echo('Users registered and notifications sent.')
 
