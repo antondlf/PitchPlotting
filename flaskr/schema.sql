@@ -12,7 +12,7 @@ CREATE TABLE email_data (
 );
 
 CREATE TABLE notifications(
-    email INTEGER,
+    user_id INTEGER,
     notification_time BLOB NOT NULL,
     next_session TEXT NOT NULL,
     is_reminder TEXT NOT NULL

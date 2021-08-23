@@ -66,7 +66,7 @@ def main():
         receiver = input('Who will receive this email?\n')
         for sesh in ['Session_1', 'Session_2', 'Session_3']:
             for remind in [True, False]:
-                msg = generate_email(sesh, is_reminder=remind, username="test", password="Testpassword", url='www.dummyurl.com')
+                msg = generate_email(sesh, is_reminder=remind, username="test", password="Testpassword")
                 smtp.sendmail('testdummyprosody@gmail.com',
                               receiver,
                               msg.as_string())

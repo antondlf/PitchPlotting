@@ -4,7 +4,25 @@ from flaskr.db import get_db
 from notify_users.auto_email import notify
 
 
-def reminder_cue(email, notification_session):
+def id2email(user_id):
+
+    db = get_db()
+
+    # Get username
+    username = db.execute(
+        "SELECT username FROM user WHERE id=?",
+        (user_id,)
+    ).fetchall()[0]['username']
+
+    # Get user email
+    user_email = db.execute(
+        "SELECT email FROM email_data WHERE username=?",
+        (username,)
+    ).fetchall()[0]['email']
+
+    return user_email
+
+def reminder_cue(user_id, notification_session):
     """Removes initial notification and adds user email to a
     cue where they will be reminded two days later to complete the next
     session.
@@ -15,14 +33,14 @@ def reminder_cue(email, notification_session):
 
     #
     db.execute(
-        "DELETE FROM notifications WHERE email=?",
-        (email,)
+        "DELETE FROM notifications WHERE user_id=?",
+        (user_id,)
     )
     db.commit()
 
     db.execute(
-        "INSERT INTO notifications (email, notification_time, next_session, is_reminder)",
-        (email, reminder_time, notification_session, 'True',)
+        "INSERT INTO notifications (user_id, notification_time, next_session, is_reminder)",
+        (user_id, reminder_time, notification_session, 'True',)
     )
 
 def send_notifications():
@@ -42,18 +60,21 @@ def send_notifications():
 
         if time_now > notification_time:
 
+            email = id2email(user['user_id'])
+
             if user['is_reminder'] == 'False':
 
-                reminder_cue(user['email'], user['next_session'])
+                reminder_cue(user['user_id'], user['next_session'])
 
-                notify(user['next_session'], user['email'])
+
+                notify(user['next_session'], email)
 
             else:
-                notify(user['next_session'], user['email'], is_reminder=True)
+                notify(user['next_session'], email, is_reminder=True)
 
             db.execute(
-                "DELETE FROM notifications WHERE email=?",
-                (user['email'])
+                "DELETE FROM notifications WHERE user_id=?",
+                (user['user_id'])
             )
             db.commit()
 
