@@ -39,7 +39,8 @@ def reminder_cue(user_id, notification_session):
     db.commit()
 
     db.execute(
-        "INSERT INTO notifications (user_id, notification_time, next_session, is_reminder)",
+        "INSERT INTO notifications (user_id, notification_time, next_session, is_reminder)"
+        "VALUES (?, ?, ?, ?)",
         (user_id, reminder_time, notification_session, 'True',)
     )
 
