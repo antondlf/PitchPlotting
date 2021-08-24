@@ -9,7 +9,9 @@ from werkzeug.exceptions import abort
 
 from flaskr.audio_processing import process_recording
 
-from pitch_track.user_dict import user_state
+from notify_users.user_dict import user_state
+
+from flaskr.notification_cue import notify_next_week
 
 import os
 
@@ -26,7 +28,17 @@ bp = Blueprint('/record', __name__)
 @login_required
 def index():
 
-    posts = ['Session 2', 'Session 3']
+    posts = ['Session 1', 'Session 2', 'Session 3']
+
+    return render_template('blog/index.html', posts=posts)
+
+
+# TODO: decide if this is the way to send url or if user identifier
+@bp.route('/<session>')
+@login_required
+def specific_index(session):
+
+    posts = [session.replace('_', ' ')]
 
     return render_template('blog/index.html', posts=posts)
 
@@ -121,7 +133,7 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
     if condition == 'a':
         return render_template(
                 '/record/index.html', recording=sent_id, sentence=text, textplot=textplot, audio=recordings
-            ) #TODO: fix index.html to reflect changes Done?
+            )
     else:
         return render_template(
                 '/record/index.html', recording=sent_id, sentence=text, textplot=None, audio=recordings
@@ -213,6 +225,9 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
 
     elif session == 'Session 3':
         if trial_type == 'pre_train':
+            # TODO: send thank you message
+            notify('done', )
+
             return redirect(url_for('/record.end_message'))
 
     elif int(chapter_order) == int(trial_length):
@@ -222,6 +237,9 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
             elif trial_type == 'training':
                 return redirect(url_for('/instructions.post_training'))
             elif trial_type == 'post_train':
+
+                notify_next_week(user_id, 'Session 2')
+
                 return redirect(url_for('/record.end_message'))
 
         elif trial_type != trial_type_list[-1]:
@@ -230,10 +248,11 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
             new_trial_type = trial_type_list[new_trial_type_index]
             chapter_order = 0
 
-
             return redirect(url_for('/record.record', chapterorder=chapter_order, session=session, trial_type=new_trial_type))
 
         else:
+
+            notify_next_week(user_id, 'Session 3')
             print(trial_type_list)
             return redirect(url_for('/record.end_message'))
     else:

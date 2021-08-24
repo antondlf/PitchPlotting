@@ -1,7 +1,16 @@
+DROP TABLE IF EXISTS notifications;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS recordings;
 DROP TABLE IF EXISTS chapters;
 DROP TABLE IF EXISTS userdata;
+
+
+CREATE TABLE notifications(
+    user_id INTEGER,
+    notification_time BLOB NOT NULL,
+    next_session TEXT NOT NULL,
+    is_reminder TEXT NOT NULL
+);
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,

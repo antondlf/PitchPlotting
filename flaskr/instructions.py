@@ -3,7 +3,7 @@ from flask import (
 )
 from flaskr.auth import login_required
 
-from pitch_track.user_dict import user_state
+from notify_users.user_dict import user_state
 
 import os
 

@@ -1,4 +1,4 @@
-from flaskr.db import get_db
+from notify_users.database import get_flaskr_db
 from flask import g
 import pickle
 import random
@@ -29,7 +29,7 @@ def get_sentences():
     all the sentence dictionaries as well as a list of all the sentence
     dictionaries.
     """
-    db = get_db()
+    db = get_flaskr_db()
 
     sentences = db.execute(
         'SELECT * FROM chapters'
@@ -90,7 +90,7 @@ def get_user_list(order_dict):
     return order_list
 
 
-def create_user_dict(user_id):
+def create_user_dict(user_id, group=None):
 
     # Get the sentence dictionary and the list of sentence dictionaries.
     sentences = get_sentences()
@@ -115,10 +115,10 @@ def create_user_dict(user_id):
     order_dict = dict()
 
     # Give the state dictionary an experimental condition
-    if is_odd(user_id):
-        user_dict['condition'] = 'a'
+    if group:
+        user_dict['condition'] = group
     else:
-        user_dict['condition'] = 'b'
+        user_dict['condition'] = 'a'
 
     # Create dictionary structure
     order_dict['Session 1'] = dict()
@@ -210,7 +210,7 @@ def create_user_dict(user_id):
     # input into the database.
     pdata = pickle.dumps(user_dict)
 
-    db = get_db()
+    db = get_flaskr_db()
     db.execute(
         'INSERT INTO userdata (user_id, user_dict) VALUES (?, ?)',
         (user_id, pdata)
@@ -222,7 +222,7 @@ def create_user_dict(user_id):
 class user_state:
 
     def __init__(self, user_id):
-        db = get_db()
+        db = get_flaskr_db()
         user_dict_pickle = db.execute(
             'SELECT user_dict FROM userdata WHERE user_id=?',
             (user_id,)
