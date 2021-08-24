@@ -21,7 +21,8 @@ def notify_next_week(user_id, notification_session):
     # The session to be notified, and whether this is a reminder
     # Or the initial notification
     db.execute(
-        "INSERT INTO notifications (user_id, notification_time, notification_session, is_reminder)",
+        "INSERT INTO notifications (user_id, notification_time, next_session, is_reminder)"
+        "VALUES (?, ?, ?, ?)",
         (user_id, notification_time, notification_session, 'False',)
     )
     db.commit()
