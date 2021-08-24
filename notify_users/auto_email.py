@@ -34,11 +34,11 @@ def send_email(msg, server, sender, receiver_list):
 
     if type(receiver_list) == list:
         for receiver in receiver_list:
-            smtp.sendmail(sender,
+            server.sendmail(sender,
                           receiver,
                           msg.as_string())
     elif type(receiver_list) == str:
-        smtp.sendmail(sender,
+        server.sendmail(sender,
                       receiver_list,
                       msg.as_string())
 
