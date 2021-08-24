@@ -90,7 +90,7 @@ def get_user_list(order_dict):
     return order_list
 
 
-def create_user_dict(user_id):
+def create_user_dict(user_id, group=None):
 
     # Get the sentence dictionary and the list of sentence dictionaries.
     sentences = get_sentences()
@@ -115,10 +115,10 @@ def create_user_dict(user_id):
     order_dict = dict()
 
     # Give the state dictionary an experimental condition
-    if is_odd(user_id):
-        user_dict['condition'] = 'a'
+    if group:
+        user_dict['condition'] = group
     else:
-        user_dict['condition'] = 'b'
+        user_dict['condition'] = 'a'
 
     # Create dictionary structure
     order_dict['Session 1'] = dict()

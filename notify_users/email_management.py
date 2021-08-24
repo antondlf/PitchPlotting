@@ -38,7 +38,7 @@ def register_account(username, password):
     db.commit()
 
 
-def generate_group(group_list, username_list, db):
+def generate_group(group_list, username_list, db, group='a'):
 
     for i in range(len(group_list)):
 
@@ -58,7 +58,7 @@ def generate_group(group_list, username_list, db):
             'SELECT id FROM user WHERE username=?',
             (username,)
         ).fetchall()[0]['id']
-        create_user_dict(user_id)
+        create_user_dict(user_id, group=group)
 
 
 def create_accounts(email_list):
@@ -88,8 +88,8 @@ def create_accounts(email_list):
     usernames_b = username_list[half_len:]
 
     # Generate groups
-    generate_group(group_a, usernames_a, db)
-    generate_group(group_b, usernames_b, db)
+    generate_group(group_a, usernames_a, db, group='a')
+    generate_group(group_b, usernames_b, db, group='b')
 
 
 @click.command('start-experiment')
