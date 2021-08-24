@@ -90,6 +90,7 @@ def login_required(view):
         return view(**kwargs)
     return wrapped_view
 
+
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
