@@ -9,7 +9,7 @@ from werkzeug.exceptions import abort
 
 from flaskr.audio_processing import process_recording
 
-from pitch_track.user_dict import user_state
+from notify_users.user_dict import user_state
 
 from notification_cue import notify_next_week
 

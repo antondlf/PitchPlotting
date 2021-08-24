@@ -1,7 +1,14 @@
 import sqlite3
 import os
-from email_management import start_experiment
 
+
+def init_email_db():
+
+    db = sqlite3.connect('./instance/base.sqlite')
+
+    with open('/Users/anton/PycharmProjects/FlaskTutorial/notify_users/email_schema.sql') as f:
+        db.executescript(f.read())
+    db.commit()
 
 def get_flaskr_db():
 
@@ -11,7 +18,7 @@ def get_flaskr_db():
         )
         db.row_factory = sqlite3.Row
     else:
-        db = sqlite3.connect('./instance/base.sqlite')
+        db = sqlite3.connect('./instance/flaskr.sqlite')
         with open('/Users/anton/PycharmProjects/FlaskTutorial/flaskr/schema.sql') as f:
             db.executescript(f.read())
         db.commit()
@@ -31,15 +38,3 @@ def connect_email_db():
         db.commit()
     return db
 
-
-def main():
-
-    start_experiment('notify_users/emails.txt')
-
-
-
-
-
-if __name__ == '__main__':
-
-    main()

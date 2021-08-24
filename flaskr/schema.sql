@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS email;
 DROP TABLE IF EXISTS notifications;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS recordings;

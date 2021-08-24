@@ -41,14 +41,21 @@ def send_email(msg, sender, receiver_list):
         # TODO: solve Password issue
         smtp.login(sender, input('Password:'))  # login to our email server
 
-
-        for receiver in receiver_list:
+        if type(receiver_list) == list:
+            for receiver in receiver_list:
+                smtp.sendmail(sender,
+                              receiver,
+                              msg.as_string())
+        elif type(receiver_list) == str:
             smtp.sendmail(sender,
-                          receiver,
+                          receiver_list,
                           msg.as_string())
 
-def notify(session, receiver_list, username=None, password=None, is_reminder=False):
+        else:
+            print('Error: email supplied is invalid.')
 
+
+def notify(session, receiver_list, username=None, password=None, is_reminder=False):
 
     msg = generate_email(session, username=username, password=password, is_reminder=is_reminder)
     send_email(msg, 'testdummyprosody@gmail.com', receiver_list)
