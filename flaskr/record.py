@@ -11,7 +11,7 @@ from flaskr.audio_processing import process_recording
 
 from notify_users.user_dict import user_state
 
-from notification_cue import notify_next_week
+from flaskr.notification_cue import notify_next_week
 
 import os
 
@@ -38,7 +38,7 @@ def index():
 @login_required
 def specific_index(session):
 
-    posts = [session]
+    posts = [session.replace('_', ' ')]
 
     return render_template('blog/index.html', posts=posts)
 
