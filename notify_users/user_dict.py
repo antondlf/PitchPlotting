@@ -1,4 +1,4 @@
-from flaskr.db import get_db
+from database import get_flaskr_db
 from flask import g
 import pickle
 import random
@@ -29,7 +29,7 @@ def get_sentences():
     all the sentence dictionaries as well as a list of all the sentence
     dictionaries.
     """
-    db = get_db()
+    db = get_flaskr_db()
 
     sentences = db.execute(
         'SELECT * FROM chapters'
@@ -210,7 +210,7 @@ def create_user_dict(user_id):
     # input into the database.
     pdata = pickle.dumps(user_dict)
 
-    db = get_db()
+    db = get_flaskr_db()
     db.execute(
         'INSERT INTO userdata (user_id, user_dict) VALUES (?, ?)',
         (user_id, pdata)
@@ -222,7 +222,7 @@ def create_user_dict(user_id):
 class user_state:
 
     def __init__(self, user_id):
-        db = get_db()
+        db = get_flaskr_db()
         user_dict_pickle = db.execute(
             'SELECT user_dict FROM userdata WHERE user_id=?',
             (user_id,)
