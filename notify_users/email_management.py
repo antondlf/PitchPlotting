@@ -3,7 +3,7 @@ import random
 import diceware
 from flask import Blueprint
 from flask.cli import with_appcontext
-from flaskr.db import get_db
+from database import get_flaskr_db, connect_email_db
 from werkzeug.security import generate_password_hash
 from pitch_track.user_dict import create_user_dict
 from notify_users.auto_email import notify
@@ -21,7 +21,7 @@ def read_email_list(email_list):
 
 
 def input_email_db(username, email):
-    db = get_db()
+    db = connect_email_db()
 
     db.execute(
         'INSERT INTO email_data (username, email)'
@@ -33,7 +33,7 @@ def input_email_db(username, email):
 
 def register_account(username, password):
 
-    db = get_db()
+    db = get_flaskr_db()
     db.execute(
         'INSERT INTO user (username, password) VALUES (?, ?)',
         (username, generate_password_hash(password))
@@ -79,7 +79,7 @@ def create_accounts(email_list):
     group_a = email_list[:half_len]
     group_b = email_list[half_len:]
 
-    db = get_db()
+    db = get_flaskr_db()
 
     # Get random usernames
     with open(diceware.get_wordlist_path('en')) as in_file:
@@ -96,15 +96,15 @@ def create_accounts(email_list):
 
 
 
-@click.command('start-experiment')
-@click.argument('email_list', type=click.Path(exists=True))
-@with_appcontext
+# @click.command('start-experiment')
+# @click.argument('email_list', type=click.Path(exists=True))
+# @with_appcontext
 def start_experiment(email_list):
 
     emails = read_email_list(email_list)
     create_accounts(emails)
 
-    click.echo('Users registered and notifications sent.')
+    # click.echo('Users registered and notifications sent.')
 
 
 def init_notification_system(app):

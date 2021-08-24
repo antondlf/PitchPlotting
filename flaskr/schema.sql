@@ -6,11 +6,6 @@ DROP TABLE IF EXISTS chapters;
 DROP TABLE IF EXISTS userdata;
 
 
-CREATE TABLE email_data (
-    username TEXT UNIQUE NOT NULL,
-    email TEXT UNIQUE NOT NULL
-);
-
 CREATE TABLE notifications(
     user_id INTEGER,
     notification_time BLOB NOT NULL,

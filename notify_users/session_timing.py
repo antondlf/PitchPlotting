@@ -1,21 +1,23 @@
 import datetime
 import pickle
-from flaskr.db import get_db
+from database import get_flaskr_db, connect_email_db
 from notify_users.auto_email import notify
 
 
 def id2email(user_id):
 
-    db = get_db()
+    flaskr_db = get_flaskr_db()
+
+    email_db = connect_email_db()
 
     # Get username
-    username = db.execute(
+    username = flaskr_db.execute(
         "SELECT username FROM user WHERE id=?",
         (user_id,)
     ).fetchall()[0]['username']
 
     # Get user email
-    user_email = db.execute(
+    user_email = email_db.execute(
         "SELECT email FROM email_data WHERE username=?",
         (username,)
     ).fetchall()[0]['email']
@@ -27,7 +29,7 @@ def reminder_cue(user_id, notification_session):
     cue where they will be reminded two days later to complete the next
     session.
     """
-    db = get_db()
+    db = get_flaskr_db()
 
     reminder_time = datetime.datetime.now() + datetime.timedelta(days=2)
 
@@ -50,7 +52,7 @@ def send_notifications():
 
     time_now = datetime.datetime.now()
 
-    db = get_db()
+    db = get_flaskr_db()
     notification_cue = db.execute(
         "SELECT * FROM notifications"
     ).fetchall()
