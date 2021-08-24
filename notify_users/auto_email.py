@@ -29,8 +29,24 @@ def generate_email(stage, username=None, password=None, is_reminder=False):
     return msg
     
 
-def send_email(msg, sender, receiver_list):
+def send_email(msg, server, sender, receiver_list):
     """Sends message object msg to some email server."""
+
+    if type(receiver_list) == list:
+        for receiver in receiver_list:
+            smtp.sendmail(sender,
+                          receiver,
+                          msg.as_string())
+    elif type(receiver_list) == str:
+        smtp.sendmail(sender,
+                      receiver_list,
+                      msg.as_string())
+
+    else:
+        print('Error: email supplied is invalid.')
+
+
+def notify(session, receiver_list, username=None, password=None, is_reminder=False):
 
     # initialize connection to our email server, we will use Outlook here
     with smtplib.SMTP('smtp.gmail.com', port='587') as smtp:
@@ -39,45 +55,29 @@ def send_email(msg, sender, receiver_list):
         smtp.starttls()  # tell server we want to communicate with TLS encryption
 
         # TODO: solve Password issue
-        smtp.login(sender, input('Password:'))  # login to our email server
-
-        if type(receiver_list) == list:
-            for receiver in receiver_list:
-                smtp.sendmail(sender,
-                              receiver,
-                              msg.as_string())
-        elif type(receiver_list) == str:
-            smtp.sendmail(sender,
-                          receiver_list,
-                          msg.as_string())
-
-        else:
-            print('Error: email supplied is invalid.')
-
-
-def notify(session, receiver_list, username=None, password=None, is_reminder=False):
-
-    msg = generate_email(session, username=username, password=password, is_reminder=is_reminder)
-    send_email(msg, 'testdummyprosody@gmail.com', receiver_list)
-
-
-def main():
-
-    with smtplib.SMTP('smtp.gmail.com', port='587') as smtp:
-
-        smtp.ehlo()  # send the extended hello to our server
-        smtp.starttls()  # tell server we want to communicate with TLS encryption
-
-        # TODO: solve Password issue
         smtp.login('testdummyprosody@gmail.com', input('Password:'))  # login to our email server
-        receiver = input('Who will receive this email?\n')
-        for sesh in ['Session_1', 'Session_2', 'Session_3']:
-            for remind in [True, False]:
-                msg = generate_email(sesh, is_reminder=remind, username="test", password="Testpassword")
-                smtp.sendmail('testdummyprosody@gmail.com',
-                              receiver,
-                              msg.as_string())
+
+        msg = generate_email(session, username=username, password=password, is_reminder=is_reminder)
+        send_email(msg, smtp, 'testdummyprosody@gmail.com', receiver_list)
+
+
+# def main():
+#
+#     with smtplib.SMTP('smtp.gmail.com', port='587') as smtp:
+#
+#         smtp.ehlo()  # send the extended hello to our server
+#         smtp.starttls()  # tell server we want to communicate with TLS encryption
+#
+#         # TODO: solve Password issue
+#         smtp.login('testdummyprosody@gmail.com', input('Password:'))  # login to our email server
+#         receiver = input('Who will receive this email?\n')
+#         for sesh in ['Session_1', 'Session_2', 'Session_3']:
+#             for remind in [True, False]:
+#                 msg = generate_email(sesh, is_reminder=remind, username="test", password="Testpassword")
+#                 smtp.sendmail('testdummyprosody@gmail.com',
+#                               receiver,
+#                               msg.as_string())
                 #send_email(msg, 'testdummyprosody@gmail.com', receiver)
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
