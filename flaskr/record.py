@@ -133,7 +133,7 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
     if condition == 'a':
         return render_template(
                 '/record/index.html', recording=sent_id, sentence=text, textplot=textplot, audio=recordings
-            ) #TODO: fix index.html to reflect changes Done?
+            )
     else:
         return render_template(
                 '/record/index.html', recording=sent_id, sentence=text, textplot=None, audio=recordings
