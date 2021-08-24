@@ -1,4 +1,4 @@
-from database import get_flaskr_db
+from notify_users.database import get_flaskr_db
 from flask import g
 import pickle
 import random
