@@ -248,7 +248,6 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
             new_trial_type = trial_type_list[new_trial_type_index]
             chapter_order = 0
 
-
             return redirect(url_for('/record.record', chapterorder=chapter_order, session=session, trial_type=new_trial_type))
 
         else:
