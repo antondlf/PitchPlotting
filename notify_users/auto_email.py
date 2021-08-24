@@ -46,19 +46,25 @@ def send_email(msg, server, sender, receiver_list):
         print('Error: email supplied is invalid.')
 
 
-def notify(session, receiver_list, username=None, password=None, is_reminder=False):
+def notify(session, receiver_list, server=None, username=None, password=None, is_reminder=False):
 
-    # initialize connection to our email server, we will use Outlook here
-    with smtplib.SMTP('smtp.gmail.com', port='587') as smtp:
 
-        smtp.ehlo()  # send the extended hello to our server
-        smtp.starttls()  # tell server we want to communicate with TLS encryption
-
-        # TODO: solve Password issue
-        smtp.login('testdummyprosody@gmail.com', input('Password:'))  # login to our email server
-
+    if server:
         msg = generate_email(session, username=username, password=password, is_reminder=is_reminder)
-        send_email(msg, smtp, 'testdummyprosody@gmail.com', receiver_list)
+        send_email(msg, server, 'testdummyprosody@gmail.com', receiver_list)
+
+    else:
+        # initialize connection to our email server, we will use Outlook here
+        with smtplib.SMTP('smtp.gmail.com', port='587') as smtp:
+
+            smtp.ehlo()  # send the extended hello to our server
+            smtp.starttls()  # tell server we want to communicate with TLS encryption
+
+            # TODO: solve Password issue
+            smtp.login('testdummyprosody@gmail.com', input('Password:'))  # login to our email server
+
+            msg = generate_email(session, username=username, password=password, is_reminder=is_reminder)
+            send_email(msg, smtp, 'testdummyprosody@gmail.com', receiver_list)
 
 
 # def main():
