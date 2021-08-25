@@ -105,7 +105,7 @@ def start_experiment(email_list):
 
     init_email_db()
     emails = read_email_list(email_list)
-    create_accounts(emailsm, server=smtp)
+    create_accounts(emails, server=smtp)
 
     click.echo('Users registered and notifications sent.')
 
