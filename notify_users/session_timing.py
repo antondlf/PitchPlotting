@@ -49,7 +49,7 @@ def reminder_cue(user_id, notification_session):
 
 
 @click.command('send_notifications')
-@click.argument('password')
+@click.option('--password', default=None)
 def send_notifications(password):
     """Checks if it is time to send a new notification and automatically
     notifies the user of the new session."""
@@ -65,7 +65,7 @@ def send_notifications(password):
 
     for user in notification_cue:
 
-        notification_time = pickle.load(user['time'])
+        notification_time = datetime.datetime.strptime(user['notification_time'], '%Y-%m-%d %H:%M:%S.%f')
 
         if time_now > notification_time:
 
