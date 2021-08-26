@@ -10,6 +10,7 @@ def init_email_db():
         db.executescript(f.read())
     db.commit()
 
+
 def get_flaskr_db():
 
     if os.path.isfile('./instance/flaskr.sqlite'):
@@ -23,6 +24,7 @@ def get_flaskr_db():
             db.executescript(f.read())
         db.commit()
     return db
+
 
 def connect_email_db():
 
