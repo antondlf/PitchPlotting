@@ -1,7 +1,8 @@
 import datetime
 import pickle
+import click
 from database import get_flaskr_db, connect_email_db
-from notify_users.auto_email import notify
+from notify_users.auto_email import notify, server_login
 
 
 def id2email(user_id):
@@ -46,7 +47,10 @@ def reminder_cue(user_id, notification_session):
         (user_id, reminder_time, notification_session, 'True',)
     )
 
-def send_notifications():
+
+@click.command('send_notifications')
+@click.argument('password')
+def send_notifications(password):
     """Checks if it is time to send a new notification and automatically
     notifies the user of the new session."""
 
@@ -56,6 +60,8 @@ def send_notifications():
     notification_cue = db.execute(
         "SELECT * FROM notifications"
     ).fetchall()
+
+    server = server_login(password)
 
     for user in notification_cue:
 
@@ -69,11 +75,10 @@ def send_notifications():
 
                 reminder_cue(user['user_id'], user['next_session'])
 
-
-                notify(user['next_session'], email)
+                notify(user['next_session'], email, server=server)
 
             else:
-                notify(user['next_session'], email, is_reminder=True)
+                notify(user['next_session'], email, server=server, is_reminder=True)
 
             db.execute(
                 "DELETE FROM notifications WHERE user_id=?",
@@ -81,4 +86,9 @@ def send_notifications():
             )
             db.commit()
 
+    server.quit()
+    click.echo('All scheduled notifications sent')
 
+
+if __name__ == '__main__':
+    send_notifications()

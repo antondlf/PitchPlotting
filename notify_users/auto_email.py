@@ -11,6 +11,22 @@ def contains_non_ascii_characters(str):
     return not all(ord(c) < 128 for c in str)
 
 
+def server_login(password):
+
+    smtp = smtplib.SMTP('smtp.gmail.com', port='587')
+    smtp.ehlo()  # send the extended hello to our server
+    smtp.starttls()  # tell server we want to communicate with TLS encryption
+
+    # TODO: solve Password issue
+    smtp.login('testdummyprosody@gmail.com', input('Password:'))
+
+    return smtp
+
+
+def server_logout(server):
+
+    server.quit()
+
 def generate_email(stage, username=None, password=None, is_reminder=False):
 
     subject, text = get_email_text(stage, username, password, is_reminder=is_reminder)
@@ -47,7 +63,6 @@ def send_email(msg, server, sender, receiver_list):
 
 
 def notify(session, receiver_list, server=None, username=None, password=None, is_reminder=False):
-
 
     if server:
         msg = generate_email(session, username=username, password=password, is_reminder=is_reminder)
