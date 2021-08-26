@@ -1,7 +1,7 @@
 import click
 import random
 import diceware
-import smtplib
+from notify_users.auto_email import server_login
 from notify_users.database import get_flaskr_db, connect_email_db, init_email_db
 from werkzeug.security import generate_password_hash
 from notify_users.user_dict import create_user_dict
@@ -95,21 +95,17 @@ def create_accounts(email_list, server=None):
 
 @click.command('start-experiment')
 @click.argument('email_list', type=click.Path(exists=True))
-def start_experiment(email_list):
+@click.option('--password', default=None)
+def start_experiment(email_list, password):
 
-    # Temporary solution, one login for start_experiment
-    smtp = smtplib.SMTP('smtp.gmail.com', port='587')
-    smtp.ehlo()  # send the extended hello to our server
-    smtp.starttls()  # tell server we want to communicate with TLS encryption
-    smtp.login('testdummyprosody@gmail.com', input('Password:'))  # login to our email server
-
+    server = server_login(password)
     init_email_db()
     emails = read_email_list(email_list)
-    create_accounts(emails, server=smtp)
+    create_accounts(emails, server=server)
 
     click.echo('Users registered and notifications sent.')
 
-    smtp.quit()
+    server.quit()
 
 
 if __name__ == '__main__':

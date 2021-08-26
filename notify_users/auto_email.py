@@ -17,8 +17,11 @@ def server_login(password):
     smtp.ehlo()  # send the extended hello to our server
     smtp.starttls()  # tell server we want to communicate with TLS encryption
 
-    # TODO: solve Password issue
-    smtp.login('testdummyprosody@gmail.com', input('Password:'))
+    if password:
+        smtp.login('testdummyprosody@gmail.com', password)
+    else:
+        smtp.login('testdummyprosody@gmail.com', input('Password:'))
+    print('Logged in successfully')
 
     return smtp
 
@@ -30,8 +33,6 @@ def server_logout(server):
 def generate_email(stage, username=None, password=None, is_reminder=False):
 
     subject, text = get_email_text(stage, username, password, is_reminder=is_reminder)
-
-
 
     if (contains_non_ascii_characters(text)):
         plain_text = MIMEText(text.encode('utf-8'), 'plain', 'utf-8')
