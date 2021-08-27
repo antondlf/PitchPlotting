@@ -4,7 +4,7 @@ from flask import (
 
 from flaskr.db import get_db
 
-from site.pitch_track import pitch_plot
+from pitch_track.pitch_plot import draw_pitch
 
 from flaskr.data_management import get_unique_id
 
@@ -106,7 +106,7 @@ def save_plot(filename, path):
     # Calculate the pitch track with Parselmouth
     new_pitch = sound.to_pitch()
     old_pitch = praat.Sound(filename).to_pitch()
-    pitch_plot.draw_pitch(new_pitch, old_pitch, plot_path)
+    draw_pitch(new_pitch, old_pitch, plot_path)
 
     return plot_path, recording_path
 
