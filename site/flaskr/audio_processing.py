@@ -4,7 +4,7 @@ from flask import (
 
 from flaskr.db import get_db
 
-from flaskr.pitch_track.pitch_plot import draw_pitch
+from pitch_track.pitch_plot import draw_pitch
 
 from flaskr.data_management import get_unique_id
 
