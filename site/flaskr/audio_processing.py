@@ -2,9 +2,9 @@ from flask import (
     flash, current_app
 )
 
-from db import get_db
+from flaskr.db import get_db
 
-from pitch_track.pitch_plot import draw_pitch
+from flaskr.pitch_track.pitch_plot import draw_pitch
 
 from flaskr.data_management import get_unique_id
 
