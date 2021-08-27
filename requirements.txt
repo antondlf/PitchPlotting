@@ -7,3 +7,4 @@ setuptools~=51.1.1
 numpy~=1.19.5
 matplotlib~=3.3.3
 praat-parselmouth~=0.3.3
+seaborn~=0.11.1
