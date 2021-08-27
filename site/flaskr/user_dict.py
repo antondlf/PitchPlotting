@@ -1,4 +1,4 @@
-from database import get_flaskr_db
+from db import get_db
 from flask import g
 import pickle
 import random
@@ -66,6 +66,7 @@ def get_sentences():
 
     return sent_dict
 
+
 def get_user_list(order_dict):
 
     order_list = str()
@@ -90,7 +91,7 @@ def get_user_list(order_dict):
     return order_list
 
 
-def create_user_dict(user_id, group=None):
+def create_user_dict(user_id, group=None, db=None):
 
     # Get the sentence dictionary and the list of sentence dictionaries.
     sentences = get_sentences()
@@ -210,7 +211,9 @@ def create_user_dict(user_id, group=None):
     # input into the database.
     pdata = pickle.dumps(user_dict)
 
-    db = get_flaskr_db()
+    if db == None:
+        db = get_db()
+
     db.execute(
         'INSERT INTO userdata (user_id, user_dict) VALUES (?, ?)',
         (user_id, pdata)

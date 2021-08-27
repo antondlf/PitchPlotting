@@ -2,13 +2,14 @@ from flask import (
     flash, current_app
 )
 
-from site.flaskr import get_db
+from db import get_db
 
 from site.pitch_track.pitch_plot import draw_pitch
 
-from site.flaskr import get_unique_id
+from data_management import get_unique_id
 
 import parselmouth as praat
+
 import numpy as np
 
 import os

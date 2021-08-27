@@ -34,7 +34,7 @@ def connect_email_db():
         )
         db.row_factory = sqlite3.Row
     else:
-        db = sqlite3.connect('base.sqlite')
+        db = sqlite3.connect('./backend_instance/base.sqlite')
         with open('./notify_users/email_schema.sql') as f:
             db.executescript(f.read())
         db.commit()

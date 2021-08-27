@@ -3,15 +3,15 @@ from flask import (
 )
 from site.flaskr.auth import login_required
 
-from site.flaskr import get_db
+from db import get_db
 
 from werkzeug.exceptions import abort
 
 from site.flaskr.audio_processing import process_recording
 
-from notify_users.user_dict import user_state
+from site.flaskr.user_dict import user_state
 
-from site.flaskr import notify_next_week
+from notification_cue import notify_next_week
 
 import os
 
@@ -22,7 +22,9 @@ def get_user_state(user_id):
 
     return g.user_dict
 
+
 bp = Blueprint('/record', __name__)
+
 
 @bp.route('/')
 @login_required

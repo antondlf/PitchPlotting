@@ -4,7 +4,7 @@ import diceware
 from auto_email import server_login
 from database import get_flaskr_db, connect_email_db, init_email_db
 from werkzeug.security import generate_password_hash
-from user_dict import create_user_dict
+from site.flaskr.user_dict import create_user_dict
 from auto_email import notify
 
 
@@ -59,7 +59,7 @@ def generate_group(group_list, username_list, db, server=None, group='a'):
             'SELECT id FROM user WHERE username=?',
             (username,)
         ).fetchall()[0]['id']
-        create_user_dict(user_id, group=group)
+        create_user_dict(user_id, group=group, db=db)
 
 
 def create_accounts(email_list, server=None):

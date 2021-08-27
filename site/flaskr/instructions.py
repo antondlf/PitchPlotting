@@ -3,7 +3,7 @@ from flask import (
 )
 from site.flaskr.auth import login_required
 
-from notify_users.user_dict import user_state
+from site.flaskr.user_dict import user_state
 
 import os
 
@@ -14,12 +14,15 @@ def get_user_state(user_id):
 
     return g.user_dict
 
+
 bp = Blueprint('/instructions', __name__)
+
 
 @bp.route('/instructions/intro')
 @login_required
 def intro():
     return render_template('Instructions/Introduction.html')
+
 
 @bp.route('/instructions/test_recordings/<string:is_session>')
 @login_required
@@ -38,6 +41,7 @@ def test_recordings(is_session):
     return render_template(
             'Instructions/Test_instructions.html',
             next_panel=what_next)
+
 
 @bp.route('/instructions/training/<string:is_session>')
 @login_required
@@ -58,10 +62,12 @@ def training(is_session):
             condition=condition,
             next_panel=what_next)
 
+
 @bp.route('/instructions/post_train')
 @login_required
 def post_training():
     return render_template('Instructions/post_test.html')
+
 
 @bp.route('/instructions/<string:filename>')
 @login_required
