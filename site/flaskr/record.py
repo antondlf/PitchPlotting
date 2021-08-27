@@ -3,7 +3,7 @@ from flask import (
 )
 from site.flaskr.auth import login_required
 
-from db import get_db
+from site.flaskr.db import get_db
 
 from werkzeug.exceptions import abort
 

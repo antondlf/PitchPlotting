@@ -1,4 +1,4 @@
-from db import get_db
+from site.flaskr.db import get_db
 from flask import g
 import pickle
 import random
