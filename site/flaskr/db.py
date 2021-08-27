@@ -2,7 +2,7 @@ import sqlite3
 import click
 from flask import current_app, g
 from flask.cli import with_appcontext
-from site.flaskr.data_management import init_chapters
+from flaskr.data_management import init_chapters
 
 
 def get_db():
