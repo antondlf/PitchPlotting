@@ -29,7 +29,7 @@ def get_sentences():
     all the sentence dictionaries as well as a list of all the sentence
     dictionaries.
     """
-    db = get_flaskr_db()
+    db = get_db()
 
     sentences = db.execute(
         'SELECT * FROM chapters'
@@ -225,7 +225,7 @@ def create_user_dict(user_id, group=None, db=None):
 class user_state:
 
     def __init__(self, user_id):
-        db = get_flaskr_db()
+        db = get_db()
         user_dict_pickle = db.execute(
             'SELECT user_dict FROM userdata WHERE user_id=?',
             (user_id,)
