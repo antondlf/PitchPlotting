@@ -1,5 +1,5 @@
 import smtplib
-from notify_users.email_generator import get_email_text
+from email_generator import get_email_text
 from future.backports.email.mime.multipart import MIMEMultipart
 from future.backports.email.mime.text import MIMEText
 
