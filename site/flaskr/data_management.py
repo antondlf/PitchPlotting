@@ -1,11 +1,8 @@
 import uuid
 
 import os
-import click
-from flask import current_app, g
-from pitch_track.text_plot import draw_text_plot
-from flask.cli import with_appcontext
-import flaskr.db
+from flask import current_app
+
 
 def get_unique_id():
     return str(uuid.uuid1())[:4]
@@ -14,7 +11,7 @@ def get_unique_id():
 def init_chapters(database): # TODO: make only one class of sentence
     """Take chapter titles from Recordings directory and
     create a chapter for each file"""
-    recordings_dir = os.path.join(current_app.root_path, '../Recordings')
+    recordings_dir = os.path.join(current_app.root_path, '../../Recordings')
     sent_id = None
     text = None
     sentence_text_exists = False

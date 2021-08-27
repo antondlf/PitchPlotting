@@ -4,7 +4,7 @@ from praatio import tgio
 import parselmouth
 import numpy as np
 import os
-from pitch_track.pitch_plot import trim_recording
+from site.pitch_track.pitch_plot import trim_recording
 
 
 

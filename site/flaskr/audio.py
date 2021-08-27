@@ -1,6 +1,6 @@
 from flask import send_from_directory
 from flask import Blueprint
-from flaskr.db import get_db
+from site.flaskr import get_db
 from flask import current_app
 from werkzeug.exceptions import abort
 import os

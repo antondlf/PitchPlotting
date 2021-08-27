@@ -13,14 +13,14 @@ def init_email_db():
 
 def get_flaskr_db():
 
-    if os.path.isfile('./instance/flaskr.sqlite'):
-        db = sqlite3.connect('./instance/flaskr.sqlite',
+    if os.path.isfile('./site/instance/flaskr.sqlite'):
+        db = sqlite3.connect('./site/instance/flaskr.sqlite',
         detect_types=sqlite3.PARSE_DECLTYPES
         )
         db.row_factory = sqlite3.Row
     else:
-        db = sqlite3.connect('./instance/flaskr.sqlite')
-        with open('./flaskr/schema.sql') as f:
+        db = sqlite3.connect('./site/instance/flaskr.sqlite')
+        with open('./site/flaskr/schema.sql') as f:
             db.executescript(f.read())
         db.commit()
     return db

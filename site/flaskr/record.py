@@ -1,17 +1,17 @@
 from flask import (
     Blueprint, flash,  current_app, g, redirect, render_template, request, url_for, send_from_directory
 )
-from flaskr.auth import login_required
+from site.flaskr.auth import login_required
 
-from flaskr.db import get_db
+from site.flaskr import get_db
 
 from werkzeug.exceptions import abort
 
-from flaskr.audio_processing import process_recording
+from site.flaskr.audio_processing import process_recording
 
 from notify_users.user_dict import user_state
 
-from flaskr.notification_cue import notify_next_week
+from site.flaskr import notify_next_week
 
 import os
 
@@ -271,7 +271,7 @@ def return_plot_file(filename):
 def return_textplot_file(chaptername, filename):
     """Get the plot file from tmp directory."""
 
-    path = os.path.join(current_app.root_path, '../Recordings/', chaptername)
+    path = os.path.join(current_app.root_path, '../../Recordings/', chaptername)
 
     return send_from_directory(path, filename, as_attachment=True)
 

@@ -1,7 +1,7 @@
 from flask import (
     Blueprint, flash, current_app, g, render_template, send_from_directory
 )
-from flaskr.auth import login_required
+from site.flaskr.auth import login_required
 
 from notify_users.user_dict import user_state
 

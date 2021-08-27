@@ -4,7 +4,7 @@ from flask import(
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from flaskr.db import get_db
+from site.flaskr import get_db
 
 from notify_users.user_dict import create_user_dict
 
