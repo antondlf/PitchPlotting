@@ -1,4 +1,4 @@
-from site.flaskr.db import get_db
+from flaskr.db import get_db
 import datetime
 
 def notify_next_week(user_id, notification_session):

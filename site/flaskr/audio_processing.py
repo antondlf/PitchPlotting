@@ -4,9 +4,9 @@ from flask import (
 
 from db import get_db
 
-from site.pitch_track.pitch_plot import draw_pitch
+from pitch_track.pitch_plot import draw_pitch
 
-from site.flaskr.data_management import get_unique_id
+from flaskr.data_management import get_unique_id
 
 import parselmouth as praat
 
