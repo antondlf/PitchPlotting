@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Dashboard{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <article class="post">
+      <header>
+        <div>
+          <h1><a class="action" href="{{ url_for('/instructions.intro') }}">Instructions</a></h1>
+        </div>
+      </header>
+    </article>
+  {% for post in posts %}
+    <article class="post">
+      <header>
+        <div>
+          <!--TODO: remember session 3 only has generalization as condition-->
+          <h1><a class="action" href="{{ url_for('/record.record', session=post, trial_type='pre_train', chapterorder=0) }}">{{ post }}</a></h1>
+        </div>
+      </header>
+    </article>
+  {% endfor %}
+{% endblock %}
