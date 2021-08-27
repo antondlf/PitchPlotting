@@ -1,7 +1,7 @@
 import smtplib
 from email_generator import get_email_text
-from future.backports.email.mime.multipart import MIMEMultipart
-from future.backports.email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 # Part of this code based on https://towardsdatascience.com/automate-email-with-python-1e755d9c6276
 # and https://realpython.com/python-send-email/
