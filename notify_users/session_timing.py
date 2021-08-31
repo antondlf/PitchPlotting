@@ -25,6 +25,7 @@ def id2email(user_id):
 
     return user_email
 
+
 def reminder_cue(user_id, notification_session):
     """Removes initial notification and adds user email to a
     cue where they will be reminded two days later to complete the next
@@ -63,12 +64,15 @@ def send_notifications(password):
 
     server = server_login(password)
 
+    counter = 0
+
     for user in notification_cue:
 
         notification_time = datetime.datetime.strptime(user['notification_time'], '%Y-%m-%d %H:%M:%S.%f')
 
         if time_now > notification_time:
 
+            counter += 1
             email = id2email(user['user_id'])
 
             if user['is_reminder'] == 'False':
@@ -87,7 +91,7 @@ def send_notifications(password):
             db.commit()
 
     server.quit()
-    click.echo('All scheduled notifications sent')
+    click.echo('{} scheduled notifications sent'.format(str(counter)))
 
 
 if __name__ == '__main__':
