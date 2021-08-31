@@ -70,6 +70,9 @@ def send_notifications(password):
     for user in notification_cue:
         click.echo('user {} has a notification in the cue'.format(str(user['user_id'])))
         notification_time = datetime.datetime.strptime(user['notification_time'], '%Y-%m-%d %H:%M:%S.%f')
+        click.echo(print(time_now, notification_time))
+        click.echo(print())
+        click.echo(print(time_now > notification_time))
 
         if time_now > notification_time:
             click.echo("user {}'s notification is due".format(str(user['user_id'])))
