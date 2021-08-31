@@ -4,23 +4,27 @@ import os
 
 def init_email_db():
 
-    db = sqlite3.connect('../backend_instance/base.sqlite')
+    dir_path = os.path.dirname(os.path.realpath(__file__))
 
-    with open('./notify_users/email_schema.sql') as f:
+    db = sqlite3.connect(dir_path + '/../backend_instance/base.sqlite')
+
+    with open(dir_path + '/email_schema.sql') as f:
         db.executescript(f.read())
     db.commit()
 
 
 def get_flaskr_db():
 
-    if os.path.isfile('../site/instance/flaskr.sqlite'):
-        db = sqlite3.connect('../site/instance/flaskr.sqlite',
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+
+    if os.path.isfile(dir_path + '/../site/instance/flaskr.sqlite'):
+        db = sqlite3.connect(dir_path + '/../site/instance/flaskr.sqlite',
         detect_types=sqlite3.PARSE_DECLTYPES
         )
         db.row_factory = sqlite3.Row
     else:
-        db = sqlite3.connect('../site/instance/flaskr.sqlite')
-        with open('../site/flaskr/schema.sql') as f:
+        db = sqlite3.connect(dir_path + '/../site/instance/flaskr.sqlite')
+        with open(dir_path + '/../site/flaskr/schema.sql') as f:
             db.executescript(f.read())
         db.commit()
     return db
@@ -28,14 +32,16 @@ def get_flaskr_db():
 
 def connect_email_db():
 
-    if os.path.isfile('../backend_instance/base.sqlite'):
-        db = sqlite3.connect('../backend_instance/base.sqlite',
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+
+    if os.path.isfile(dir_path + '/../backend_instance/base.sqlite'):
+        db = sqlite3.connect(dir_path + '/../backend_instance/base.sqlite',
         detect_types=sqlite3.PARSE_DECLTYPES
         )
         db.row_factory = sqlite3.Row
     else:
-        db = sqlite3.connect('../backend_instance/base.sqlite')
-        with open('../notify_users/email_schema.sql') as f:
+        db = sqlite3.connect(dir_path + '/../backend_instance/base.sqlite')
+        with open(dir_path + '/../notify_users/email_schema.sql') as f:
             db.executescript(f.read())
         db.commit()
     return db
