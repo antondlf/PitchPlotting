@@ -70,27 +70,18 @@ def send_notifications(password):
     for user in notification_cue:
         click.echo('user {} has a notification in the cue'.format(str(user['user_id'])))
         notification_time = datetime.datetime.strptime(user['notification_time'], '%Y-%m-%d %H:%M:%S.%f')
-        click.echo(print(time_now, notification_time))
-        click.echo(print())
-        click.echo(print(time_now > notification_time))
 
         if time_now > notification_time:
-            click.echo("user {}'s notification is due".format(str(user['user_id'])))
             counter += 1
             email = id2email(user['user_id'])
 
             if user['is_reminder'] == 'False':
-                click.echo("user {}'s notification is not a reminder". format(str(user['user_id'])))
                 reminder_cue(user['user_id'], user['next_session'])
-                click.echo("a reminder was added for user {}".format(str(user['user_id'])))
 
                 notify(user['next_session'], email, server=server)
-                click.echo("user {}'s notification was sent".format(str(user['user_id'])))
 
             else:
-                click.echo("user {}'s notification is a reminder".format(str(user['user_id'])))
                 notify(user['next_session'], email, server=server, is_reminder=True)
-                click.echo("user {}'s notification was sent".format(str(user['user_id'])))
             print(user['user_id'], type(user['user_id']))
             db.execute(
                 "DELETE FROM notifications WHERE user_id=?",
