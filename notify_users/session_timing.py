@@ -94,7 +94,7 @@ def send_notifications(password):
             print(user['user_id'], type(user['user_id']))
             db.execute(
                 "DELETE FROM notifications WHERE user_id=?",
-                (str(user['user_id']))
+                (str(user['user_id']),)
             )
             db.commit()
 
