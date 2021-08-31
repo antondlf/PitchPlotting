@@ -14,7 +14,7 @@ def init_email_db():
 def get_flaskr_db():
 
     if os.path.isfile('../site/instance/flaskr.sqlite'):
-        db = sqlite3.connect('./site/instance/flaskr.sqlite',
+        db = sqlite3.connect('../site/instance/flaskr.sqlite',
         detect_types=sqlite3.PARSE_DECLTYPES
         )
         db.row_factory = sqlite3.Row
@@ -34,7 +34,7 @@ def connect_email_db():
         )
         db.row_factory = sqlite3.Row
     else:
-        db = sqlite3.connect('./backend_instance/base.sqlite')
+        db = sqlite3.connect('../backend_instance/base.sqlite')
         with open('../notify_users/email_schema.sql') as f:
             db.executescript(f.read())
         db.commit()
