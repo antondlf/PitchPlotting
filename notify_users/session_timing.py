@@ -16,6 +16,7 @@ def id2email(user_id):
         "SELECT username FROM user WHERE id=?",
         (user_id,)
     ).fetchall()[0]['username']
+    print(username)
 
     # Get user email
     user_email = email_db.execute(
@@ -83,10 +84,10 @@ def send_notifications(password):
 
             else:
                 notify(user['next_session'], email, server=server, is_reminder=True)
-
+            print(user['user_id'], type(user['user_id']))
             db.execute(
                 "DELETE FROM notifications WHERE user_id=?",
-                (user['user_id'])
+                (str(user['user_id']))
             )
             db.commit()
 

@@ -31,9 +31,7 @@ def get_email_text(stage, username, password, is_reminder=False):
                 "Just checking in to see if you’re" \
                     " still interested in participating" \
                     " in our study and practicing your Italian intonation."\
-                "To start the first session, click on the link below. Sign in as follows:\n\n"\
-                "username: {}\n"\
-                "password: {}\n"\
+                "To start the first session, click on the link below and sign in with the credentials we provided in the first email"\
                 "url: {}\n\n" \
                     " The study has three sessions, one week apart. " \
                     "The first two are training sessions that should take" \
@@ -45,7 +43,7 @@ def get_email_text(stage, username, password, is_reminder=False):
                 " If you run into any issues," \
                 " contact Antón de la Fuente at antondlf@mac.com\n\n"\
                 "Grazie mille!\n"\
-                "Catherine Scanlon and Antón de la Fuente".format(username, password, url)
+                "Catherine Scanlon and Antón de la Fuente".format(url)
 
     elif stage == "Session_2":
         subject = 'Italian Prosody Study Part 2{}'
