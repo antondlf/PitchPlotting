@@ -2,7 +2,7 @@ import datetime
 import pickle
 import click
 from database import get_flaskr_db, connect_email_db
-from notify_users.auto_email import notify, server_login
+from auto_email import notify, server_login
 
 
 def id2email(user_id):
