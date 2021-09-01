@@ -31,7 +31,7 @@ def get_email_text(stage, username, password, is_reminder=False):
                 "Just checking in to see if you’re" \
                     " still interested in participating" \
                     " in our study and practicing your Italian intonation."\
-                "To start the first session, click on the link below and sign in with the credentials we provided in the first email"\
+                "To start the first session, click on the link below and sign in with the credentials we provided in the first email\n"\
                 "url: {}\n\n" \
                     " The study has three sessions, one week apart. " \
                     "The first two are training sessions that should take" \
