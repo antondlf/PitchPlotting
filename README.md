@@ -1,0 +1,36 @@
+# Teaching L2 Prosody Through Automatic Pitch Visualization
+
+<p> This repository contains the source code for an online experiment that was designed to test a system of automatic pitch visualization<br>
+for the learning of L2 prosody. This experiment specifically is designed with the acquisition of Italian question-statement<br>
+discrimination in mind. The repository is divided into two main sections. First, **Site** contains the visualization system under **Pitch_Plotting**<br>
+and the source code associated with the experiment website, hosted [here](https://prosody.delafuentealvarez.com), under **flaskr**. <br>
+Second, a system of automatic notification associated with the experiment is held under **notify_users**.<br>
+Below each part of the project will be introduced.<\p>
+
+## The Visualization System **Pitch_Plotting**
+
+<p> This system was developed during a Graduate Seminar on linguistic Rhythm at UCSB (Fall 2020, Winter 2021).<br>
+The system is held in the script **Pitch_Plot.py**. This script takes in two recordings, one reference and one input, <br>
+extracts the pitch out of both and generates a plot with both traces aligned. The reference recording is meant to be <br>
+a native speaker's production of a sentence that is representative of the target intonation being taught. The input recording <br>
+is meant to be the learner's production of that intonational pattern. The pitch array of the input recording is trimmed to exclude <br>
+any silence at the beginning or the end of the recording. Then, the corresponding time array is warped to fit into the same time frame <br>
+as the reference recording. Although this is very simple, it seems to robustly align pitch excursions at the level of individual sentences. <br>
+This makes it ideal for applications in phrasal intonation as well as lexical pitch accent or phonemic tone. A version of this system is being <br>
+used for a similar application to teach Mandarin Tone [here](https://pitchperfect.training). </p>
+
+## The Site **flaskr**
+
+<p> This part of the repository contains a Flask web application that hosts a set of sentences in Italian that are either questions or statements.<br>
+Each user is alotted a sequence of sentences with a controlled number of syllables and accent placements. The site takes a user through 3 sessions, <br>
+two of these have 7 pre-training recordings (baselines for comparison), 31 training recordings where they receive automatic visual feedback, <br>
+and 7 post-training recordings to assess their ability to generalize what they learned during training. Finally, a third session with 7 more <br>
+recordings is meant to assess delayed generalization. The code for this section was originally based on the [Flask tutorial](https://flask.palletsprojects.com/en/2.0.x/tutorial/index.html) <br>
+and was adapted to fit our individual needs. </p>
+
+## Notification System **notify_users**
+
+<p> In order to make a larger experiment possible, I introduced an automatic notification system. This system notifies users of when they should do each session <br>
+(one week apart), and reminds users if they haven't completed the current session within two days. This system is set apart from the rest of the app in order to <br>
+avoid associating user emails from any part of the active web server. Therefore, the user that runs the web-server has no access to this part of the app, but the <br>
+user that runs these notifications has read access for some important parts of flaskr.</p>
