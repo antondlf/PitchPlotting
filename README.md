@@ -9,7 +9,7 @@ Below each part of the project will be introduced.
 
 ## The Visualization System **Pitch_Plotting**
 
-This system was developed during a Graduate Seminar on linguistic Rhythm at UCSB taught by Matthew Gordon and Argyro Katsika (Fall 2020, Winter 2021).
+This system was developed during a Graduate Seminar on Linguistic Rhythm at UCSB taught by Matthew Gordon and Argyro Katsika (Fall 2020, Winter 2021).
 The system is held in the script **Pitch_Plot.py**. This script takes in two recordings, one reference and one input,
 extracts the pitch out of both and generates a plot with both traces aligned. The reference recording is meant to be 
 a native speaker's production of a sentence that is representative of the target intonation being taught. The input recording 
