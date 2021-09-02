@@ -7,7 +7,7 @@ and the source code associated with the experiment website, hosted [here](https:
 Second, a system of automatic notification associated with the experiment is held under **notify_users**.
 Below each part of the project will be introduced.
 
-## The Visualization System **Pitch_Plotting**
+## The Visualization System
 
 This system was developed during a Graduate Seminar on Linguistic Rhythm at UCSB taught by Matthew Gordon and Argyro Katsika (Fall 2020, Winter 2021).
 The system is held in the script **Pitch_Plot.py**. This script takes in two recordings, one reference and one input,
@@ -19,7 +19,7 @@ as the reference recording. Although this is very simple, it seems to robustly a
 This makes it ideal for applications in phrasal intonation as well as lexical pitch accent or phonemic tone. A version of this system is being 
 used for a similar application to teach Mandarin Tone [here](https://pitchperfect.training).
 
-## The Site **flaskr**
+## The Web App
 
 This part of the repository contains a Flask web application that hosts a set of sentences in Italian that are either questions or statements.
 Each user is alotted a sequence of sentences with a controlled number of syllables and accent placements. The site takes a user through 3 sessions,
@@ -28,9 +28,9 @@ and 7 post-training recordings to assess their ability to generalize what they l
 recordings is meant to assess delayed generalization. The code for this section was originally based on the [Flask tutorial](https://flask.palletsprojects.com/en/2.0.x/tutorial/index.html)
 and was adapted to fit our individual needs.
 
-## Notification System **notify_users**
+## The Notification System
 
-In order to make a larger experiment possible, I introduced an automatic notification system. This system notifies users of when they should do each session 
+In order to make a larger experiment possible, I introduced an automatic notification system held in **notify_users**. This system notifies users of when they should do each session 
 (one week apart), and reminds users if they haven't completed the current session within two days. This system is set apart from the rest of the app in order to 
 avoid associating user emails from any part of the active web server. Therefore, the user that runs the web-server has no access to this part of the app, but the 
 user that runs these notifications has read access for some important parts of flaskr.
