@@ -119,7 +119,7 @@ def create_user_dict(user_id, group=None, db=None):
     if group:
         user_dict['condition'] = group
     else:
-        user_dict['condition'] = 'a'
+        user_dict['condition'] = random.choice(['a', 'b'])
 
     # Create dictionary structure
     order_dict['Session 1'] = dict()
