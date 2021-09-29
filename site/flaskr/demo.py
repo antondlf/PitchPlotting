@@ -18,7 +18,7 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 
-@app.route('/demo/menu')
+@app.route('/demo')
 def demo_index():
     return render_template('/demo/demo_index.html')
 
