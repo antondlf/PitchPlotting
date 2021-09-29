@@ -13,22 +13,18 @@ import os
 
 bp = Blueprint('/demo', __name__)
 
-from flask import Flask, render_template, request
 
-app = Flask(__name__)
-
-
-@app.route('/demo')
+@bp.route('/demo')
 def demo_index():
     return render_template('/demo/demo_index.html')
 
 
-@app.route('/demo/upload')
+@bp.route('/demo/upload')
 def demo_upload():
     return render_template('demo/own_recording.html')
 
 
-@app.route('/demo/upload_demo', methods=['GET', 'POST'])
+@bp.route('/demo/upload_demo', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         f = request.files['file']
@@ -41,7 +37,7 @@ def upload_file():
             flash('Error: file not uploaded correctly')
 
 
-@app.route('/demo/upload_demo/plot', methods=['GET', 'POST'])
+@bp.route('/demo/upload_demo/plot', methods=['GET', 'POST'])
 def plot_pitches(file):
 
     with tempfile.NamedTemporaryFile() as temp:
