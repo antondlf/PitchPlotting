@@ -2,7 +2,7 @@ from flask import (
     Blueprint, flash,  current_app, g, redirect, render_template, request, url_for, send_from_directory
 )
 
-from site.pitch_track.pitch_plot import draw_pitch
+from pitch_track.pitch_plot import draw_pitch
 
 import parselmouth as praat
 
