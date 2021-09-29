@@ -37,7 +37,7 @@ def demo_index():
 
 @app.route('/demo/upload')
 def upload_file():
-    return render_template('/demo/own_recording.html')
+    return render_template('demo/own_recording.html')
 
 
 @app.route('/demo/upload_demo', methods=['GET', 'POST'])
@@ -48,7 +48,7 @@ def upload_file():
         if f:
 
             return render_template(
-                '/demo/script_host.html', recording=f)
+                'demo/script_host.html', recording=f)
         else:
             flash('Error: file not uploaded correctly')
 
@@ -64,7 +64,7 @@ def plot_pitches(file):
         draw_pitch(new_pitch, old_pitch, temp)
 
         return render_template(
-            '/demo/script_host.html', recording=f, plot=temp
+            'demo/script_host.html', recording=f, plot=temp
         )
 
 
