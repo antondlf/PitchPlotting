@@ -36,7 +36,7 @@ def index():
 
 
 # TODO: decide if this is the way to send url or if user identifier
-@bp.route('/<session>')
+@bp.route('/session_menu/<session>')
 @login_required
 def specific_index(session):
 

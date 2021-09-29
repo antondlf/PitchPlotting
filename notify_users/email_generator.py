@@ -2,7 +2,7 @@
 
 def get_email_text(stage, username, password, is_reminder=False):
 
-    url = 'prosody.delafuentealvarez.com/{}'.format(stage)
+    url = 'prosody.delafuentealvarez.com/session_menu/{}'.format(stage)
 
     if stage == 'Session_1':
 
