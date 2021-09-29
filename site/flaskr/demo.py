@@ -1,17 +1,6 @@
 from flask import (
     Blueprint, flash,  current_app, g, redirect, render_template, request, url_for, send_from_directory
 )
-from site.auth import login_required
-
-from site.flaskr.db import get_db
-
-from werkzeug.exceptions import abort
-
-from site.flaskr.audio_processing import process_recording
-
-from site.flaskr.user_dict import user_state
-
-from site.flaskr.notification_cue import notify_next_week
 
 from site.pitch_track.pitch_plot import draw_pitch
 
