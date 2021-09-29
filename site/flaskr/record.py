@@ -187,7 +187,7 @@ def post_trial(session, trial_type, chapter_order):
     if condition == 'a':
         return render_template('/record/post_trial.html', sentence=text, recording=recording_path, plot=plot_path, original_audio=sent_id)
 
-    elif condition == 'b':
+    else:
         return render_template('/record/post_trial.html', sentence=text, recording=recording_path, plot=None, original_audio=sent_id)
 
 
