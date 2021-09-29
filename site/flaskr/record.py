@@ -26,7 +26,7 @@ def get_user_state(user_id):
 bp = Blueprint('/record', __name__)
 
 
-@bp.route('/')
+@bp.route('/menu')
 @login_required
 def index():
 
