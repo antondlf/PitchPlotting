@@ -78,9 +78,9 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
         audio_path,\
         textplot_path = sentence[0]
 
-    if int(chapterorder)+1 % 4 == 0:
+    if (int(chapterorder)+1) % 4 == 0:
         repetition = '1'
-    elif int(chapterorder)+2 % 4 == 0:
+    elif (int(chapterorder)+2) % 4 == 0:
         repetition = '1'
     else:
         repetition = '0'
@@ -191,7 +191,6 @@ def post_trial(session, trial_type, chapter_order):
         return render_template('/record/post_trial.html', sentence=text, recording=recording_path, plot=None, original_audio=sent_id)
 
 
-
 @bp.route('/record/<string:session>/<string:trial_type>/<string:chapter_order>/post_trial/next_chapter')
 @login_required
 def next_chapter(session, trial_type, chapter_order): # TODO: revamp this function
@@ -228,7 +227,7 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
     elif session == 'Session 3':
         if trial_type == 'pre_train':
             # TODO: send thank you message
-            notify('done', )
+            #notify('done', )
 
             return redirect(url_for('/record.end_message'))
 
