@@ -19,7 +19,8 @@ var url = window.location.href
 var audioElem = document.getElementById("audio");
 var useraudioElem = document.getElementById('useraudio');
 var nextButton = document.getElementById('nextButton');
-var replayButton = document.getElementById('replayButton')
+var replayButton = document.getElementById('replayButton');
+var plotButton = document.getElementById('plotButton')
 
 if (playButton){
     console.log('Record button exists');
@@ -35,6 +36,10 @@ if (nextButton) {
     if (recordButton){
         recordButton.disabled = true;
     }
+if (replayButton){
+    console.log('Demo plot button exists');
+    replayButton.addEventListener("click", plotPitch);
+}
 
 
 }
@@ -273,6 +278,14 @@ function sendAudio(data) {
 
 function sendAudioEvent() {
     rec.exportWAV(sendAudio);
+}
+
+function PlotAudio(){
+    console.log('plot button clicked');
+    var new_address = window.location.href + '/plot'
+    var new_page = new URL(new_address)
+    console.log(new_address)
+    window.location.replace(new_page);
 }
 
 function nextChapter() {

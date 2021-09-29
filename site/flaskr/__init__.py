@@ -45,6 +45,10 @@ def create_app(test_config=None):
     app.register_blueprint(audio.bp)
     app.add_url_rule('/', endpoint='audio')
 
+    from . import demo
+    app.register_blueprint(demo.bp)
+    app.add_url_rule('/', endpoint='demo')
+
     return app
 
 
