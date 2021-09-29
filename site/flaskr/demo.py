@@ -30,7 +30,7 @@ from werkzeug import secure_filename
 app = Flask(__name__)
 
 
-@app.route('/demo')
+@app.route('/demo/menu')
 def demo_index():
     return render_template('/demo/demo_index.html')
 
