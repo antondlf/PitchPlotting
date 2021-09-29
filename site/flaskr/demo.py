@@ -24,7 +24,7 @@ def demo_index():
 
 
 @app.route('/demo/upload')
-def upload_file():
+def demo_upload():
     return render_template('demo/own_recording.html')
 
 
