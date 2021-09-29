@@ -30,6 +30,11 @@ from werkzeug import secure_filename
 app = Flask(__name__)
 
 
+@app.route('demo')
+def demo_index():
+    return render_template('/demo/demo_index.html')
+
+
 @app.route('demo/upload')
 def upload_file():
     return render_template('/demo/own_recording.html')
