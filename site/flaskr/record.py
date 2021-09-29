@@ -150,11 +150,13 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
 # Repetition is probably necessary
 def post_trial(session, trial_type, chapter_order):
 
+    print('function entered')
     db = get_db()
     user_id = g.user['id']
 
     user_dict = get_user_state(user_id)
     condition = user_dict.get_condition()
+    print('condition: ' + condition)
 
     # TODO: change database queries to align with new sql schema
     user_audio = db.execute(
