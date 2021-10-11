@@ -5,6 +5,8 @@ from flask.cli import with_appcontext
 from flaskr.data_management import init_chapters
 
 
+# This is straight from the flask tutorial, database utilities
+
 def get_db():
 
     if 'db' not in g:

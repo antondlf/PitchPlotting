@@ -3,18 +3,32 @@ import uuid
 import os
 from flask import current_app
 
+# This file provides utilities to initialize the database
+# inputting native speaker recording and plot paths.
 
 def get_unique_id():
+    """This function generates a unique four character id
+    meant to disambiguate repetitions of the same trial
+    that a participant may do.
+    """
+
     return str(uuid.uuid1())[:4]
 
 
 def init_chapters(database): # TODO: make only one class of sentence
     """Take chapter titles from Recordings directory and
     create a chapter for each file"""
+
+    # Get path for recordings (hardcoded)
     recordings_dir = os.path.join(current_app.root_path, '../../Recordings')
     sent_id = None
     text = None
     sentence_text_exists = False
+
+    # A bit of hardcoding, these will change so probably moving to
+    # a json file stored on the server will be better once that
+    # change is implemented
+    # TODO: move to json
     sentences = {
         'matched':
             {'set_1': {
@@ -50,8 +64,7 @@ def init_chapters(database): # TODO: make only one class of sentence
     question_tag = '(Q)'
     statement_tag = '(S)'
 
-    # Get matched sentences in db
-
+    # Input matched sentences into db
     for set in sentences['matched'].keys():
 
         sent_group = set
@@ -63,6 +76,7 @@ def init_chapters(database): # TODO: make only one class of sentence
 
             input_sent_pair(recordings_dir, sent_group, current_sent, database)
 
+    # Input unmatched sentences into db
     for n in sentences['unmatched'].keys():
 
         current_sent = sentences['unmatched'][n]
@@ -72,18 +86,27 @@ def init_chapters(database): # TODO: make only one class of sentence
 
 
 def input_sent_pair(recordings_dir, sent_group, current_sent, database):
+    """Takes sentence pair ids, processes corresponding
+    files, and inputs them into the database."""
 
+    # For both individuals in pair
     for sent_type in ['Q', 'S']:
 
+        # Hardcoded id format is <sent_id>(<sent_type>)
+        # e.g. Mario_vola(Q)
         sent_id = current_sent + '(' + sent_type + ')'
 
+        # Get directory for sentence
         chap_directory = os.path.join(recordings_dir, sent_id)
 
         # Check that it is a directory
         if os.path.isdir(chap_directory):
+
             item_pair = os.listdir(chap_directory)
+            # Iterate through directory files
             for file in item_pair:
 
+                # Get orthography from text file
                 if file.endswith('.txt'):
                     with open(os.path.join(chap_directory, file)) as in_file:
                         text = in_file.read()
@@ -92,20 +115,27 @@ def input_sent_pair(recordings_dir, sent_group, current_sent, database):
                     if not sentence_text_exists:
                         return print('Error: missing text in baseline')
 
-                # Extract the name and path of wav file
+                # Get audio file path
                 elif file.endswith('.wav'):
                     audio_path = os.path.join(chap_directory, file)
 
+                # Get textgrid for text_plot generation (deprecated)
                 elif file.endswith('.TextGrid'):
-                    textgrid_path = os.path.join(chap_directory, file)
+                    #textgrid_path = os.path.join(chap_directory, file)
+                    pass
+                # Get path to text_plot
                 elif file.endswith('.png'):
                     textplot_path = os.path.join(chap_directory, file)
 
+                # In case files have been uploaded from mac and .DS_Store
+                # was not deleted
                 elif file == '.DS_Store':
                     pass
+                # I
                 else:
                     return print("Error: filesystem corrupt")
 
+            # TODO: this check is not exhaustive
             if sent_id and text:
 
                 database.execute(

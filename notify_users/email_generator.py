@@ -1,5 +1,8 @@
 
 
+# Script holds email messages as strings to be formatted with user
+# specific information.
+
 def get_email_text(stage, username, password, is_reminder=False):
 
     url = 'prosody.delafuentealvarez.com/session_menu/{}'.format(stage)

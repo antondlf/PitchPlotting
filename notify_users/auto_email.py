@@ -3,16 +3,21 @@ from email_generator import get_email_text
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+# This script provides functions for automatic emailing.
+# Contains email generator, server login, and notification.
+
 # Part of this code based on https://towardsdatascience.com/automate-email-with-python-1e755d9c6276
 # and https://realpython.com/python-send-email/
 
 #def session_text(session, reminder):
+
+# This avoids mime encoding issues
 def contains_non_ascii_characters(str):
     return not all(ord(c) < 128 for c in str)
 
 
 def server_login(password):
-
+    """Login to email server"""
     smtp = smtplib.SMTP('smtp.gmail.com', port='587')
     smtp.ehlo()  # send the extended hello to our server
     smtp.starttls()  # tell server we want to communicate with TLS encryption
@@ -27,10 +32,11 @@ def server_login(password):
 
 
 def server_logout(server):
-
+    """Logout from server"""
     server.quit()
 
 def generate_email(stage, username=None, password=None, is_reminder=False):
+    """generate email reminder for a given session and mime encode it."""
 
     subject, text = get_email_text(stage, username, password, is_reminder=is_reminder)
 
@@ -64,6 +70,7 @@ def send_email(msg, server, sender, receiver_list):
 
 
 def notify(session, receiver_list, server=None, username=None, password=None, is_reminder=False):
+    """This function sends the email notifications."""
 
     if server:
         msg = generate_email(session, username=username, password=password, is_reminder=is_reminder)

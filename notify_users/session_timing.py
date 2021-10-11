@@ -5,7 +5,12 @@ from database import get_flaskr_db, connect_email_db
 from auto_email import notify, server_login
 
 
+# This script provides a click command that checks if
+# There are any upstanding notifications and sends all
+# emails that need to be sent.
+
 def id2email(user_id):
+    """Gets email from user id"""
 
     flaskr_db = get_flaskr_db()
 

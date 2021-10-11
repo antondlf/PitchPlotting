@@ -5,10 +5,15 @@ from flask import current_app
 from werkzeug.exceptions import abort
 import os
 
+# This is the native audio fetching app, returns the
+# native speaker recordings
+
 bp = Blueprint('/audio', __name__)
 
 @bp.route('/Recordings/<string:chaptername>', methods=['GET'])
 def download_file(chaptername):
+    """Takes in a url programmed sent id and returns the
+    audio file corresponding to that id"""
     audio = get_db().execute(
         'SELECT audio_path FROM chapters WHERE sent_id=?',
         (chaptername,)

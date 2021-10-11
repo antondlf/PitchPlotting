@@ -11,6 +11,8 @@ import tempfile
 import os
 
 
+# This is an unfinished demo app, please ignore
+
 bp = Blueprint('/demo', __name__)
 
 

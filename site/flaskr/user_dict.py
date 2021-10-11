@@ -5,6 +5,8 @@ import random
 from io import BytesIO
 
 
+# Randomization code for sentence apportionment
+
 sent_dict_list = [{'id': 1, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Mario_vola(Q)'}, {'id': 2, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Mario_vola(S)'}, {'id': 3, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Delia_guida(Q)'}, {'id': 4, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Delia_guida(S)'}, {'id': 5, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Livia_dorme(Q)'}, {'id': 6, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Livia_dorme(S)'}, {'id': 7, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Barbara_vive(Q)'}, {'id': 8, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Barbara_vive(S)'}, {'id': 9, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Angelo_giunge(Q)'}, {'id': 10, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Angelo_giunge(S)'}, {'id': 11, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Debora_gira(Q)'}, {'id': 12, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Debora_gira(S)'}, {'id': 13, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Daria_brinda(Q)'}, {'id': 14, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Daria_brinda(S)'}, {'id': 15, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Adriana_beve(Q)'}, {'id': 16, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Adriana_beve(S)'}, {'id': 17, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Giuliana_mangia(Q)'}, {'id': 18, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Giuliana_mangia(S)'}, {'id': 19, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Damiano_morde(Q)'}, {'id': 20, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Damiano_morde(S)'}, {'id': 21, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Amedeo_lava(Q)'}, {'id': 22, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Amedeo_lava(S)'}, {'id': 23, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Edoardo_vede(Q)'}, {'id': 24, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Edoardo_vede(S)'}, {'id': 25, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Loredana_vende(Q)'}, {'id': 26, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Loredana_vende(S)'}, {'id': 27, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Gabriele_ama(Q)'}, {'id': 28, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Gabriele_ama(S)'}, {'id': 29, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'Il_lago(Q)'}, {'id': 30, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'Il_lago(S)'}, {'id': 31, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'Il_brodo(Q)'}, {'id': 32, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'Il_brodo(S)'}, {'id': 33, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'La_legna(Q)'}, {'id': 34, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'La_legna(S)'}, {'id': 35, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'La_rana(Q)'}, {'id': 36, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'La_rana(S)'}, {'id': 37, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'Il_ladro(Q)'}, {'id': 38, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'Il_ladro(S)'}, {'id': 39, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'La_via(Q)'}, {'id': 40, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'La_via(S)'}, {'id': 41, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'Il_nome(Q)'}, {'id': 42, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'Il_nome(S)'}, {'id': 43, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'Il_giornale(Q)'}, {'id': 44, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'Il_giornale(S)'}, {'id': 45, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'La_balena(Q)'}, {'id': 46, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'La_balena(S)'}, {'id': 47, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'Il_melone(Q)'}, {'id': 48, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'Il_melone(S)'}, {'id': 49, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'La_bambina(Q)'}, {'id': 50, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'La_bambina(S)'}, {'id': 51, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'La_ragione(Q)'}, {'id': 52, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'La_ragione(S)'}, {'id': 53, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'Il_rumore(Q)'}, {'id': 54, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'Il_rumore(S)'}, {'id': 55, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'La_bevanda(Q)'}, {'id': 56, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'La_bevanda(S)'}, {'id': 57, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Anna_lavora(Q)'}, {'id': 58, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Anna_lavora(S)'}, {'id': 59, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Emilia_arriva(Q)'}, {'id': 60, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Emilia_arriva(S)'}, {'id': 61, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Bernardo_viene(Q)'}, {'id': 62, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Bernardo_viene(S)'}, {'id': 63, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Luigi_odia(Q)'}, {'id': 64, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Luigi_odia(S)'}, {'id': 65, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Elena_guarda(Q)'}, {'id': 66, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Elena_guarda(S)'}, {'id': 67, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Giovanni_ruba(Q)'}, {'id': 68, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Giovanni_ruba(S)'}, {'id': 69, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Irene_disegna(Q)'}, {'id': 70, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Irene_disegna(S)'}]
 
 
@@ -38,14 +40,14 @@ def get_sentences():
     print(sentences[0])
     sent_dict_list = list()
 
-    # Randomization code
+    # Wrap each recording metadata in a list of dictionaries
     for sent in sentences:
         id = sent['id']
         sent_group = sent['sent_group']
         sent_type = sent['sent_type']
         sent_id = sent['sent_id']
         sent_dict_list.append({'id': id, 'sent_group': sent_group, 'sent_type': sent_type, 'sent_id': sent_id})
-    sent_dict_list = [{'id': 1, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Mario_vola(Q)'}, {'id': 2, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Mario_vola(S)'}, {'id': 3, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Delia_guida(Q)'}, {'id': 4, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Delia_guida(S)'}, {'id': 5, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Livia_dorme(Q)'}, {'id': 6, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Livia_dorme(S)'}, {'id': 7, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Barbara_vive(Q)'}, {'id': 8, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Barbara_vive(S)'}, {'id': 9, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Angelo_giunge(Q)'}, {'id': 10, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Angelo_giunge(S)'}, {'id': 11, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Debora_gira(Q)'}, {'id': 12, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Debora_gira(S)'}, {'id': 13, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Daria_brinda(Q)'}, {'id': 14, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Daria_brinda(S)'}, {'id': 15, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Adriana_beve(Q)'}, {'id': 16, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Adriana_beve(S)'}, {'id': 17, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Giuliana_mangia(Q)'}, {'id': 18, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Giuliana_mangia(S)'}, {'id': 19, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Damiano_morde(Q)'}, {'id': 20, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Damiano_morde(S)'}, {'id': 21, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Amedeo_lava(Q)'}, {'id': 22, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Amedeo_lava(S)'}, {'id': 23, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Edoardo_vede(Q)'}, {'id': 24, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Edoardo_vede(S)'}, {'id': 25, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Loredana_vende(Q)'}, {'id': 26, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Loredana_vende(S)'}, {'id': 27, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Gabriele_ama(Q)'}, {'id': 28, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Gabriele_ama(S)'}, {'id': 29, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'Il_lago(Q)'}, {'id': 30, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'Il_lago(S)'}, {'id': 31, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'Il_brodo(Q)'}, {'id': 32, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'Il_brodo(S)'}, {'id': 33, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'La_legna(Q)'}, {'id': 34, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'La_legna(S)'}, {'id': 35, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'La_rana(Q)'}, {'id': 36, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'La_rana(S)'}, {'id': 37, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'Il_ladro(Q)'}, {'id': 38, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'Il_ladro(S)'}, {'id': 39, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'La_via(Q)'}, {'id': 40, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'La_via(S)'}, {'id': 41, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'Il_nome(Q)'}, {'id': 42, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'Il_nome(S)'}, {'id': 43, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'Il_giornale(Q)'}, {'id': 44, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'Il_giornale(S)'}, {'id': 45, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'La_balena(Q)'}, {'id': 46, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'La_balena(S)'}, {'id': 47, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'Il_melone(Q)'}, {'id': 48, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'Il_melone(S)'}, {'id': 49, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'La_bambina(Q)'}, {'id': 50, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'La_bambina(S)'}, {'id': 51, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'La_ragione(Q)'}, {'id': 52, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'La_ragione(S)'}, {'id': 53, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'Il_rumore(Q)'}, {'id': 54, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'Il_rumore(S)'}, {'id': 55, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'La_bevanda(Q)'}, {'id': 56, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'La_bevanda(S)'}, {'id': 57, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Anna_lavora(Q)'}, {'id': 58, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Anna_lavora(S)'}, {'id': 59, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Emilia_arriva(Q)'}, {'id': 60, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Emilia_arriva(S)'}, {'id': 61, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Bernardo_viene(Q)'}, {'id': 62, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Bernardo_viene(S)'}, {'id': 63, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Luigi_odia(Q)'}, {'id': 64, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Luigi_odia(S)'}, {'id': 65, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Elena_guarda(Q)'}, {'id': 66, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Elena_guarda(S)'}, {'id': 67, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Giovanni_ruba(Q)'}, {'id': 68, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Giovanni_ruba(S)'}, {'id': 69, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Irene_disegna(Q)'}, {'id': 70, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Irene_disegna(S)'}]
+    # sent_dict_list = [{'id': 1, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Mario_vola(Q)'}, {'id': 2, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Mario_vola(S)'}, {'id': 3, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Delia_guida(Q)'}, {'id': 4, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Delia_guida(S)'}, {'id': 5, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Livia_dorme(Q)'}, {'id': 6, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Livia_dorme(S)'}, {'id': 7, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Barbara_vive(Q)'}, {'id': 8, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Barbara_vive(S)'}, {'id': 9, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Angelo_giunge(Q)'}, {'id': 10, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Angelo_giunge(S)'}, {'id': 11, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Debora_gira(Q)'}, {'id': 12, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Debora_gira(S)'}, {'id': 13, 'sent_group': 'set_1', 'sent_type': 'Q', 'sent_id': 'Daria_brinda(Q)'}, {'id': 14, 'sent_group': 'set_1', 'sent_type': 'S', 'sent_id': 'Daria_brinda(S)'}, {'id': 15, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Adriana_beve(Q)'}, {'id': 16, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Adriana_beve(S)'}, {'id': 17, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Giuliana_mangia(Q)'}, {'id': 18, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Giuliana_mangia(S)'}, {'id': 19, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Damiano_morde(Q)'}, {'id': 20, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Damiano_morde(S)'}, {'id': 21, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Amedeo_lava(Q)'}, {'id': 22, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Amedeo_lava(S)'}, {'id': 23, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Edoardo_vede(Q)'}, {'id': 24, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Edoardo_vede(S)'}, {'id': 25, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Loredana_vende(Q)'}, {'id': 26, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Loredana_vende(S)'}, {'id': 27, 'sent_group': 'set_2', 'sent_type': 'Q', 'sent_id': 'Gabriele_ama(Q)'}, {'id': 28, 'sent_group': 'set_2', 'sent_type': 'S', 'sent_id': 'Gabriele_ama(S)'}, {'id': 29, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'Il_lago(Q)'}, {'id': 30, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'Il_lago(S)'}, {'id': 31, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'Il_brodo(Q)'}, {'id': 32, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'Il_brodo(S)'}, {'id': 33, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'La_legna(Q)'}, {'id': 34, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'La_legna(S)'}, {'id': 35, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'La_rana(Q)'}, {'id': 36, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'La_rana(S)'}, {'id': 37, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'Il_ladro(Q)'}, {'id': 38, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'Il_ladro(S)'}, {'id': 39, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'La_via(Q)'}, {'id': 40, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'La_via(S)'}, {'id': 41, 'sent_group': 'set_3', 'sent_type': 'Q', 'sent_id': 'Il_nome(Q)'}, {'id': 42, 'sent_group': 'set_3', 'sent_type': 'S', 'sent_id': 'Il_nome(S)'}, {'id': 43, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'Il_giornale(Q)'}, {'id': 44, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'Il_giornale(S)'}, {'id': 45, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'La_balena(Q)'}, {'id': 46, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'La_balena(S)'}, {'id': 47, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'Il_melone(Q)'}, {'id': 48, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'Il_melone(S)'}, {'id': 49, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'La_bambina(Q)'}, {'id': 50, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'La_bambina(S)'}, {'id': 51, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'La_ragione(Q)'}, {'id': 52, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'La_ragione(S)'}, {'id': 53, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'Il_rumore(Q)'}, {'id': 54, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'Il_rumore(S)'}, {'id': 55, 'sent_group': 'set_4', 'sent_type': 'Q', 'sent_id': 'La_bevanda(Q)'}, {'id': 56, 'sent_group': 'set_4', 'sent_type': 'S', 'sent_id': 'La_bevanda(S)'}, {'id': 57, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Anna_lavora(Q)'}, {'id': 58, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Anna_lavora(S)'}, {'id': 59, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Emilia_arriva(Q)'}, {'id': 60, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Emilia_arriva(S)'}, {'id': 61, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Bernardo_viene(Q)'}, {'id': 62, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Bernardo_viene(S)'}, {'id': 63, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Luigi_odia(Q)'}, {'id': 64, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Luigi_odia(S)'}, {'id': 65, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Elena_guarda(Q)'}, {'id': 66, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Elena_guarda(S)'}, {'id': 67, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Giovanni_ruba(Q)'}, {'id': 68, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Giovanni_ruba(S)'}, {'id': 69, 'sent_group': 'unmatched', 'sent_type': 'Q', 'sent_id': 'Irene_disegna(Q)'}, {'id': 70, 'sent_group': 'unmatched', 'sent_type': 'S', 'sent_id': 'Irene_disegna(S)'}]
 
     #print(sent_dict_list)
     sent_dict = dict()
@@ -56,11 +58,18 @@ def get_sentences():
     for group in group_list:
         sent_dict[group] = list()
 
+    # Create group to sentence id list mapping
     for sent in sent_dict_list:
 
+        # We only need the pair, so the (Q) or (S) tag
+        # can be removed
         sent_id = sent['sent_id'][:-3]
+
+        # Get the group
         group = sent['sent_group']
 
+
+        # Add pair id if not in mapping yet
         if sent_id not in sent_dict[group]:
             sent_dict[group].append(sent_id)
 
@@ -68,6 +77,8 @@ def get_sentences():
 
 
 def get_user_list(order_dict):
+    """Generate user order dictionary and input as pickled object into
+    database."""
 
     order_list = str()
 
@@ -92,6 +103,9 @@ def get_user_list(order_dict):
 
 
 def create_user_dict(user_id, group=None, db=None):
+    """Creates a dictionary that contains the trial orders
+    for each user.
+    """
 
     # Get the sentence dictionary and the list of sentence dictionaries.
     sentences = get_sentences()
@@ -101,6 +115,7 @@ def create_user_dict(user_id, group=None, db=None):
     statement_list = list()
     question_list = list()
 
+    # shuffle each group list in place to randomize
     for group in group_list:
         # print('pre_shuffle')
         # print(sentences[group])
@@ -115,13 +130,14 @@ def create_user_dict(user_id, group=None, db=None):
     # Initialie order dictionary
     order_dict = dict()
 
-    # Give the state dictionary an experimental condition
+    # Give the state dictionary an experimental condition:
+    # If the group is given as keyword argument set it.
     if group:
         user_dict['condition'] = group
     else:
         user_dict['condition'] = random.choice(['a', 'b'])
 
-    # Create dictionary structure
+    # Initialize dictionary structure
     order_dict['Session 1'] = dict()
     order_dict['Session 2'] = dict()
     order_dict['Session 3'] = dict()
@@ -136,11 +152,13 @@ def create_user_dict(user_id, group=None, db=None):
     # Counter to keep track of order for pre_train and post_train
     i = 0
 
-    # Another couter to keep track of training order
+    # Another counter to keep track of training order
     n = 0
-    # pre_train and post_train dicts
+
+    # Create pre_train and post_train dicts
     for group in group_list[:-1]:
 
+        # Portion out one statement from each group to be first
         print(n, sentences[group][1], group)
         print()
         order_dict['Session 1']['pre_train'][i] = sentences[group][0] + '(S)'
@@ -156,7 +174,9 @@ def create_user_dict(user_id, group=None, db=None):
 
         # add 1 to n for second statement
         n += 1
-        # Get 5 statements and do the same as above
+
+        # Pre and post train get a question at this stage,
+        # Trainings get a repetition of the Sentence
         order_dict['Session 1']['pre_train'][i] = sentences[group][0] + '(Q)'
         order_dict['Session 1']['training'][n] = sentences[group][1] + '(S)'
         order_dict['Session 1']['post_train'][i] = sentences[group][2] + '(Q)'
@@ -168,6 +188,8 @@ def create_user_dict(user_id, group=None, db=None):
         i += 1
         # Add two questions
         n += 1
+
+        # Training needs another loop to add two question repetitions
         for x in range(2):
 
             order_dict['Session 1']['training'][n] = sentences[group][1] + '(Q)'
@@ -175,9 +197,11 @@ def create_user_dict(user_id, group=None, db=None):
             # for next iter add 1:
             n += 1
 
-    # We start unmatched at 15
+    # We start unmatched at 15 (there was a reason for this but I forget)
     n = len(order_dict['Session 1']['training'])-1
     print('unmatched:')
+
+    # Trainings are longer, these extra pairs are drawn from unmatched sentences
     for i in range(4):
         print(n, sentences['unmatched'][i])
         print()
@@ -222,9 +246,12 @@ def create_user_dict(user_id, group=None, db=None):
 
     return user_dict
 
+
+# This class makes querying dictionary easier
 class user_state:
 
     def __init__(self, user_id):
+        # Unpickle dictionary
         db = get_db()
         user_dict_pickle = db.execute(
             'SELECT user_dict FROM userdata WHERE user_id=?',

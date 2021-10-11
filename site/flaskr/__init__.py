@@ -3,6 +3,8 @@ from flask import Flask
 
 
 def create_app(test_config=None):
+    """This is an app factory, which creates a flask app from the blueprints
+    in each script."""
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
