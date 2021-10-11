@@ -14,9 +14,15 @@ import numpy as np
 
 import os
 
+# This is a backend file that processes all of the audio input by speakers
+# It takes in frontend data and manages all backend processing
+
 
 def process_recording(original_audio_path, audio_data, chaptername, database_inputs):
-    """Yields the template with latest plot and posts recording info into db."""
+    """Function takes in audio data and metadata, processes it and
+    and posts recording info into db.
+    Returns a the path where the recording is stored.
+    """
 
     print(original_audio_path)
 
@@ -28,7 +34,7 @@ def process_recording(original_audio_path, audio_data, chaptername, database_inp
     session, trial_type, sent_group, \
     sent_type, sent_id, repetition = database_inputs
 
-    trial_id = str(user_id) + '_' + str(sent_id) + '_' + str(sent_type) + '_' + str(repetition) + '_' + str(get_unique_id())
+    trial_id = str(user_id) + '_' + str(sent_id) + '_' + str(repetition) + '_' + str(get_unique_id())
     trial_path = os.path.join(current_app.root_path, '../participant_recordings', trial_id)
 
 
@@ -76,7 +82,7 @@ def process_recording(original_audio_path, audio_data, chaptername, database_inp
 
 
 def save_audio(path, audio_data):
-    """Save the audio to filename."""
+    """Writes audio to given path"""
 
     recording_path = path + '.wav'
     with open(recording_path, 'wb') as out_file:
@@ -91,8 +97,9 @@ def save_audio(path, audio_data):
         return recording_path
 
 def save_plot(filename, path):
-    """Uses temporary file to write wav file and process in praat into
-    pitch plot saved on a given path."""
+    """produces comparison plot using draw_pitch
+    and returns path to plot and recording.
+    """
 
     plot_path = path + '.png'
 
@@ -100,6 +107,8 @@ def save_plot(filename, path):
 
     sound = praat.Sound(recording_path)
 
+    # Make sure that written audio isn't empty
+    # TODO: this will yield an error, make sure there's an excape
     if np.count_nonzero(sound.as_array()) == 0:
         return None
 

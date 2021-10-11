@@ -2,6 +2,9 @@ import sqlite3
 import os
 
 
+# Two different databases are created, one holds emails and the other
+# is the flask app db. This script provides utilities for access to them.
+
 def init_email_db():
 
     dir_path = os.path.dirname(os.path.realpath(__file__))

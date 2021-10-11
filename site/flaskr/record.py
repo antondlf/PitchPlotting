@@ -16,16 +16,34 @@ from flaskr.notification_cue import notify_next_week
 import os
 
 
+# Main frontent utility, with backend functions mixed in
+
 def get_user_state(user_id):
     if 'user_dict' not in g:
         g.user_dict = user_state(user_id)
 
     return g.user_dict
 
+def is_repetition(trial_type, chapterorder):
+    """Determine if recording is a repetition
+    ____________________________________________
+    Repetitions are every other recording for a
+    training trial only, so theymust be divisible
+    by 2. Since Python uses 0 indexing then the
+    mod2 operation should equal 1.
+
+    Returns 1 if it's repetition and 0 if not
+    """
+    if trial_type == 'Training':
+        if int(chapterorder) % 2 == 1:
+            return '1'
+
+    else:
+        return '0'
 
 bp = Blueprint('/record', __name__)
 
-
+# Simple login index
 @bp.route('/')
 @login_required
 def index():
@@ -35,7 +53,7 @@ def index():
     return render_template('blog/index.html', posts=posts)
 
 
-# TODO: decide if this is the way to send url or if user identifier
+# Specific session index, to be sent through email
 @bp.route('/session_menu/<session>')
 @login_required
 def specific_index(session):
@@ -47,10 +65,11 @@ def specific_index(session):
 
 @bp.route('/record/<string:session>/<string:trial_type>/<string:chapterorder>', methods=['POST', 'GET'])
 @login_required
-def record(session, trial_type, chapterorder): # TODO: maybe session and chapterorder and trial_type
+def record(session, trial_type, chapterorder):
     """Extracts relevant information from database and then
     yields record html template with audio."""
 
+    # Get user info
     print(session, chapterorder)
     db = get_db()
     user_id = g.user['id']
@@ -59,16 +78,19 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
     condition = user_dict.get_condition()
     recordings = list()
 
+    # Get current user sentence
     sentence = db.execute(
         'SELECT sent_group, sent_type, text, audio_path, textplot_path' #TODO: get all variables necessary
         ' FROM chapters WHERE sent_id=?'  # p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC',
         (sent_id,)
+    # Fetchall should only yield one sentence
     ).fetchall()
 
     # Make sure there is only one identified sentence
     if not len(sentence) == 1:
         print(sentence)
+        # This error message is misleading
         abort(404, "Audio '{0}' doesn't exist or database entry is corrupt.".format(sent_id))
 
     # Get paths and text
@@ -78,37 +100,17 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
         audio_path,\
         textplot_path = sentence[0]
 
-    if (int(chapterorder)+1) % 4 == 0:
-        repetition = '1'
-    elif (int(chapterorder)+2) % 4 == 0:
-        repetition = '1'
-    else:
-        repetition = '0'
+    repetition = is_repetition(trial_type, chapterorder)
 
     # make sure textplot only contains the name of the file
     textplot = textplot_path.rsplit('/', 1)[-1]
 
-    if request.method == 'GET':
-        user_audio = db.execute(
-            'SELECT trial_id'
-            ' FROM recordings WHERE sent_id=? AND user_id=? AND session_number=? AND sent_order=?'
-            ' ORDER BY created DESC',
-            (sent_id, user_id, session, chapterorder)
-        ).fetchall()
+    # When there is a post process the data
+    if request.method == 'POST':
 
-        if trial_type != 'training':
-            return render_template('/record/baseline.html', sentence=text)
-        if len(user_audio) > 0:
-            plot_path = user_audio[0]['trial_id'] + '.png'
-        else:
-            plot_path = None
-
-        recordings = [row['trial_id'] + '.wav' for row in user_audio]
-
-
-    elif request.method == 'POST':
-
+        # The audio data is contained in the request object
         audio_data = request.data
+        # Wrap metadata in a tuple
         database_inputs = (user_id,
                              chapterorder,  # sent_order in schema
                              condition,
@@ -119,9 +121,11 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
                              sent_id,  # sent_id in schema
                              repetition)
 
+        # Use utility from audio_processing.py to process the audio
         recording_path = process_recording(audio_path, audio_data, sent_id, database_inputs)
 
         # Make sure the microphone picked up a recording
+        # This may not catch all recording errors
         if recording_path == None:
             flash("No audio was recorded.", 'error')
             return redirect(url_for('/record.record', session=session, trial_type=trial_type, chapterorder=chapterorder))
@@ -130,13 +134,17 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
         if trial_type != 'training':
             return render_template('/record/baseline.html', sentence=text)
 
+        # Redirect to the post_trial (comparison plot template)
         return redirect(url_for('/record.post_trial', session=session, trial_type=trial_type, chapter_order=chapterorder))
 
+    # When the post is "GET" we server the template for the corresponding condition
     if condition == 'a':
+        # full feedback condition
         return render_template(
                 '/record/index.html', recording=sent_id, sentence=text, textplot=textplot, audio=recordings
             )
     else:
+        # audio only condition
         return render_template(
                 '/record/index.html', recording=sent_id, sentence=text, textplot=None, audio=recordings
             )
@@ -144,21 +152,22 @@ def record(session, trial_type, chapterorder): # TODO: maybe session and chapter
 
 @bp.route('/record/<string:session>/<string:trial_type>/<string:chapter_order>/post_trial')
 @login_required
-# TODO: figure out arguments necessary to query
-# Variables I need at the end of this function:
-#   session, trial_type, chapter_order
-# Repetition is probably necessary
+# one dummy argument a result of js code appending "/post_trial" to url
 def post_trial(session, trial_type, chapter_order):
+    """This function serves templates for the comparison plot
+    or post_trial auditory feedback."""
 
-    print('function entered')
+
+    # Get user context
+    #print('function entered')
     db = get_db()
     user_id = g.user['id']
 
     user_dict = get_user_state(user_id)
     condition = user_dict.get_condition()
-    print('condition: ' + condition)
+    #print('condition: ' + condition)
 
-    # TODO: change database queries to align with new sql schema
+    # Query user recording
     user_audio = db.execute(
         'SELECT trial_id, sent_id'
         ' FROM recordings WHERE session_number=? AND user_id=? AND sent_order=?'
@@ -166,10 +175,11 @@ def post_trial(session, trial_type, chapter_order):
         (session, user_id, chapter_order)
     ).fetchall()
 
-
+    # Get actual ids
     sent_id = user_audio[0]['sent_id']
     trial_id = user_audio[0]['trial_id']
 
+    # Query native audio
     sentence = db.execute(
         'SELECT audio_path, text'
         ' FROM chapters WHERE sent_id=?'  # p JOIN user u ON p.author_id = u.id'
@@ -177,6 +187,7 @@ def post_trial(session, trial_type, chapter_order):
         (sent_id,)
     ).fetchall()
 
+    # Avoid breaking app if no trial_id
     if trial_id:
         plot_path = trial_id + '.png'
     else:
@@ -186,6 +197,8 @@ def post_trial(session, trial_type, chapter_order):
     recording_path = user_audio[0]['trial_id'] + '.wav'
 
     text = sentence[0]['text']
+
+    # Render templates by condition
     if condition == 'a':
         return render_template('/record/post_trial.html', sentence=text, recording=recording_path, plot=plot_path, original_audio=sent_id)
 
@@ -195,7 +208,8 @@ def post_trial(session, trial_type, chapter_order):
 
 @bp.route('/record/<string:session>/<string:trial_type>/<string:chapter_order>/post_trial/next_chapter')
 @login_required
-def next_chapter(session, trial_type, chapter_order): # TODO: revamp this function
+def next_chapter(session, trial_type, chapter_order):
+    """Reroute to the next sentence trial."""
 
     # zero indexing so one less than real length
     # sequence = {
@@ -203,29 +217,35 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
     #     'training': 31,
     #     'post_train': 7
     # }
-    # TODO: Remember to change this to actual sequence for experiment
     trial_length = {
      'pre_train': 7,
      'training': 30,
      'post_train': 7,
     }
 
-    # Get the list of trial types for this session.
+    # Get user specific info
     user_id = str(g.user['id'])
     user_dict = user_state(user_id)
     trial_length = user_dict.get_trial_length(session, trial_type)
 
+    # Hardcoded list
     trial_type_list = ['pre_train', 'training', 'post_train']
 
 
     # Cast to int in order to run int operations
     chapter_order_int = int(chapter_order)
+
+    # If the current chapter is less than the total add one
     if chapter_order_int < int(trial_length):
 
         chapter_order_int += 1
         chapter_order = str(chapter_order_int)
         return redirect(url_for('/record.record', chapterorder=chapter_order, session=session, trial_type=trial_type))
 
+    # This part of the code got very hardcoded when automatic
+    # notification was added.
+
+    # If it's the third session and we reached the end it's over
     elif session == 'Session 3':
         if trial_type == 'pre_train':
             # TODO: send thank you message
@@ -233,18 +253,24 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
 
             return redirect(url_for('/record.end_message'))
 
+    # if it's the last sentence
     elif int(chapter_order) == int(trial_length):
+
+        # For the first session we want to serve the instruction templates
         if session == 'Session 1':
+            # Check which template to serve
             if trial_type == 'pre_train':
                 return redirect(url_for('/instructions.training', is_session=True))
             elif trial_type == 'training':
                 return redirect(url_for('/instructions.post_training'))
             elif trial_type == 'post_train':
 
+                # If finished add to notification cue for session 2
                 notify_next_week(user_id, 'Session 2')
 
                 return redirect(url_for('/record.end_message'))
 
+        # If last sentence but not last trial, serve 0 for next trial
         elif trial_type != trial_type_list[-1]:
             new_trial_type_index = \
                 trial_type_list.index(trial_type) + 1
@@ -254,25 +280,26 @@ def next_chapter(session, trial_type, chapter_order): # TODO: revamp this functi
             return redirect(url_for('/record.record', chapterorder=chapter_order, session=session, trial_type=new_trial_type))
 
         else:
-
+            # If finished add to notification cue for session 3
             notify_next_week(user_id, 'Session 3')
             print(trial_type_list)
             return redirect(url_for('/record.end_message'))
     else:
+        # when all else fails it must be over
         return redirect(url_for('/record.end_message'))
 
 
 @bp.route('/audio_process/participant_recordings/<string:filename>')
 @login_required
 def return_plot_file(filename):
-    """Get the plot file from tmp directory."""
+    """Get the comparison plot"""
     dir = os.path.join(current_app.root_path, '../participant_recordings')
     return send_from_directory(dir, filename, as_attachment=True)
 
 @bp.route('/textplot/<string:chaptername>/<string:filename>')
 @login_required
 def return_textplot_file(chaptername, filename):
-    """Get the plot file from tmp directory."""
+    """Get the orthographic plot"""
 
     path = os.path.join(current_app.root_path, '../../Recordings/', chaptername)
 

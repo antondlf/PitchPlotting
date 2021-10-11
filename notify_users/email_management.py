@@ -7,9 +7,15 @@ from werkzeug.security import generate_password_hash
 from site.flaskr.user_dict import create_user_dict
 from auto_email import notify
 
+# This script creates a click command that starts the experiment
+# from an uploaded list of emails (this flow is to be deprecated
+# in favor of individual sign ups through the flask app.
 
+# Original workflow for emails was meant to start a group
+# of participants all at once, to be deprecated in favor of
+# an individual sign up model.
 def read_email_list(email_list):
-
+    """Takes in a list of emails and starts an experiment"""
     with open(email_list, 'r') as in_file:
         # TODO: add encryption
         emails = in_file.read().splitlines()
@@ -19,6 +25,7 @@ def read_email_list(email_list):
 
 
 def input_email_db(username, email):
+    """Inputs emails into db"""
     db = connect_email_db()
 
     db.execute(
@@ -28,8 +35,10 @@ def input_email_db(username, email):
     )
     db.commit()
 
-
+# to be deprecated and workflow reversed
+# (Account sign up triggers email reminder)
 def register_account(username, password):
+    """Registers an account in flask for each email"""
 
     db = get_flaskr_db()
     db.execute(
@@ -39,6 +48,7 @@ def register_account(username, password):
     db.commit()
 
 
+# Part of original flow, partitions participants into two groups.
 def generate_group(group_list, username_list, db, server=None, group='a'):
 
     for i in range(len(group_list)):
@@ -62,6 +72,7 @@ def generate_group(group_list, username_list, db, server=None, group='a'):
         create_user_dict(user_id, group=group, db=db)
 
 
+# Creates accounts from email list
 def create_accounts(email_list, server=None):
 
     # Shuffle emails
@@ -92,7 +103,7 @@ def create_accounts(email_list, server=None):
     generate_group(group_a, usernames_a, db, server=server, group='a')
     generate_group(group_b, usernames_b, db, server=server, group='b')
 
-
+# Click command to start experiment
 @click.command('start-experiment')
 @click.argument('email_list', type=click.Path(exists=True))
 @click.option('--password', default=None)

@@ -8,6 +8,8 @@ from flaskr.user_dict import user_state
 import os
 
 
+# Frontend utility for serving html templates with instructions
+
 def get_user_state(user_id):
     if 'user_dict' not in g:
         g.user_dict = user_state(user_id)

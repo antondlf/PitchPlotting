@@ -7,12 +7,31 @@ import seaborn as sns
 
 sns.set()
 
+def get_summary(pitch):
+
+    average = np.mean(pitch)
+    deviation = np.std(pitch)
+
+    return average, deviation
+
+
+def remove_outliers(pitch):
+    """Removes outlier noise."""
+
+    data = pitch.selected_array['frequency']
+    avg, std = (get_summary(data))
+
+    # make samples outside 2.5 deviations of
+    # mean equal 0
+    data[data >= avg+(std*2.5)] = 0
+
+    return data
+
 def trim_recording(pitch:np.array) -> tuple:
-    """Trims the front zeros from the pitch array and the corresponding
-    time values."""
+    """Trims the front and back zeros from the pitch
+    array and the corresponding time values."""
 
-
-    array = pitch.selected_array['frequency']
+    array = remove_outliers(pitch)
     trimmed_pitch = np.trim_zeros(array, 'f')
 
     trim = array.shape[0] - trimmed_pitch.shape[0]
@@ -32,16 +51,8 @@ def trim_recording(pitch:np.array) -> tuple:
     return trimmed_pitch, trimmed_time
 
 
-def get_summary(pitch):
-
-    average = np.mean(pitch)
-    deviation = np.std(pitch)
-
-    return average, deviation
-
-
 def adjust_time_samples(new_time, old_time):
-    """Get a resample of the new_pitch array to match the old pitch array."""
+    """Get a resample of the new time array to match the old time array."""
 
 
     new_time_normalized = new_time/(new_time.max()/old_time.max())
@@ -64,8 +75,8 @@ def pitch_difference(pitch_values_old, pitch_values_new):
 
     average_new, deviation_new = get_summary(pitch_values_new)
     average_old, deviation_old = get_summary(pitch_values_old)
-    pitch_aver_new = np.mean(pitch_values_new[pitch_values_new <= average_new+(deviation_new*2.5)])
-    pitch_aver_old = np.mean(pitch_values_old[pitch_values_old <= average_old+(deviation_old*2.5)])
+    pitch_aver_new = np.mean(pitch_values_new)
+    pitch_aver_old = np.mean(pitch_values_old)
 
     scaling_factor = pitch_aver_old - pitch_aver_new
     print(scaling_factor)
@@ -142,20 +153,3 @@ def draw_pitch(new_pitch, old_pitch, path):
     plt.savefig(path)
     return path
 
-
-def plot_pitch(new_audio_path, old_audio_path):
-    """This function takes in two audio samples and turns them into
-    a pitch plot"""
-    old_pitch = praat.Sound(old_audio_path).to_pitch()
-    # spectrogram = old_audio.to_spectrogram()
-    draw_pitch(new_audio_path, old_pitch)
-    # draw_spectrogram(spectrogram, pitch, dynamic_range = 70)
-
-
-def main(original_audio, new_audio):
-    """Our main function here runs record() inside plot_pitch to provide
-    the new_audio, and then as a hardcoded input uses the original audio."""
-    target_audio = praat.Sound(original_audio)
-    recorded_audio = praat.Sound(new_audio)
-    #duration = target_audio.get_total_duration() + 1
-    plot_pitch(recorded_audio, target_audio)

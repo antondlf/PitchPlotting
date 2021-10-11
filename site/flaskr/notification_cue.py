@@ -1,6 +1,9 @@
 from flaskr.db import get_db
 import datetime
 
+# Backend utilities to determine which users need to be reminded
+# to do another session.
+
 def notify_next_week(user_id, notification_session):
     """Adds user email to a cue where they will be notified about
     the next session a week later"""
