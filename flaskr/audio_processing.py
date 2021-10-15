@@ -117,6 +117,7 @@ def save_plot(filename, path):
 
     old_pitch = praat.Sound(filename)
     trimmed = pitch_plot.trim_silences(old_pitch)
+    print(type(trimmed), trimmed)
     echo(message=print(type(trimmed), trimmed))
     pitch_plot.draw_pitch(new_pitch, old_pitch, plot_path)
 
