@@ -174,7 +174,7 @@ def post_trial(session, trial_type, chapter_order):
     """This function serves templates for the comparison plot
     or post_trial auditory feedback."""
 
-
+    print('function entered')
     # Get user context
     #print('function entered')
     db = get_db()
@@ -310,6 +310,7 @@ def next_chapter(session, trial_type, chapter_order):
 @login_required
 def return_plot_file(filename):
     """Get the comparison plot"""
+    print('plot filename:', filename)
     dir = os.path.join(current_app.root_path, '../participant_recordings')
     return send_from_directory(dir, filename, as_attachment=True)
 
