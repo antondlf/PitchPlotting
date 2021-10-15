@@ -4,7 +4,7 @@ from flask import (
 
 from flaskr.db import get_db
 
-from pitch_track.pitch_plot import draw_pitch
+from pitch_track import pitch_plot
 
 from flaskr.data_management import get_unique_id
 
@@ -36,7 +36,6 @@ def process_recording(original_audio_path, audio_data, chaptername, database_inp
 
     trial_id = str(user_id) + '_' + str(sent_id) + '_' + str(repetition) + '_' + str(get_unique_id())
     trial_path = os.path.join(current_app.root_path, '../participant_recordings', trial_id)
-
 
     recording_path = save_audio(trial_path, audio_data)
     print(recording_path)
@@ -115,7 +114,7 @@ def save_plot(filename, path):
         return None
 
     old_pitch = praat.Sound(filename)
-    draw_pitch(new_pitch, old_pitch, plot_path)
+    pitch_plot.draw_pitch(new_pitch, old_pitch, plot_path)
 
     return plot_path, recording_path
 
