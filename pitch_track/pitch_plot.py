@@ -209,3 +209,5 @@ def main():
     new = parselmouth.Sound(learner)
     draw_pitch(new, old, path, show=True)
 
+if __name__=='__main__':
+    main()
