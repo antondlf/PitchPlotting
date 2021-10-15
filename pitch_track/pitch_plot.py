@@ -34,7 +34,6 @@ def low_pass(sound_object, low_freq, high_freq, smoothing):
     """Filters sound object using praat's command
     Filter (pass Hann band)"""
 
-
     filtered = call(sound_object, "Filter (pass Hann band)", low_freq, high_freq, smoothing)
 
     return filtered
@@ -44,9 +43,7 @@ def trim_silences(sound: parselmouth.Sound) -> parselmouth.Sound:
     """Uses praat command Trim silences to remove noise and long
     silent sections."""
 
-    print(sound)
     trimmed_sound = call(sound, 'Trim silences', 0.05, 0, 100, 0, -25, 0.1, 0.1, 0, "silence")
-    print(type(trimmed_sound), trimmed_sound)
 
     return trimmed_sound
 
