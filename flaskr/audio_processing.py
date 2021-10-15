@@ -2,6 +2,8 @@ from flask import (
     flash, current_app
 )
 
+from click import echo
+
 from flaskr.db import get_db
 
 from pitch_track import pitch_plot
@@ -114,6 +116,8 @@ def save_plot(filename, path):
         return None
 
     old_pitch = praat.Sound(filename)
+    trimmed = pitch_plot.trim_silences(old_pitch)
+    echo(message=print(type(trimmed), trimmed))
     pitch_plot.draw_pitch(new_pitch, old_pitch, plot_path)
 
     return plot_path, recording_path
