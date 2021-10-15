@@ -14,6 +14,8 @@ import parselmouth as praat
 
 import numpy as np
 
+import sys
+
 import os
 
 # This is a backend file that processes all of the audio input by speakers
@@ -117,7 +119,10 @@ def save_plot(filename, path):
 
     old_pitch = praat.Sound(filename)
     trimmed = pitch_plot.trim_silences(old_pitch)
-    print(type(trimmed), trimmed)
+    print(type(trimmed), trimmed, file=sys.stderr)
+    print(type(trimmed), trimmed, file=sys.stdout)
+    print(type(trimmed), trimmed, file=sys.stdout)
+    print(type(trimmed), trimmed, file=sys.stdin)
     echo(message=print(type(trimmed), trimmed))
     pitch_plot.draw_pitch(new_pitch, old_pitch, plot_path)
 
