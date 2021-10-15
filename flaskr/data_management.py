@@ -20,7 +20,7 @@ def init_chapters(database): # TODO: make only one class of sentence
     create a chapter for each file"""
 
     # Get path for recordings (hardcoded)
-    recordings_dir = os.path.join(current_app.root_path, '../../Recordings')
+    recordings_dir = os.path.join(current_app.root_path, '../Recordings')
     sent_id = None
     text = None
     sentence_text_exists = False

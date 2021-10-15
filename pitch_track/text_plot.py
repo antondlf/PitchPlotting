@@ -4,7 +4,7 @@ from praatio import tgio
 import parselmouth
 import numpy as np
 import os
-from site.pitch_track.pitch_plot import trim_recording
+from pitch_plot import preprocess_pipeline
 
 
 
@@ -21,11 +21,11 @@ def draw_text_plot(audio, textgrid, plot_path):#,  jitter = 0.001, text_jitter =
 
     plt.clf()
 
-    pitch = parselmouth.Sound(audio).to_pitch(time_step=0.005)
+    sound = parselmouth.Sound(audio)
 
 
     # Extract selected pitch contour, and trim the beginning zeroes
-    pitch_values, time = trim_recording(pitch)
+    pitch_values, time = preprocess_pipeline(sound)
 
     pitch_values[pitch_values == 0] = np.nan
 
@@ -76,10 +76,8 @@ def draw_text_plot(audio, textgrid, plot_path):#,  jitter = 0.001, text_jitter =
     start_room = 0.5
 
     for interval in entryList:
-    #     #plt.axvline(interval[0], linestyle='dotted')
-    #     # Get start and end time for each boundary
-    #     start, end = (np.where(time == round(interval[0], 2))[0], np.where(time == round(interval[1], 2))[0])
-    #     # Place text at the start of each interval
+
+        # Place text at the start of each interval
         plt.text(
             round(interval[0]-trim, 2) + start_room, #+ jitter,
             pitch_min - 20,
@@ -119,7 +117,7 @@ def preprocess_chapters(chapters_path):
 
         chap_directory = os.path.join(chapters_path, dir)
         print(chap_directory)
-        if chap_directory != 'Recordings/.DS_Store':
+        if chap_directory != '../../Recordings/.DS_Store':
             pass
 
             for file in os.listdir(chap_directory):
@@ -135,4 +133,4 @@ def preprocess_chapters(chapters_path):
             draw_text_plot(audio, grid, pathname)
 
 if __name__ == '__main__':
-    preprocess_chapters('Recordings')
+    preprocess_chapters('../Recordings')

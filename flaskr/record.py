@@ -301,7 +301,7 @@ def return_plot_file(filename):
 def return_textplot_file(chaptername, filename):
     """Get the orthographic plot"""
 
-    path = os.path.join(current_app.root_path, '../../Recordings/', chaptername)
+    path = os.path.join(current_app.root_path, '../Recordings/', chaptername)
 
     return send_from_directory(path, filename, as_attachment=True)
 

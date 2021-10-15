@@ -26,6 +26,7 @@ def sample_remove(x):
 
     return choice
 
+
 def get_sentences():
     """Get the sentences from the database and return a dictionary with
     all the sentence dictionaries as well as a list of all the sentence
@@ -246,6 +247,7 @@ def create_user_dict(user_id, group=None, db=None):
 
     return user_dict
 
+# TODO: create JSON representation for easy access
 
 # This class makes querying dictionary easier
 class user_state:

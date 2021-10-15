@@ -81,25 +81,33 @@ def adjust_time_samples(new_time, old_time):
     return new_time_normalized
 
 
+def preprocess_pipeline(sound, low=0, high=500, smoothing=50):
+    """Preprocesses praat sound objects for plotting.
+    Filters, trims silences, smooths samples."""
+
+    # Filter out high frequencies to reduce chances of interfering noise
+    filtered = low_pass(sound, low, high, smoothing)
+
+    # Trim short transient noise samples and long silences
+    trimmed = trim_silences(filtered)
+
+    # Create pitch objects and smooth
+    smooth = trimmed.to_pitch().smooth()
+
+    # Remove trailing and leading silences
+    pitch, time= trim_recording(smooth)
+
+    return pitch, time
+
+
 def preprocess_audio(new_sound, old_sound, low=0, high=500, smoothing=50):
     """Processes sound objects for plotting"""
 
-    # Filter out high frequencies to reduce chances of interfering noise
-    new_filtered = low_pass(new_sound, low, high, smoothing)
-    old_filtered = low_pass(old_sound, low, high, smoothing)
+    # Individual audio preprocessing
+    pitch_old, time_old = preprocess_pipeline(old_sound, low=low, high=high, smoothing=smoothing)
+    pitch_new, time_new = preprocess_pipeline(new_sound, low=low, high=high, smoothing=smoothing)
 
-    # Trim short transient noise samples and long silences
-    new_trimmed = trim_silences(new_filtered)
-    old_trimmed = trim_silences(old_filtered)
-
-    # Create pitch objects and smooth
-    new_smooth = new_trimmed.to_pitch().smooth()
-    old_smooth = old_trimmed.to_pitch().smooth()
-
-    # Remove trailing and leading silences
-    pitch_new, time_new = trim_recording(new_smooth)
-    pitch_old, time_old = trim_recording(old_smooth)
-
+    # Simple time warping
     new_time_normalized = adjust_time_samples(time_new, time_old)
 
     return pitch_new, pitch_old, new_time_normalized, time_old
@@ -191,4 +199,13 @@ def draw_pitch(new_pitch, old_pitch, path, show=False):
 
     return path
 
+
+def main():
+    # testing code
+    native = input('Path to native:')
+    learner = input('Path to learner:')
+    path = input('Path to plot:')
+    old = parselmouth.Sound(native)
+    new = parselmouth.Sound(learner)
+    draw_pitch(new, old, path, show=True)
 
