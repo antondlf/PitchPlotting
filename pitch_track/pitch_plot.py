@@ -193,7 +193,7 @@ def draw_pitch(new_pitch, old_pitch, path, show=False):
     plt.ylim(0,  np.nanmax(pitch_values_old) + 200)
     plt.ylabel('Pitch')
     plt.xlabel('Time')
-    #plt.savefig(path)
+    plt.savefig(path)
     if show:
         plt.show()
 
