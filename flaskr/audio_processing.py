@@ -113,7 +113,7 @@ def save_plot(filename, path):
     new_pitch = praat.Sound(recording_path)
 
     # Make sure that written audio isn't empty
-    # TODO: this will yield an error, make sure there's an excape
+    # TODO: this will yield an error, make sure there's an escape
     if np.count_nonzero(new_pitch.as_array()) == 0:
         return None
 

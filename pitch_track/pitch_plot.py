@@ -36,6 +36,7 @@ def low_pass(sound_object, low_freq, high_freq, smoothing):
     Filter (pass Hann band)"""
 
     filtered = call(sound_object, "Filter (pass Hann band)", low_freq, high_freq, smoothing)
+    print('filtered:', type(filtered), filtered)
 
     return filtered
 
@@ -45,6 +46,8 @@ def trim_silences(sound: parselmouth.Sound) -> parselmouth.Sound:
     silent sections."""
     print(type(sound), sound, file=sys.stderr)
     trimmed_sound = call(sound, 'Trim silences', 0.05, 0, 100, 0, -25, 0.1, 0.1, 0, "silence")
+    if type(trimmed_sound) == list:
+        trimmed_sound = trimmed_sound[0]
     print(type(trimmed_sound), trimmed_sound, file=sys.stderr)
 
     return trimmed_sound
