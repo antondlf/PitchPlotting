@@ -2,9 +2,10 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import parselmouth as parselmouth
+import parselmouth
 from parselmouth.praat import call
 import seaborn as sns
+import sys
 
 sns.set()
 
@@ -42,8 +43,9 @@ def low_pass(sound_object, low_freq, high_freq, smoothing):
 def trim_silences(sound: parselmouth.Sound) -> parselmouth.Sound:
     """Uses praat command Trim silences to remove noise and long
     silent sections."""
-
+    print(type(sound), sound, file=sys.stderr)
     trimmed_sound = call(sound, 'Trim silences', 0.05, 0, 100, 0, -25, 0.1, 0.1, 0, "silence")
+    print(type(trimmed_sound), trimmed_sound, file=sys.stderr)
 
     return trimmed_sound
 
@@ -94,7 +96,7 @@ def preprocess_pipeline(sound, low=0, high=500, smoothing=50):
     smooth = trimmed.to_pitch().smooth()
 
     # Remove trailing and leading silences
-    pitch, time= trim_recording(smooth)
+    pitch, time = trim_recording(smooth)
 
     return pitch, time
 
