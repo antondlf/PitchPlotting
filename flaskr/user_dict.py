@@ -103,7 +103,7 @@ def get_user_list(order_dict):
     return order_list
 
 
-def create_user_dict(user_id, group=None, db=None):
+def create_user_dict(user_id, condition=None, db=None):
     """Creates a dictionary that contains the trial orders
     for each user.
     """
@@ -133,8 +133,8 @@ def create_user_dict(user_id, group=None, db=None):
 
     # Give the state dictionary an experimental condition:
     # If the group is given as keyword argument set it.
-    if group:
-        user_dict['condition'] = group
+    if condition:
+        user_dict['condition'] = condition
     else:
         user_dict['condition'] = random.choice(['a', 'b'])
 

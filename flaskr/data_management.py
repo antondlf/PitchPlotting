@@ -57,7 +57,7 @@ def init_chapters(database): # TODO: make only one class of sentence
                 }},
         'unmatched': {
             '1': 'Anna_lavora', '2': 'Emilia_arriva',
-            '3': 'Bernardo_viene', '4': 'Andrea_rimane',
+            '3': 'Bernardo_viene', '4': 'Andrea_balla',
             '5': 'Luigi_odia', '6': 'Elena_guarda',
             '7': 'Giovanni_ruba', '8': 'Irene_disegna'}
     }
@@ -101,7 +101,6 @@ def input_sent_pair(recordings_dir, sent_group, current_sent, database):
 
         # Check that it is a directory
         if os.path.isdir(chap_directory):
-
             item_pair = os.listdir(chap_directory)
             # Iterate through directory files
             for file in item_pair:
@@ -146,7 +145,7 @@ def input_sent_pair(recordings_dir, sent_group, current_sent, database):
                 database.commit()
 
             else:
-                return print('Missing title or text')
+                return print('Missing information')
         else:
             print("Error:", chap_directory, 'is a file, not a directory.')
 
