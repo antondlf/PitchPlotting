@@ -44,7 +44,9 @@ def trim_silences(sound: parselmouth.Sound) -> parselmouth.Sound:
     """Uses praat command Trim silences to remove noise and long
     silent sections."""
 
+    print(sound)
     trimmed_sound = call(sound, 'Trim silences', 0.05, 0, 100, 0, -25, 0.1, 0.1, 0, "silence")
+    print(type(trimmed_sound), trimmed_sound)
 
     return trimmed_sound
 
