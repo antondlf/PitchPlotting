@@ -105,16 +105,16 @@ def save_plot(filename, path):
 
     recording_path = path + '.wav'
 
-    sound = praat.Sound(recording_path)
+
+    # Generate praat sound objects
+    new_pitch = praat.Sound(recording_path)
 
     # Make sure that written audio isn't empty
     # TODO: this will yield an error, make sure there's an excape
-    if np.count_nonzero(sound.as_array()) == 0:
+    if np.count_nonzero(new_pitch.as_array()) == 0:
         return None
 
-    # Calculate the pitch track with Parselmouth
-    new_pitch = sound.to_pitch()
-    old_pitch = praat.Sound(filename).to_pitch()
+    old_pitch = praat.Sound(filename)
     draw_pitch(new_pitch, old_pitch, plot_path)
 
     return plot_path, recording_path
