@@ -137,7 +137,23 @@ def record(session, trial_type, chapterorder):
         # Redirect to the post_trial (comparison plot template)
         return redirect(url_for('/record.post_trial', session=session, trial_type=trial_type, chapter_order=chapterorder))
 
-    # When the post is "GET" we server the template for the corresponding condition
+    if request.method == 'GET':
+        user_audio = db.execute(
+            'SELECT trial_id'
+            ' FROM recordings WHERE sent_id=? AND user_id=? AND session_number=? AND sent_order=?'
+            ' ORDER BY created DESC',
+            (sent_id, user_id, session, chapterorder)
+        ).fetchall()
+
+        if trial_type != 'training':
+            return render_template('/record/baseline.html', sentence=text)
+        if len(user_audio) > 0:
+            plot_path = user_audio[0]['trial_id'] + '.png'
+        else:
+            plot_path = None
+
+        recordings = [row['trial_id'] + '.wav' for row in user_audio]
+
     if condition == 'a':
         # full feedback condition
         return render_template(
