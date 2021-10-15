@@ -105,8 +105,25 @@ def record(session, trial_type, chapterorder):
     # make sure textplot only contains the name of the file
     textplot = textplot_path.rsplit('/', 1)[-1]
 
+    if request.method == 'GET':
+        user_audio = db.execute(
+            'SELECT trial_id'
+            ' FROM recordings WHERE sent_id=? AND user_id=? AND session_number=? AND sent_order=?'
+            ' ORDER BY created DESC',
+            (sent_id, user_id, session, chapterorder)
+        ).fetchall()
+
+        if trial_type != 'training':
+            return render_template('/record/baseline.html', sentence=text)
+        if len(user_audio) > 0:
+            plot_path = user_audio[0]['trial_id'] + '.png'
+        else:
+            plot_path = None
+
+        recordings = [row['trial_id'] + '.wav' for row in user_audio]
+
     # When there is a post process the data
-    if request.method == 'POST':
+    elif request.method == 'POST':
 
         # The audio data is contained in the request object
         audio_data = request.data
@@ -137,22 +154,6 @@ def record(session, trial_type, chapterorder):
         # Redirect to the post_trial (comparison plot template)
         return redirect(url_for('/record.post_trial', session=session, trial_type=trial_type, chapter_order=chapterorder))
 
-    if request.method == 'GET':
-        user_audio = db.execute(
-            'SELECT trial_id'
-            ' FROM recordings WHERE sent_id=? AND user_id=? AND session_number=? AND sent_order=?'
-            ' ORDER BY created DESC',
-            (sent_id, user_id, session, chapterorder)
-        ).fetchall()
-
-        if trial_type != 'training':
-            return render_template('/record/baseline.html', sentence=text)
-        if len(user_audio) > 0:
-            plot_path = user_audio[0]['trial_id'] + '.png'
-        else:
-            plot_path = None
-
-        recordings = [row['trial_id'] + '.wav' for row in user_audio]
 
     if condition == 'a':
         # full feedback condition
