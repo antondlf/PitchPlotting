@@ -1,10 +1,7 @@
 import click
-import random
-import diceware
 from auto_email import server_login
-from database import get_flaskr_db, connect_email_db, init_email_db
+from database import get_flaskr_db, connect_email_db
 from werkzeug.security import generate_password_hash
-from flaskr.user_dict import create_user_dict
 from auto_email import notify
 
 # This script creates a click command that starts the experiment
