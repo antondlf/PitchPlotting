@@ -73,7 +73,6 @@ def init_chapters(database): # TODO: make only one class of sentence
         for n in set_sents.keys():
 
             current_sent = sentences['matched'][set][n]
-
             input_sent_pair(recordings_dir, sent_group, current_sent, database)
 
     # Input unmatched sentences into db
