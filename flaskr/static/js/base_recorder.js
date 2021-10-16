@@ -109,7 +109,7 @@ function stopRecording() {
 	//sendButton.disabled = false;
 	nextButton.disabled = false;
 
-	document.getElementById("formats").innerHTML="wait..."
+	document.getElementById("formats").innerHTML="Done!"
 
 	//reset button just in case the recording is stopped while paused
 	//pauseButton.innerHTML="Pause";
