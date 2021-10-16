@@ -11,6 +11,7 @@ from email.mime.text import MIMEText
 
 #def session_text(session, reminder):
 
+
 # This avoids mime encoding issues
 def contains_non_ascii_characters(str):
     return not all(ord(c) < 128 for c in str)
@@ -35,10 +36,11 @@ def server_logout(server):
     """Logout from server"""
     server.quit()
 
+
 def generate_email(stage, username=None, password=None, is_reminder=False):
     """generate email reminder for a given session and mime encode it."""
 
-    subject, text = get_email_text(stage, username, password, is_reminder=is_reminder)
+    subject, text = get_email_text(stage, username, is_reminder=is_reminder)
 
     if (contains_non_ascii_characters(text)):
         plain_text = MIMEText(text.encode('utf-8'), 'plain', 'utf-8')
@@ -69,11 +71,12 @@ def send_email(msg, server, sender, receiver_list):
         print('Error: email supplied is invalid.')
 
 
-def notify(session, receiver_list, server=None, username=None, password=None, is_reminder=False):
+def notify(session, receiver_list, server=None, username=None, is_reminder=False):
     """This function sends the email notifications."""
 
     if server:
-        msg = generate_email(session, username=username, password=password, is_reminder=is_reminder)
+        print(is_reminder)
+        msg = generate_email(session, username=username, is_reminder=is_reminder)
         send_email(msg, server, 'testdummyprosody@gmail.com', receiver_list)
 
     else:
@@ -86,7 +89,7 @@ def notify(session, receiver_list, server=None, username=None, password=None, is
             # TODO: solve Password issue
             smtp.login('testdummyprosody@gmail.com', input('Password:'))  # login to our email server
 
-            msg = generate_email(session, username=username, password=password, is_reminder=is_reminder)
+            msg = generate_email(session, username=username, is_reminder=is_reminder)
             send_email(msg, smtp, 'testdummyprosody@gmail.com', receiver_list)
 
 

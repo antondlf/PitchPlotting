@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS recordings;
 DROP TABLE IF EXISTS chapters;
 DROP TABLE IF EXISTS userdata;
+DROP TABLE IF EXISTS new_emails;
 
 
 CREATE TABLE notifications(
@@ -16,6 +17,11 @@ CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   username TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL
+);
+
+CREATE TABLE new_emails(
+    username TEXT UNIQUE NOT NULL,
+    email TEXT NOT NULL
 );
 
 CREATE TABLE userdata (
