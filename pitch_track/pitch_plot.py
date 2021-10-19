@@ -41,14 +41,30 @@ def low_pass(sound_object, low_freq, high_freq, smoothing):
     return filtered
 
 
+def validated_smooth(sound_object):
+    """Smooths f0 while filtering out doubled samples."""
+
+    # Turn into a pitch object
+    pitch_object = sound_object.to_pitch()
+
+    # Remove octave jumps
+    kill_octaves = pitch_object.kill_octave_jumps()
+
+    # Smooth
+    smoothed = kill_octaves.smooth()
+
+    return smoothed
+
+
 def trim_silences(sound: parselmouth.Sound) -> parselmouth.Sound:
     """Uses praat command Trim silences to remove noise and long
     silent sections."""
-    print(type(sound), sound, file=sys.stderr)
+
     trimmed_sound = call(sound, 'Trim silences', 0.05, 0, 100, 0, -25, 0.1, 0.1, 0, "silence")
+    # Parselmouth call is not well documented, and trimmed_sound sometimes
+    # returns a list of length 1, this causes problems for the rest of the script
     if type(trimmed_sound) == list:
         trimmed_sound = trimmed_sound[0]
-    print(type(trimmed_sound), trimmed_sound, file=sys.stderr)
 
     return trimmed_sound
 
@@ -96,7 +112,8 @@ def preprocess_pipeline(sound, low=0, high=500, smoothing=50):
     trimmed = trim_silences(filtered)
 
     # Create pitch objects and smooth
-    smooth = trimmed.to_pitch().smooth()
+    smooth = validated_smooth(trimmed)
+        #trimmed.to_pitch().smooth()
 
     # Remove trailing and leading silences
     pitch, time = trim_recording(smooth)
