@@ -39,7 +39,7 @@ def reminder_cue(user_id, notification_session):
     """
     db = get_flaskr_db()
     # TODO: change to 2 days after testing
-    reminder_time = datetime.datetime.now() + datetime.timedelta(days=1)
+    reminder_time = datetime.datetime.now() + datetime.timedelta(minutes=1)#days=1)
 
     #
     db.execute(
