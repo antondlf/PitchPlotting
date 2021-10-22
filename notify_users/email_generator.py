@@ -5,7 +5,7 @@
 
 def get_email_text(stage, username, is_reminder=False):
 
-    url = 'prosody.delafuentealvarez.com/session_menu/{}'.format(stage)
+    url = 'prosody.delafuentealvarez.com/session_menu/{}'
 
     if stage == 'Session 1':
 
@@ -27,7 +27,7 @@ def get_email_text(stage, username, is_reminder=False):
                 " If you run into any issues," \
                 " contact Antón de la Fuente at antondlf@mac.com\n\n"\
                 "Grazie mille!\n"\
-                "Catherine Scanlon and Antón de la Fuente".format(username, url)
+                "Catherine Scanlon and Antón de la Fuente".format(username, url.format('Session_1'))
 
         reminder = "Hi again!\n\n"\
                 "Just checking in to see if you’re" \
@@ -45,7 +45,7 @@ def get_email_text(stage, username, is_reminder=False):
                 " If you run into any issues," \
                 " contact Antón de la Fuente at antondlf@mac.com\n\n"\
                 "Grazie mille!\n"\
-                "Catherine Scanlon and Antón de la Fuente".format(url)
+                "Catherine Scanlon and Antón de la Fuente".format(url.format('Session_1'))
 
     elif stage == "Session 2":
         subject = 'Italian Prosody Study Part 2{}'
@@ -59,7 +59,7 @@ def get_email_text(stage, username, is_reminder=False):
                 " If you run into any issues," \
                 " contact Antón de la Fuente at antondlf@mac.com\n\n"\
                 "Grazie mille!\n"\
-                "Catherine Scanlon and Antón de la Fuente".format(url)
+                "Catherine Scanlon and Antón de la Fuente".format(url.format('Session_2'))
 
         reminder = "Hi!\n\n" \
                    "Just a reminder about Session 2 of the Italian prosody study," \
@@ -71,7 +71,7 @@ def get_email_text(stage, username, is_reminder=False):
                 " If you run into any issues," \
                 " contact Antón de la Fuente at antondlf@mac.com\n\n"\
                 "Grazie mille!\n"\
-                "Catherine Scanlon and Antón de la Fuente".format(url)
+                "Catherine Scanlon and Antón de la Fuente".format(url.format('Session_2'))
 
     elif stage == "Session 3":
 
@@ -92,7 +92,7 @@ def get_email_text(stage, username, is_reminder=False):
                   "collection is complete. The winner will" \
                   " be notified by email.\n\n"\
                 "Grazie mille!\n"\
-                "Catherine Scanlon and Antón de la Fuente".format(url)
+                "Catherine Scanlon and Antón de la Fuente".format(url.format('Session_3'))
 
         reminder = "Ciao!\n\n"\
                     "Just a reminder about the final sesion" \
@@ -109,7 +109,7 @@ def get_email_text(stage, username, is_reminder=False):
                   "collection is complete. The winner will" \
                   " be notified by email.\n\n"\
                 "Grazie mille!\n"\
-                "Catherine Scanlon and Antón de la Fuente".format(url)
+                "Catherine Scanlon and Antón de la Fuente".format(url.format('Session_3'))
 
     if is_reminder:
         return subject.format(' reminder'), reminder
