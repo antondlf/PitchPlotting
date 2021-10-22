@@ -60,7 +60,7 @@ def trim_silences(sound: parselmouth.Sound) -> parselmouth.Sound:
     """Uses praat command Trim silences to remove noise and long
     silent sections."""
 
-    trimmed_sound = call(sound, 'Trim silences', 0.05, 0, 100, 0, -25, 0.1, 0.1, 0, "silence")
+    trimmed_sound = call(sound, 'Trim silences', 0.05, 0, 100, 0, -25, 0.2, 0.1, 0, "silence")
     # Parselmouth call is not well documented, and trimmed_sound sometimes
     # returns a list of length 1, this causes problems for the rest of the script
     if type(trimmed_sound) == list:
@@ -223,8 +223,8 @@ def draw_pitch(new_pitch, old_pitch, path, show=False):
 
 def main():
     # testing code
-    native = '~/desktop/Grad_seminar_project/JIIL presentation/examples/Uninterpretable/10_La_bevanda(S)_S_0_c7a9 copy.wav'#input('Path to native:')
-    learner = '~/PycharmProjects/Data_analysis/Pilot data/Recordings/4-S-La_bevanda.wav'#input('Path to learner:')
+    native = '~/desktop/Grad_seminar_project/JIIL presentation/examples/misalignment/9_Bernardo_viene(S)_S_0_6c79 copy.wav'#input('Path to native:')
+    learner = '~/PycharmProjects/Data_analysis/Pilot data/Recordings/1b-S-Bernardo_viene.wav'#input('Path to learner:')
     path = 'dummypath'#input('Path to plot:')
     old = parselmouth.Sound(native)
     new = parselmouth.Sound(learner)
