@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib
-matplotlib.use('Agg')
+#matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import parselmouth
 from parselmouth.praat import call
@@ -101,7 +101,7 @@ def adjust_time_samples(new_time, old_time):
     return new_time_normalized
 
 
-def preprocess_pipeline(sound, low=0, high=500, smoothing=50):
+def preprocess_pipeline(sound, low=0, high=500, smoothing=100):
     """Preprocesses praat sound objects for plotting.
     Filters, trims silences, smooths samples."""
 
@@ -121,7 +121,7 @@ def preprocess_pipeline(sound, low=0, high=500, smoothing=50):
     return pitch, time
 
 
-def preprocess_audio(new_sound, old_sound, low=0, high=500, smoothing=50):
+def preprocess_audio(new_sound, old_sound, low=0, high=500, smoothing=100):
     """Processes sound objects for plotting"""
 
     # Individual audio preprocessing
@@ -214,18 +214,18 @@ def draw_pitch(new_pitch, old_pitch, path, show=False):
     plt.ylim(0,  np.nanmax(pitch_values_old) + 200)
     plt.ylabel('Pitch')
     plt.xlabel('Time')
-    plt.savefig(path)
+    #plt.savefig(path)
     if show:
         plt.show()
 
-    return path
+    #return path
 
 
 def main():
     # testing code
-    native = input('Path to native:')
-    learner = input('Path to learner:')
-    path = input('Path to plot:')
+    native = '~/desktop/Grad_seminar_project/JIIL presentation/examples/Uninterpretable/10_La_bevanda(S)_S_0_c7a9 copy.wav'#input('Path to native:')
+    learner = '~/PycharmProjects/Data_analysis/Pilot data/Recordings/4-S-La_bevanda.wav'#input('Path to learner:')
+    path = 'dummypath'#input('Path to plot:')
     old = parselmouth.Sound(native)
     new = parselmouth.Sound(learner)
     draw_pitch(new, old, path, show=True)
