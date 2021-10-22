@@ -47,7 +47,7 @@ def reminder_cue(user_id, notification_session):
         (user_id,)
     )
     db.commit()
-
+    click.echo('Submitted a reminder for time {}'.format(reminder_time))
     db.execute(
         "INSERT INTO notifications (user_id, notification_time, next_session, is_reminder)"
         "VALUES (?, ?, ?, ?)",
@@ -88,12 +88,11 @@ def send_notifications(password):
 
             else:
                 notify(user['next_session'], email, server=server, is_reminder=True)
-            print(user['user_id'], type(user['user_id']))
-            db.execute(
-                "DELETE FROM notifications WHERE user_id=?",
-                (str(user['user_id']),)
-            )
-            db.commit()
+                db.execute(
+                    "DELETE FROM notifications WHERE user_id=?",
+                    (str(user['user_id']),)
+                )
+                db.commit()
 
     server.quit()
     click.echo('{} scheduled notifications sent'.format(str(counter)))
