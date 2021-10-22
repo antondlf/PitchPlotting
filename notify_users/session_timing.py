@@ -53,6 +53,7 @@ def reminder_cue(user_id, notification_session):
         "VALUES (?, ?, ?, ?)",
         (user_id, reminder_time, notification_session, 'True',)
     )
+    db.commit()
 
 
 @click.command('send_notifications')
