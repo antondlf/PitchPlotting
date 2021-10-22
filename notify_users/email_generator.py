@@ -7,7 +7,7 @@ def get_email_text(stage, username, is_reminder=False):
 
     url = 'prosody.delafuentealvarez.com/session_menu/{}'.format(stage)
 
-    if stage == 'Session_1':
+    if stage == 'Session 1':
 
         subject = 'Italian Prosody Study Part 1{}'
 
@@ -47,7 +47,7 @@ def get_email_text(stage, username, is_reminder=False):
                 "Grazie mille!\n"\
                 "Catherine Scanlon and Antón de la Fuente".format(url)
 
-    elif stage == "Session_2":
+    elif stage == "Session 2":
         subject = 'Italian Prosody Study Part 2{}'
         message = "Ciao!\n\n"\
                     "Time for another Italian prosody session!" \
@@ -73,7 +73,7 @@ def get_email_text(stage, username, is_reminder=False):
                 "Grazie mille!\n"\
                 "Catherine Scanlon and Antón de la Fuente".format(url)
 
-    elif stage == "Session_3":
+    elif stage == "Session 3":
 
         subject = 'Italian Prosody Study Final Followup{}'
 
