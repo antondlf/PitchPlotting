@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib
-#matplotlib.use('Agg')
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import parselmouth
 from parselmouth.praat import call
@@ -41,7 +41,7 @@ def low_pass(sound_object, low_freq, high_freq, smoothing):
     return filtered
 
 
-def validated_smooth(sound_object):
+def validated_smooth(sound_object: parselmouth.Sound):
     """Smooths f0 while filtering out doubled samples."""
 
     # Turn into a pitch object
@@ -51,7 +51,7 @@ def validated_smooth(sound_object):
     kill_octaves = pitch_object.kill_octave_jumps()
 
     # Smooth
-    smoothed = kill_octaves.smooth()
+    smoothed = kill_octaves.smooth(bandwidth=15)
 
     return smoothed
 
@@ -214,21 +214,19 @@ def draw_pitch(new_pitch, old_pitch, path, show=False):
     plt.ylim(0,  np.nanmax(pitch_values_old) + 200)
     plt.ylabel('Pitch')
     plt.xlabel('Time')
-    #plt.savefig(path)
-    if show:
-        plt.show()
-
-    #return path
+    plt.savefig(path)
+    return path
 
 
-def main():
-    # testing code
-    native = '~/desktop/Grad_seminar_project/JIIL presentation/examples/misalignment/9_Bernardo_viene(S)_S_0_6c79 copy.wav'#input('Path to native:')
-    learner = '~/PycharmProjects/Data_analysis/Pilot data/Recordings/1b-S-Bernardo_viene.wav'#input('Path to learner:')
-    path = 'dummypath'#input('Path to plot:')
-    old = parselmouth.Sound(native)
-    new = parselmouth.Sound(learner)
-    draw_pitch(new, old, path, show=True)
+# def main():
+#     # testing code
+#     learner = '~/PycharmProjects/Data_analysis/Pilot data/data_sample/9_Daria_brinda(Q)_Q_0_4a6c_pre_train.wav' \
+#               #~/desktop/Grad_seminar_project/JIIL presentation/examples/misalignment/9_Bernardo_viene(S)_S_0_6c79 copy.wav'#input('Path to learner:')
+#     native = '~/PycharmProjects/Data_analysis/Pilot data/Recordings/1-Q-Daria_brinda.wav'#input('Path to native:')
+#     path = 'dummypath'#input('Path to plot:')
+#     old = parselmouth.Sound(native)
+#     new = parselmouth.Sound(learner)
+#     draw_pitch(new, old, path, show=True)
 
-if __name__=='__main__':
-    main()
+# if __name__=='__main__':
+#     main()
