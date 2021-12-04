@@ -20,29 +20,28 @@ def get_user_state(user_id):
 bp = Blueprint('/instructions', __name__)
 
 
-@bp.route('/instructions/intro')
+@bp.route('/instructions/intro/<string:post>')
 @login_required
-def intro():
-    return render_template('Instructions/Introduction.html')
+def intro(post):
+
+    return render_template('Instructions/Introduction.html', post=post)
 
 
-@bp.route('/instructions/test_recordings/<string:is_session>')
+@bp.route('/instructions/test_recordings/<string:post>')
 @login_required
-def test_recordings(is_session):
+def test_recordings(post):
     user_id = g.user['id']
     condition = get_user_state(user_id).get_condition()
     if condition == 'Error, user not properly registered. Contact the support email to get a new account.':
         return flash(condition)
 
-    if is_session == 'True':
-        print('session is true')
-        what_next = 'pre_train'
-    elif is_session == 'False':
-        what_next = 'menu'
+    post = post.replace('_', ' ')
+
+    post_name = post.lower()
 
     return render_template(
             'Instructions/Test_instructions.html',
-            next_panel=what_next)
+            post=post, post_name=post_name)
 
 
 @bp.route('/instructions/training/<string:is_session>')
@@ -77,3 +76,10 @@ def get_image(filename):
     path = os.path.join(current_app.root_path, 'instructions_pics')
     print(path)
     return send_from_directory(path, filename, as_attachment=True)
+
+
+@bp.route('/mic_test/<string:post>')
+@login_required
+def mic_test(post):
+
+    return render_template('Instructions/mic_test.html', post=post)

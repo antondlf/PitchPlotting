@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="/static/stylejs.css"/>
 </head>
     <body>
+            <h1>Compare your intonation with the native speaker's:</h1>
             <h3> {{ sentence }} </h3>
             <audio id = "audio" hidden>
                 <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
@@ -25,10 +26,15 @@
             {% endif %}
             <div id="controls">
                 <button id="replayButton">Listen To Yourself</button>
+                <button id="playButton">Listen to a Native Speaker</button>
              <button id="nextButton" disabled>Next Activity</button>
             </div>
             <audio id = "useraudio" hidden>
                 <source src="{{ url_for('/record.return_plot_file', dir='participants', filename=recording) }}" type="audio/wav">
+            </audio>
+
+            <audio id = "nativeaudio" hidden>
+                <source src="{{ url_for('/audio.download_file', chaptername=recording)}}" type="audio/wav">
             </audio>
             <!--ol id="recordingsList"></ol-->
 

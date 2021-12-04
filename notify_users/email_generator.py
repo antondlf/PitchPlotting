@@ -53,8 +53,8 @@ def get_email_text(stage, username, is_reminder=False):
                     "Time for another Italian prosody session!" \
                   " Please complete Session 2 within the next day." \
                   " It’s very similar to Session 1 and should take no " \
-                  "more than 30 minutes. Please sign in with the username" \
-                  "and password from the last email at this link: {}\n\n"\
+                  "more than 30 minutes. Please sign in with your username" \
+                  "and password at this link: {}\n\n"\
             "Have fun!" \
                 " If you run into any issues," \
                 " contact Antón de la Fuente at antondlf@mac.com\n\n"\
@@ -65,8 +65,8 @@ def get_email_text(stage, username, is_reminder=False):
                    "Just a reminder about Session 2 of the Italian prosody study," \
                    " which should take no more than 30 minutes." \
                    " Please complete it today if you can, by clicking the following link" \
-                   "and signing in with the username and password provided to you" \
-                   "in the introductory email\n\nSession 2 link: {}" \
+                   "and signing in with your username and password" \
+                   "\n\nSession 2 link: {}" \
                    "\n\nEnjoy!" \
                 " If you run into any issues," \
                 " contact Antón de la Fuente at antondlf@mac.com\n\n"\
@@ -82,8 +82,8 @@ def get_email_text(stage, username, is_reminder=False):
                   " of the Italian prosody study." \
                   " This is a short follow-up that should " \
                   "take no more than 15 minutes." \
-                  " Please sign in with the username" \
-                  "and password from the first email at this link: {}\n\n"\
+                  " Please sign in with your username" \
+                  "and password at this link: {}\n\n"\
                 " If you run into any issues," \
                 " contact Antón de la Fuente at antondlf@mac.com\n\n" \
                   "Thanks for your participation!" \
@@ -99,8 +99,8 @@ def get_email_text(stage, username, is_reminder=False):
                    " of the Italian prosody study, which" \
                    " should take no more than 15 minutes." \
                    " Please complete it today if you can." \
-                  " Please sign in with the username" \
-                  "and password from the first email at this link: {}\n\n"\
+                  " Please sign in with your username" \
+                  "and password at this link: {}\n\n"\
                 " If you run into any issues," \
                 " contact Antón de la Fuente at antondlf@mac.com\n\n" \
                   "Thanks for your participation!" \

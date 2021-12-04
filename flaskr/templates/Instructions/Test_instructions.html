@@ -31,10 +31,7 @@
     which will take you to the next sentence.
 </p>
 
-{% if next_panel == 'pre_train' %}
-    <a href="{{ url_for('/record.record', session='Session 1', trial_type='pre_train', chapterorder='0') }}">Continue to Session</a>
-{% elif next_panel == 'menu' %}
-    <a href="{{ url_for('/instructions.training', is_session=False) }}">Next: Training</a>
-{% endif %}
+<h1><a class="action" href="{{ url_for('/record.record', session=post, trial_type='pre_train', chapterorder=0) }}">Start {{ post_name }}</a></h1>
+
 </body>
 </html>

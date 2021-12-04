@@ -36,7 +36,6 @@ def low_pass(sound_object, low_freq, high_freq, smoothing):
     Filter (pass Hann band)"""
 
     filtered = call(sound_object, "Filter (pass Hann band)", low_freq, high_freq, smoothing)
-    print('filtered:', type(filtered), filtered)
 
     return filtered
 
@@ -53,7 +52,10 @@ def validated_smooth(sound_object: parselmouth.Sound):
     # Smooth
     smoothed = kill_octaves.smooth(bandwidth=15)
 
-    return smoothed
+    # add interpolation
+    interpolated = smoothed.interpolate()
+
+    return interpolated
 
 
 def trim_silences(sound: parselmouth.Sound) -> parselmouth.Sound:
@@ -144,7 +146,6 @@ def pitch_difference(pitch_values_old, pitch_values_new):
     pitch_aver_old = np.mean(pitch_values_old)
 
     scaling_factor = pitch_aver_old - pitch_aver_new
-    print(scaling_factor)
 
     pitch_values_new = pitch_values_new + scaling_factor
 
@@ -190,7 +191,7 @@ def draw_pitch(new_pitch, old_pitch, path, show=False):
 
     # create a plot object for old_pitch with label "Target"
     plt.plot(time_old, pitch_values_old, 'o', markersize=7, color='w')
-    old_pitch_plot = plt.plot(time_old, pitch_values_old, 'o', label='Native', markersize=3, color='b')
+    old_pitch_plot = plt.plot(time_old, pitch_values_old, 'o', label='Native Speaker', markersize=3, color='b')
 
     # Plot the new pitch over the old
     # Make sure units are not included
@@ -215,18 +216,19 @@ def draw_pitch(new_pitch, old_pitch, path, show=False):
     plt.ylabel('Pitch')
     plt.xlabel('Time')
     plt.savefig(path)
+    #plt.show()
     return path
 
 
 # def main():
 #     # testing code
-#     learner = '~/PycharmProjects/Data_analysis/Pilot data/data_sample/9_Daria_brinda(Q)_Q_0_4a6c_pre_train.wav' \
-#               #~/desktop/Grad_seminar_project/JIIL presentation/examples/misalignment/9_Bernardo_viene(S)_S_0_6c79 copy.wav'#input('Path to learner:')
-#     native = '~/PycharmProjects/Data_analysis/Pilot data/Recordings/1-Q-Daria_brinda.wav'#input('Path to native:')
-#     path = 'dummypath'#input('Path to plot:')
+#     learner = '~/desktop/Grad_seminar_project/JIIL presentation/examples/uninterpretable/10_La_bevanda(S)_S_0_c7a9 copy.wav'#input('Path to learner:')
+#     #'~/PycharmProjects/Data_analysis/Pilot data/data_sample/9_Daria_brinda(Q)_Q_0_4a6c_pre_train.wav' \
+#     native = '~/PycharmProjects/Data_analysis/Pilot data/Recordings/1-Q-Delia_guida.wav'#input('Path to native:')
+#     path = '/users/anton/desktop/Grad School/writing sample/update_uninterpret.png'#input('Path to plot:')
 #     old = parselmouth.Sound(native)
 #     new = parselmouth.Sound(learner)
 #     draw_pitch(new, old, path, show=True)
-
+#
 # if __name__=='__main__':
 #     main()

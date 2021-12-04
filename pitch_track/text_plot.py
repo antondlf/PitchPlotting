@@ -117,7 +117,7 @@ def preprocess_chapters(chapters_path):
 
         chap_directory = os.path.join(chapters_path, dir)
         print(chap_directory)
-        if chap_directory != '../../Recordings/.DS_Store':
+        if chap_directory != 'Recordings/.DS_Store':
             pass
 
             for file in os.listdir(chap_directory):
@@ -133,4 +133,4 @@ def preprocess_chapters(chapters_path):
             draw_text_plot(audio, grid, pathname)
 
 if __name__ == '__main__':
-    preprocess_chapters('../Recordings')
+    preprocess_chapters('Recordings')

@@ -48,9 +48,11 @@ bp = Blueprint('/record', __name__)
 @login_required
 def index():
 
-    posts = ['Session 1']#, 'Session 2', 'Session 3']
+    post = 'Session_1'
 
-    return render_template('blog/index.html', posts=posts)
+    print(post)
+
+    return render_template('/instructions/Introduction.html', post=post)
 
 
 # Specific session index, to be sent through email
@@ -58,9 +60,11 @@ def index():
 @login_required
 def specific_index(session):
 
-    posts = [session.replace('_', ' ')]
+    if session == 'Session_3':
 
-    return render_template('blog/index.html', posts=posts)
+        return render_template()
+
+    return render_template('Instructions/Introduction.html', post=session)
 
 
 @bp.route('/record/<string:session>/<string:trial_type>/<string:chapterorder>', methods=['POST', 'GET'])
@@ -100,6 +104,11 @@ def record(session, trial_type, chapterorder):
         audio_path,\
         textplot_path = sentence[0]
 
+    if text[-1] == '?':
+        sentence_type = 'QUESTION: '
+    else:
+        sentence_type = 'STATEMENT: '
+
     repetition = is_repetition(trial_type, chapterorder)
 
     # make sure textplot only contains the name of the file
@@ -114,7 +123,7 @@ def record(session, trial_type, chapterorder):
         ).fetchall()
 
         if trial_type != 'training':
-            return render_template('/record/baseline.html', sentence=text)
+            return render_template('/record/baseline.html', sentence=text, sent_type=sentence_type)
         if len(user_audio) > 0:
             plot_path = user_audio[0]['trial_id'] + '.png'
         else:
@@ -149,7 +158,7 @@ def record(session, trial_type, chapterorder):
 
         # If it's not a training trial no post_trial necessary
         if trial_type != 'training':
-            return render_template('/record/baseline.html', sentence=text)
+            return render_template('/record/baseline.html', sentence=text, sent_type=sentence_type)
 
         # Redirect to the post_trial (comparison plot template)
         return redirect(url_for('/record.post_trial', session=session, trial_type=trial_type, chapter_order=chapterorder))
@@ -158,12 +167,12 @@ def record(session, trial_type, chapterorder):
     if condition == 'a':
         # full feedback condition
         return render_template(
-                '/record/index.html', recording=sent_id, sentence=text, textplot=textplot, audio=recordings
+                '/record/index.html', recording=sent_id, sentence=text, sent_type=sentence_type, textplot=textplot, audio=recordings
             )
     else:
         # audio only condition
         return render_template(
-                '/record/index.html', recording=sent_id, sentence=text, textplot=None, audio=recordings
+                '/record/index.html', recording=sent_id, sentence=text, sent_type=sentence_type, textplot=None, audio=recordings
             )
 
 
@@ -273,8 +282,8 @@ def next_chapter(session, trial_type, chapter_order):
     # if it's the last sentence
     elif int(chapter_order) == int(trial_length):
 
-        # For the first session we want to serve the instruction templates
-        if session == 'Session 1':
+        # For the first two sessions we want to serve the instruction templates
+        if session != 'Session 3':
             # Check which template to serve
             if trial_type == 'pre_train':
                 return redirect(url_for('/instructions.training', is_session=True))
@@ -283,7 +292,10 @@ def next_chapter(session, trial_type, chapter_order):
             elif trial_type == 'post_train':
 
                 # If finished add to notification cue for session 2
-                notify_next_week(user_id, 'Session 2')
+                if session == 'Session 1':
+                    notify_next_week(user_id, 'Session 2')
+                else:
+                    notify_next_week(user_id, 'Session 3')
 
                 return redirect(url_for('/record.end_message'))
 
@@ -296,11 +308,6 @@ def next_chapter(session, trial_type, chapter_order):
 
             return redirect(url_for('/record.record', chapterorder=chapter_order, session=session, trial_type=new_trial_type))
 
-        else:
-            # If finished add to notification cue for session 3
-            notify_next_week(user_id, 'Session 3')
-            print(trial_type_list)
-            return redirect(url_for('/record.end_message'))
     else:
         # when all else fails it must be over
         return redirect(url_for('/record.end_message'))
@@ -326,6 +333,5 @@ def return_textplot_file(chaptername, filename):
 
 @bp.route('/done')
 @login_required
-
 def end_message():
     return 'Done!'
