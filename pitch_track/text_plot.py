@@ -57,8 +57,6 @@ def draw_text_plot(audio, textgrid, plot_path):#,  jitter = 0.001, text_jitter =
 
     # Remove 0 values and values further than two standard deviations from the mean
     pitch_values[pitch_values == 0] = np.nan
-    pitch_values[pitch_values >= average+(deviation*2.5)] = np.nan
-    pitch_values[pitch_values <= average-(deviation*2.5)] = np.nan
 
     # # Make sure there are enough colors for each word
     # while len(color_list) < len(entryList):

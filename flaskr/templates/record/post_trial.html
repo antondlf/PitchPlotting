@@ -26,9 +26,11 @@
             {% endif %}
             <div id="controls">
                 <button id="replayButton">Listen To Yourself</button>
-                <button id="playButton">Listen to a Native Speaker</button>
+                <button id="playButton">Listen to the Native Speaker</button>
              <button id="nextButton" disabled>Next Activity</button>
             </div>
+            <h1>Progress</h1>
+    <progress value={{ progress }} max="100">{{ progress }} </progress>
             <audio id = "useraudio" hidden>
                 <source src="{{ url_for('/record.return_plot_file', dir='participants', filename=recording) }}" type="audio/wav">
             </audio>

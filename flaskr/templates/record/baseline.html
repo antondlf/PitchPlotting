@@ -28,6 +28,8 @@
           <!--button id="sendButton" disabled>Send</button-->
           <button id="nextButton" disabled>Next Activity</button>
         </div>
+                <h1>Progress</h1>
+        <progress value={{ progress }} max="100">{{ progress }} </progress>
         <audio id="bell" hidden>
           <source src="{{ url_for('/audio.get_bell')}}" type="audio/wav">
         </audio>

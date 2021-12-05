@@ -24,6 +24,23 @@ def get_user_state(user_id):
 
     return g.user_dict
 
+
+def get_progress(session, chapterorder):
+    """Returns progress throughout the session."""
+
+    chapterorder = int(chapterorder)
+
+    if session != 'Session 3':
+
+        progress = round((chapterorder/48)*100)
+
+    elif session == 'Session 3':
+
+        progress = round((chapterorder/8)*100)
+
+    return progress
+
+
 def is_repetition(trial_type, chapterorder):
     """Determine if recording is a repetition
     ____________________________________________
@@ -109,6 +126,8 @@ def record(session, trial_type, chapterorder):
     else:
         sentence_type = 'STATEMENT: '
 
+    progress = get_progress(session, chapterorder)
+
     repetition = is_repetition(trial_type, chapterorder)
 
     # make sure textplot only contains the name of the file
@@ -123,7 +142,7 @@ def record(session, trial_type, chapterorder):
         ).fetchall()
 
         if trial_type != 'training':
-            return render_template('/record/baseline.html', sentence=text, sent_type=sentence_type)
+            return render_template('/record/baseline.html', sentence=text, sent_type=sentence_type, progress=progress)
         if len(user_audio) > 0:
             plot_path = user_audio[0]['trial_id'] + '.png'
         else:
@@ -158,7 +177,7 @@ def record(session, trial_type, chapterorder):
 
         # If it's not a training trial no post_trial necessary
         if trial_type != 'training':
-            return render_template('/record/baseline.html', sentence=text, sent_type=sentence_type)
+            return render_template('/record/baseline.html', sentence=text, sent_type=sentence_type, progress=progress)
 
         # Redirect to the post_trial (comparison plot template)
         return redirect(url_for('/record.post_trial', session=session, trial_type=trial_type, chapter_order=chapterorder))
@@ -167,12 +186,14 @@ def record(session, trial_type, chapterorder):
     if condition == 'a':
         # full feedback condition
         return render_template(
-                '/record/index.html', recording=sent_id, sentence=text, sent_type=sentence_type, textplot=textplot, audio=recordings
+                '/record/index.html', recording=sent_id, sentence=text,
+            sent_type=sentence_type, textplot=textplot, audio=recordings, progress=progress
             )
     else:
         # audio only condition
         return render_template(
-                '/record/index.html', recording=sent_id, sentence=text, sent_type=sentence_type, textplot=None, audio=recordings
+                '/record/index.html', recording=sent_id, sentence=text,
+            sent_type=sentence_type, textplot=None, audio=recordings, progress=progress
             )
 
 
@@ -192,6 +213,8 @@ def post_trial(session, trial_type, chapter_order):
     user_dict = get_user_state(user_id)
     condition = user_dict.get_condition()
     #print('condition: ' + condition)
+
+    progress = get_progress(session, chapter_order)
 
     # Query user recording
     user_audio = db.execute(
@@ -226,10 +249,16 @@ def post_trial(session, trial_type, chapter_order):
 
     # Render templates by condition
     if condition == 'a':
-        return render_template('/record/post_trial.html', sentence=text, recording=recording_path, plot=plot_path, original_audio=sent_id)
+        return render_template(
+            '/record/post_trial.html', sentence=text, recording=recording_path,
+            plot=plot_path, original_audio=sent_id, progress=progress
+        )
 
     else:
-        return render_template('/record/post_trial.html', sentence=text, recording=recording_path, plot=None, original_audio=sent_id)
+        return render_template(
+            '/record/post_trial.html', sentence=text,
+            recording=recording_path, plot=None, original_audio=sent_id, progress=progress
+        )
 
 
 @bp.route('/record/<string:session>/<string:trial_type>/<string:chapter_order>/post_trial/next_chapter')
