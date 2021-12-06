@@ -6,6 +6,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+<nav>
+<ul>
+    {% if g.user %}
+      <li><span>{{ g.user['username'] }}</span>
+      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+    {% endif %}
+</ul>
+</nav>
 <h1>Learning Italian Intonation</h1>
 <p>
 
