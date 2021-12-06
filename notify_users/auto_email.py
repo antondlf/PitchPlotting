@@ -24,9 +24,9 @@ def server_login(password):
     smtp.starttls()  # tell server we want to communicate with TLS encryption
 
     if password:
-        smtp.login('testdummyprosody@gmail.com', password)
+        smtp.login('italianprosody.reminders@gmail.com', password)
     else:
-        smtp.login('testdummyprosody@gmail.com', input('Password:'))
+        smtp.login('italianprosody.reminders@gmail.com', input('Password:'))
     print('Logged in successfully')
 
     return smtp
