@@ -69,7 +69,7 @@ def index():
 
     print(post)
 
-    return render_template('/instructions/Introduction.html', post=post)
+    return render_template('/Instructions/Introduction.html', post=post)
 
 
 # Specific session index, to be sent through email
@@ -79,9 +79,9 @@ def specific_index(session):
 
     if session == 'Session_3':
 
-        return render_template()
+        return render_template('/Instructions/Introduction.html', post=session)
 
-    return render_template('Instructions/Introduction.html', post=session)
+    return render_template('/Instructions/Introduction.html', post=session)
 
 
 @bp.route('/record/<string:session>/<string:trial_type>/<string:chapterorder>', methods=['POST', 'GET'])
