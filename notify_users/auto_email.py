@@ -77,7 +77,7 @@ def notify(session, receiver_list, server=None, username=None, is_reminder=False
     if server:
         print(is_reminder)
         msg = generate_email(session, username=username, is_reminder=is_reminder)
-        send_email(msg, server, 'testdummyprosody@gmail.com', receiver_list)
+        send_email(msg, server, 'italianprosody.reminders@gmail.com', receiver_list)
 
     else:
         # initialize connection to our email server, we will use Outlook here
@@ -87,10 +87,10 @@ def notify(session, receiver_list, server=None, username=None, is_reminder=False
             smtp.starttls()  # tell server we want to communicate with TLS encryption
 
             # TODO: solve Password issue
-            smtp.login('testdummyprosody@gmail.com', input('Password:'))  # login to our email server
+            smtp.login('italianprosody.reminders@gmail.com', input('Password:'))  # login to our email server
 
             msg = generate_email(session, username=username, is_reminder=is_reminder)
-            send_email(msg, smtp, 'testdummyprosody@gmail.com', receiver_list)
+            send_email(msg, smtp, 'italianprosody.reminders@gmail.com', receiver_list)
 
 
 # def main():
