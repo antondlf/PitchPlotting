@@ -25,18 +25,18 @@ def demo_index():
 def demo_upload():
     return render_template('demo/own_recording.html')
 
-
-@bp.route('/demo/upload_demo', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        f = request.files['file']
-
-        if f:
-
-            return render_template(
-                'demo/script_host.html', recording=f)
-        else:
-            flash('Error: file not uploaded correctly')
+#
+# @bp.route('/demo/upload_demo', methods=['GET', 'POST'])
+# def upload_file():
+#     if request.method == 'POST':
+#         f = request.files['file']
+#
+#         if f:
+#
+#             return render_template(
+#                 'demo/script_host.html', recording=f)
+#         else:
+#             flash('Error: file not uploaded correctly')
 
 
 @bp.route('/demo/upload_demo/plot', methods=['GET', 'POST'])
@@ -49,8 +49,12 @@ def plot_pitches(file):
 
         draw_pitch(new_pitch, old_pitch, temp)
 
-        return render_template(
-            'demo/script_host.html', recording=f, plot=temp
+@bp.route('/demo/italian_example')
+def get_demo_sent():
+
+    return render_template(
+            '/record/index.html', recording='Damiano_morde(Q)', sentence='Damiano morde la mela?',
+        sent_type='QUESTION: ', textplot='2-Q-Damiano_morde.png', audio='2-Q-Damiano_morde.wav'
         )
 
 

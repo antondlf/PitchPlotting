@@ -5,31 +5,40 @@
     <meta charset="UTF-8">
     <title>Italian Prosody Project</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
-    <script src="/static/js/app.js"></script>
-
-    <!-- Latest compiled and minified Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> <!--integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"-->
-    <link rel="stylesheet" type="text/css" href="/static/stylejs.css">
-    <title>My Recording</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> <!--integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"-->
+    <link rel="stylesheet" type="text/css" href="/static/stylejs.css"/>
 </head>
-<body>
-        <audio id = "audio" hidden>
-            <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
-            <source src="{{ recording }}" type="audio/wav">
-        </audio>
-        {% if plot %}
-        <div id="image">
-            <img width="50%" class='NO-CACHE' src="{{ plot }}">
-        </div>
-        {% endif %}
-        <div id="controls">
-         <button id="playButton">Play Recording</button>
-         <button id="recordButton" disabled>Record</button>
-         <!--button id="pauseButton" disabled>Pause</button-->
-         <button id="stopButton" disabled>Stop</button>
-            <button id="plotButton" disabled>Plot My Pitch</button>
-        </div>
+    <body>
+            <h1>Compare your intonation with the native speaker's:</h1>
+            <h3> {{ sentence }} </h3>
+            <audio id = "audio" hidden>
+                <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
+                <source src="{{ url_for('/audio.download_file', chaptername=original_audio)}}" type="audio/wav">
+            </audio>
+            <!--<h1>Simple Recorder.js demo</h1>
+            <p><small>Made by the <a href="https://addpipe.com" target="_blank">Pipe Video Recording Platform</a></small></p>
+            <p>This demo uses <a href="https://github.com/mattdiamond/Recorderjs" target="_blank">Recorder.js</a> to record wav/PCM audio directly in the browser. Matt Diamond‘s <a target="_blank" href="https://github.com/mattdiamond/Recorderjs">Recorder.js</a> is a popular JavaScript library for recording audio in the browser as uncompressed pcm audio in .wav containers. Before it, the only way to record audio was to use Flash.</p>
+            <p>Check out the <a href="https://github.com/addpipe/simpl-recorderjs-demo" target="_blank">code on GitHub</a> and <a href="https://addpipe.com/blog/using-recorder-js-to-capture-wav-audio-in-your-html5-web-site/" target="_blank">our blog post on using Recorder.js to capture WAV audio</a>.</p>-->
+            {% if plot %}
+            <div id="image">
+            <img width="50%" class='NO-CACHE' src="{{ url_for('/record.return_plot_file', filename=plot) }}">
+            </div>
+            {% endif %}
+            <div id="controls">
+                <button id="replayButton">Listen To Yourself</button>
+                <button id="playButton">Listen to the Native Speaker</button>
+             <button id="nextButton" disabled>Try Again</button>
+            </div>
+            <audio id = "useraudio" hidden>
+                <source src="{{ url_for('/record.return_plot_file', dir='participants', filename=recording) }}" type="audio/wav">
+            </audio>
 
-</body>
+            <audio id = "nativeaudio" hidden>
+                <source src="{{ url_for('/audio.download_file', chaptername=recording)}}" type="audio/wav">
+            </audio>
+            <!--ol id="recordingsList"></ol-->
+
+        <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+        <script src="/static/js/app.js"></script>
+    </body>
 </html>

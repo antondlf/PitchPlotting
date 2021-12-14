@@ -3,17 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Automatic Pitch Tracing Demo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <article class="post">
       <header>
+          <h1>Automatic Pitch Plotting Demo</h1>
+                </header>
+          <p>
+              This is a demo version of an app meant to facilitate learning L2 intonation.\n
+              An experiment testing this app is currently being hosted in this site.
+              In this demo an example of an Italian sentence will be shown to you as in the study,
+              and you will be able to test out the system for yourself.
+          </p>
         <div>
-          <h1><a class="action" href="{{ url_for('/demo.demo_index') }}">Italian Sentence Example</a></h1>
+          <h1><a class="action" href="{{ url_for('/demo.get_demo_sent') }}">Italian Sentence Example</a></h1>
         </div>
         <div>
           <h1><a class="action" href="https://prosody.delafuentealvarez/demo/upload">Use Your Own Recording</a></h1>
         </div>
-      </header>
+
     </article>
 </body>
 </html>
