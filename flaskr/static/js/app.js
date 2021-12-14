@@ -12,6 +12,7 @@ var audioContext //audio context to help us record
 var playButton = document.getElementById('playButton')
 var recordButton = document.getElementById("recordButton");
 var stopButton = document.getElementById("stopButton");
+var menuButton = document.getElementById('menuButton')
 //var pauseButton = document.getElementById("pauseButton");
 //var sendButton = document.getElementById("sendButton");
 //get url from html
@@ -41,7 +42,9 @@ if (replayButton){
     replayButton.addEventListener("click", plotPitch);
 }
 
-
+if (menuButton){
+    menuButton.addEventListener('click', window.location.href='/demo');
+}
 }
 else {
     console.log('trial in progress')
@@ -77,7 +80,7 @@ async function playAudio() {
     playButton.classList.remove("playing");
   }
     playButton.disabled = true;
-    recordButton.disabled = false;
+    if (recordButton) {recordButton.disabled = false;}
 }
 
 async function playUserAudio() {
@@ -199,62 +202,10 @@ function stopRecording() {
 	gumStream.getAudioTracks()[0].stop();
 	console.log('gumStream gotten.')
 
-	//create the wav blob and pass it on to createDownloadLink
-	rec.exportWAV(createDownloadLink);
-	console.log('Exported Audio');
 	sendAudioEvent();
+	console.log('Exported Audio');
 }
 
-function createDownloadLink(blob) {
-
-	var url = URL.createObjectURL(blob);
-	var au = document.createElement('audio');
-	var li = document.createElement('li');
-	var link = document.createElement('a');
-
-	//name of .wav file to use during upload and download (without extension)
-	var filename = new Date().toISOString();
-
-	//add controls to the <audio> element
-	au.controls = true;
-	au.src = url;
-
-	//save to disk link
-	link.href = url;
-	link.download = filename+".wav"; //download forces the browser to donwload the file using the  filename
-	link.innerHTML = "Save to disk";
-
-	//add the new audio element to li
-	li.appendChild(au);
-
-	//add the filename to the li
-	li.appendChild(document.createTextNode(filename+".wav "))
-
-	//add the save to disk link to li
-	li.appendChild(link);
-
-	//upload link
-	var upload = document.createElement('a');
-	upload.href="#";
-	upload.innerHTML = "Upload";
-	upload.addEventListener("click", function(event){
-		  var xhr=new XMLHttpRequest();
-		  xhr.onload=function(e) {
-		      if(this.readyState === 4) {
-		          console.log("Server returned: ",e.target.responseText);
-		      }
-		  };
-		  var fd=new FormData();
-		  fd.append("audio_data",blob, filename);
-		  xhr.open("POST","upload.php",true);
-		  xhr.send(fd);
-	})
-	li.appendChild(document.createTextNode (" "))//add a space in between
-	li.appendChild(upload)//add the upload link to li
-
-	//add the li element to the ol
-	recordingsList.appendChild(li);
-}
 
 function sendAudio(data) {
 /*    let audio = new FormData();
@@ -268,7 +219,7 @@ function sendAudio(data) {
 //            )
             .then(response => {
                 if (response.redirected) {window.location = response.url;}
-                else {throw Error(`Server returned ${response.status}: ${response.statusText}`)}
+//                else {throw Error(`Server returned ${response.status}: ${response.statusText}`)}
             })
             //.then(response => console.log(response.text()))
             .catch(err => {

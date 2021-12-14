@@ -4,14 +4,17 @@ from flask import (
 
 from pitch_track.pitch_plot import draw_pitch
 
+from flaskr.audio_processing import save_audio, save_plot
+
 import parselmouth as praat
+
+import random
 
 import tempfile
 
 import os
 
 
-# This is an unfinished demo app, please ignore
 
 bp = Blueprint('/demo', __name__)
 
@@ -49,13 +52,62 @@ def plot_pitches(file):
 
         draw_pitch(new_pitch, old_pitch, temp)
 
-@bp.route('/demo/italian_example')
+@bp.route('/demo/italian_example', methods=['GET', 'POST'])
+def italian_demo():
+    if request.method == 'GET':
+        return get_demo_sent()
+    elif request.method == 'POST':
+        # The audio data is contained in the request object
+        audio_data = request.data
+
+        demo_id = str(random.randint(0,50))
+
+        # Use utility from audio_processing.py to process the audio
+        trial_path = os.path.join(current_app.root_path, '../demo_recordings', 'demo_rec' + demo_id)
+
+        recording_path = save_audio(trial_path, audio_data)
+        print(recording_path)
+
+        # If recording_path = None then wav file is empty.
+        if recording_path == None:
+            flash("No audio was recorded.", 'error')
+            return get_demo_sent()
+
+        nativeaudio = 'Recordings/Damiano_morde(Q)/2-Q-damiano_morde.wav'
+        plot, useraudio = save_plot(nativeaudio, trial_path)
+
+        # Redirect to the post_trial (comparison plot template)
+        return redirect(url_for('/demo.get_demo_post_trial', demo_id=demo_id))
+
+
 def get_demo_sent():
 
     return render_template(
-            '/record/index.html', recording='Damiano_morde(Q)', sentence='Damiano morde la mela?',
+        '/demo/italian_example.html', recording='Damiano_morde(Q)', sentence='Damiano morde la mela?',
         sent_type='QUESTION: ', textplot='2-Q-Damiano_morde.png', audio='2-Q-Damiano_morde.wav'
-        )
+    )
+
+@bp.route('/demo/italian_example/post_trial/<string:demo_id>')
+def get_demo_post_trial(demo_id):
+
+
+    nativefilename = '2-Q-damiano_morde.wav'
+    trial_path = 'demo_rec' + demo_id
+
+    plot = trial_path + '.png'
+    useraudio = trial_path + '.wav'
+
+    # Redirect to the post_trial (comparison plot template)
+    return render_template(
+        '/demo/script_host.html', plot=plot, nativeaudio='Damiano_morde(Q)', useraudio=useraudio
+    )
+
+
+@bp.route('/demo/italian_example/get_demo_file/<string:filename>')
+def return_demo_plot(filename):
+    """Get the comparison plot"""
+    dir = os.path.join(current_app.root_path, '../demo_recordings')
+    return send_from_directory(dir, filename, as_attachment=True)
 
 
 
