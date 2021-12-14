@@ -117,7 +117,7 @@ def demo_textplot():
 
     path = os.path.join(current_app.root_path, '../Recordings', 'Damiano_morde(Q)')
 
-    return send_from_directory(path, '2-Q-damiano_morde.png', as_attachment=True)
+    return send_from_directory(path, '2-Q-Damiano_morde.png', as_attachment=True)
 
 
 
