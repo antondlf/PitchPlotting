@@ -73,7 +73,7 @@ def italian_demo():
             flash("No audio was recorded.", 'error')
             return get_demo_sent()
 
-        nativeaudio = 'Recordings/Damiano_morde(Q)/2-Q-damiano_morde.wav'
+        nativeaudio = 'Recordings/Damiano_morde(Q)/2-Q-Damiano_morde.wav'
         plot, useraudio = save_plot(nativeaudio, trial_path)
 
         # Redirect to the post_trial (comparison plot template)
@@ -91,7 +91,7 @@ def get_demo_sent():
 def get_demo_post_trial(demo_id):
 
 
-    nativefilename = '2-Q-damiano_morde.wav'
+    nativefilename = '2-Q-Damiano_morde.wav'
     trial_path = 'demo_rec' + demo_id
 
     plot = trial_path + '.png'
