@@ -111,7 +111,7 @@ def return_demo_plot(filename):
 
 
 #Hardcode textplot for demo to avoid login requirement and protect data
-@bp.route('/demo/textplot')
+@bp.route('/demo/italian_example/textplot')
 def demo_textplot():
     """Get the orthographic plot"""
 
