@@ -99,7 +99,7 @@ def get_demo_post_trial(demo_id):
 
     # Redirect to the post_trial (comparison plot template)
     return render_template(
-        '/demo/script_host.html', plot=plot, nativeaudio='Damiano_morde(Q)', useraudio=useraudio
+        '/demo/script_host.html', plot=plot, nativeaudio='Damiano_morde(Q)', useraudio=useraudio, demo_id=demo_id
     )
 
 
@@ -119,5 +119,23 @@ def demo_textplot():
 
     return send_from_directory(path, '2-Q-Damiano_morde.png', as_attachment=True)
 
+
+@bp.route('/demo/reset_demo/<string:demo_id>')
+def reset_demo(demo_id):
+    """Delete current demo file"""
+
+    trial_path = 'demo_rec' + demo_id
+
+    dir = os.path.join(current_app.root_path, '../demo_recordings', trial_path)
+
+    plot = dir + '.png'
+    useraudio = dir + '.wav'
+
+    if os.path.isfile(plot):
+        os.remove(plot)
+    if os.path.isfile(useraudio):
+        os.remove(useraudio)
+
+    return render_template('demo/demo_index.html')
 
 

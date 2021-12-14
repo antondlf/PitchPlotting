@@ -27,7 +27,7 @@
             <div id="controls">
                 <button id="replayButton">Listen To Yourself</button>
                 <button id="playButton">Native Speaker</button>
-                <button type="button" onclick="window.location.href='{{ url_for('/demo.demo_index') }}'">Menu</button>
+                <button type="button" onclick="window.location.href='{{ url_for('/demo.reset_demo', demo_id=demo_id) }}'">Menu</button>
             </div>
             <audio id = "useraudio" hidden>
                 <source src="{{ url_for('/demo.return_demo_plot', filename=useraudio) }}" type="audio/wav">
