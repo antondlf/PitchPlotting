@@ -110,4 +110,14 @@ def return_demo_plot(filename):
     return send_from_directory(dir, filename, as_attachment=True)
 
 
+#Hardcode textplot for demo to avoid login requirement and protect data
+@bp.route('/demo/textplot')
+def demo_textplot():
+    """Get the orthographic plot"""
+
+    path = os.path.join(current_app.root_path, '../Recordings/Damiano_morde(Q)')
+
+    return send_from_directory(path, '2-Q-damiano_morde.png', as_attachment=True)
+
+
 

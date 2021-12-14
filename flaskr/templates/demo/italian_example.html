@@ -23,7 +23,7 @@
         <h3> {{ sent_type }} {{ sentence }} </h3>
         <audio id = "audio" hidden>
             <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
-            <source src="{{ url_for('/audio.download_file', chaptername=recording)}}" type="audio/wav">
+            <source src="{{ url_for('/demo.demo_textplot')}}" type="audio/wav">
         </audio>
         <audio id="bell" hidden>
           <source src="{{ url_for('/audio.get_bell')}}" type="audio/wav">
