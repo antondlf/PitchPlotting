@@ -34,11 +34,12 @@ def draw_text_plot(audio, textgrid, plot_path):#,  jitter = 0.001, text_jitter =
     # Make sure there is only one tier
     if len(list(tg.tierDict.keys())) > 1:
         print('Error: more than one tier in textgrid')
-        return
+        tier_key = list(tg.tierDict.keys())[0]
+        print('Got tier:', tier_key)
+        print()
     else:
         # Get tier name
         tier_key = list(tg.tierDict.keys())[0]
-
 
     entryList = tg.tierDict[tier_key].entryList  # Get all intervals
 
