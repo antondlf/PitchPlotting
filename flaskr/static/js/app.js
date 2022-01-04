@@ -222,9 +222,9 @@ function sendAudio(data) {
 //                else {throw Error(`Server returned ${response.status}: ${response.statusText}`)}
             })
             //.then(response => console.log(response.text()))
-            .catch(err => {
-                alert(err);
-            });
+           // .catch(err => {
+           //     alert(err);
+           // });
 }
 
 function sendAudioEvent() {
