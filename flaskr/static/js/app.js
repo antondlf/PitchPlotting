@@ -221,7 +221,7 @@ function sendAudio(data) {
                 if (response.redirected) {window.location = response.url;}
 //                else {throw Error(`Server returned ${response.status}: ${response.statusText}`)}
             })
-            //.then(response => console.log(response.text()))
+            .then(response => console.log(response.text()))
            // .catch(err => {
            //     alert(err);
            // });
