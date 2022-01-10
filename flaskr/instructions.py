@@ -8,6 +8,10 @@ from flaskr.user_dict import user_state
 import os
 
 
+
+bp = Blueprint('/instructions', __name__)
+
+
 # Frontend utility for serving html templates with instructions
 
 def get_user_state(user_id):
@@ -15,9 +19,6 @@ def get_user_state(user_id):
         g.user_dict = user_state(user_id)
 
     return g.user_dict
-
-
-bp = Blueprint('/instructions', __name__)
 
 
 @bp.route('/instructions/intro/<string:post>')
