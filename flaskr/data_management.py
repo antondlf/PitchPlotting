@@ -104,6 +104,7 @@ def input_sent_pair(recordings_dir, sent_group, current_sent, database):
         # Some of the directories were made with a lower case first letter
         # by accident, this is a patch
         elif os.path.isdir(chap_directory[0].lower() + chap_directory[1:]):
+            print(chap_directory)
             chap_directory = chap_directory[0].lower() + chap_directory[1:]
             item_pair = os.listdir(chap_directory)
         else:
