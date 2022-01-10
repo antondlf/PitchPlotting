@@ -108,6 +108,7 @@ def input_sent_pair(recordings_dir, sent_group, current_sent, database):
             item_pair = os.listdir(chap_directory)
         else:
             print("Error:", chap_directory, 'is a file, not a directory.')
+            return
         # Iterate through directory files
         for file in item_pair:
 
