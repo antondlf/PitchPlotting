@@ -95,20 +95,21 @@ def input_sent_pair(recordings_dir, sent_group, current_sent, database):
         # e.g. Mario_vola(Q)
         sent_id = current_sent + '(' + sent_type + ')'
 
+        lower_case_sent_id = current_sent.lower() + '(' + sent_type + ')'
+
         # Get directory for sentence
         chap_directory = os.path.join(recordings_dir, sent_id)
+        lower_chap_dir = os.path.join(recordings_dir, lower_case_sent_id)
 
         # Check that it is a directory
         if os.path.isdir(chap_directory):
             item_pair = os.listdir(chap_directory)
         # Some of the directories were made with a lower case first letter
         # by accident, this is a patch
-        elif os.path.isdir(chap_directory[0].lower() + chap_directory[1:]):
-            print(chap_directory)
-            chap_directory = chap_directory[0].lower() + chap_directory[1:]
-            item_pair = os.listdir(chap_directory)
+        elif os.path.isdir(lower_chap_dir):
+            item_pair = os.listdir(lower_chap_dir)
         else:
-            print("Error:", chap_directory, 'is a file, not a directory.')
+            print("Error:", chap_directory, 'or', lower_chap_dir, 'are not a directories.')
             return
         # Iterate through directory files
         for file in item_pair:
