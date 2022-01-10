@@ -249,6 +249,7 @@ def create_user_dict(user_id, condition=None, db=None):
 
 # TODO: create JSON representation for easy access
 
+
 # This class makes querying dictionary easier
 class user_state:
 
@@ -261,7 +262,6 @@ class user_state:
         ).fetchall()
         if len(user_dict_pickle) == 0:
             error = 'Error, user not properly registered. Contact the support email to get a new account.'
-            return error
         else:
             self.user_dict = pickle.load(BytesIO(user_dict_pickle[0]['user_dict']))
 

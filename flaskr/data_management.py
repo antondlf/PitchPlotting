@@ -108,6 +108,7 @@ def input_sent_pair(recordings_dir, sent_group, current_sent, database):
         # by accident, this is a patch
         elif os.path.isdir(lower_chap_dir):
             chap_directory = lower_chap_dir
+            sent_id = lower_case_sent_id
             item_pair = os.listdir(lower_chap_dir)
         else:
             print("Error:", chap_directory, 'or', lower_chap_dir, 'are not a directories.')
