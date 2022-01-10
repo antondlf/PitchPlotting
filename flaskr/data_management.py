@@ -51,7 +51,7 @@ def init_chapters(database): # TODO: make only one class of sentence
                 },
                 'set_4': {
                     '1': 'Il_melone', '2': 'La_balena',
-                    '3': 'Il_melone', '4': 'La_bambina',
+                    '3': 'Il_leone', '4': 'La_bambina',
                     '5': 'La_ragione', '6': 'Il_rumore',
                     '7': 'La_bevanda'
                 }},
