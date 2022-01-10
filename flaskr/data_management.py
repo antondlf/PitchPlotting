@@ -50,7 +50,7 @@ def init_chapters(database): # TODO: make only one class of sentence
                     '7': 'Il_nome'
                 },
                 'set_4': {
-                    '1': 'Il_giornale', '2': 'La_balena',
+                    '1': 'Il_melone', '2': 'La_balena',
                     '3': 'Il_melone', '4': 'La_bambina',
                     '5': 'La_ragione', '6': 'Il_rumore',
                     '7': 'La_bevanda'
@@ -59,7 +59,7 @@ def init_chapters(database): # TODO: make only one class of sentence
             '1': 'Anna_lavora', '2': 'Emilia_arriva',
             '3': 'Bernardo_viene', '4': 'Andrea_balla',
             '5': 'Luigi_odia', '6': 'Elena_guarda',
-            '7': 'Giovanni_ruba', '8': 'Irene_disegna'}
+            '7': 'Giovanni_ruba', '8': 'Irene_bagna'}
     }
     question_tag = '(Q)'
     statement_tag = '(S)'
