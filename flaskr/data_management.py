@@ -101,52 +101,57 @@ def input_sent_pair(recordings_dir, sent_group, current_sent, database):
         # Check that it is a directory
         if os.path.isdir(chap_directory):
             item_pair = os.listdir(chap_directory)
-            # Iterate through directory files
-            for file in item_pair:
-
-                # Get orthography from text file
-                if file.endswith('.txt'):
-                    with open(os.path.join(chap_directory, file)) as in_file:
-                        text = in_file.read()
-                        sentence_text_exists = True
-
-                    if not sentence_text_exists:
-                        return print('Error: missing text in baseline')
-
-                # Get audio file path
-                elif file.endswith('.wav'):
-                    audio_path = os.path.join(chap_directory, file)
-
-                # Get textgrid for text_plot generation (deprecated)
-                elif file.endswith('.TextGrid'):
-                    #textgrid_path = os.path.join(chap_directory, file)
-                    pass
-                # Get path to text_plot
-                elif file.endswith('.png'):
-                    textplot_path = os.path.join(chap_directory, file)
-
-                # In case files have been uploaded from mac and .DS_Store
-                # was not deleted
-                elif file == '.DS_Store':
-                    pass
-                # I
-                else:
-                    return print("Error: filesystem corrupt")
-
-            # TODO: this check is not exhaustive
-            if sent_id and text:
-
-                database.execute(
-                    'INSERT INTO chapters (sent_group, sent_type, sent_id, text, audio_path, textplot_path)'
-                    ' VALUES (?, ?, ?, ?, ?, ?)',
-                    (sent_group, sent_type, sent_id, text, audio_path, textplot_path)
-                )
-                database.commit()
-
-            else:
-                return print('Missing information')
+        # Some of the directories were made with a lower case first letter
+        # by accident, this is a patch
+        elif os.path.isdir(chap_directory.lower()):
+            chap_directory = chap_directory.lower()
+            item_pair = os.listdir(chap_directory)
         else:
             print("Error:", chap_directory, 'is a file, not a directory.')
+        # Iterate through directory files
+        for file in item_pair:
+
+            # Get orthography from text file
+            if file.endswith('.txt'):
+                with open(os.path.join(chap_directory, file)) as in_file:
+                    text = in_file.read()
+                    sentence_text_exists = True
+
+                if not sentence_text_exists:
+                    return print('Error: missing text in baseline')
+
+            # Get audio file path
+            elif file.endswith('.wav'):
+                audio_path = os.path.join(chap_directory, file)
+
+            # Get textgrid for text_plot generation (deprecated)
+            elif file.endswith('.TextGrid'):
+                #textgrid_path = os.path.join(chap_directory, file)
+                pass
+            # Get path to text_plot
+            elif file.endswith('.png'):
+                textplot_path = os.path.join(chap_directory, file)
+
+            # In case files have been uploaded from mac and .DS_Store
+            # was not deleted
+            elif file == '.DS_Store':
+                pass
+            # I
+            else:
+                return print("Error: filesystem corrupt")
+
+        # TODO: this check is not exhaustive
+        if sent_id and text:
+
+            database.execute(
+                'INSERT INTO chapters (sent_group, sent_type, sent_id, text, audio_path, textplot_path)'
+                ' VALUES (?, ?, ?, ?, ?, ?)',
+                (sent_group, sent_type, sent_id, text, audio_path, textplot_path)
+            )
+            database.commit()
+
+        else:
+            return print('Missing information')
 
 
 
