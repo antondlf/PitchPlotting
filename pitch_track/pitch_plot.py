@@ -190,7 +190,6 @@ def draw_pitch(new_pitch, old_pitch, path, show=False):
     time_new += start_room
 
     # create a plot object for old_pitch with label "Target"
-    #plt.plot(time_old, pitch_values_old, markersize=7, color='w')
     old_pitch_plot = plt.plot(time_old, pitch_values_old, label='Native Speaker', markersize=3, color='b')
 
     # Plot the new pitch over the old
@@ -198,7 +197,6 @@ def draw_pitch(new_pitch, old_pitch, path, show=False):
     plt.xticks(time_new, '')
     plt.yticks(pitch_values_new, '')
     # create a plot object for new_pitch with label "You"
-    #plt.plot(time_new, pitch_values_new, markersize=5, color='w')
     new_pitch_plot = plt.plot(time_new, pitch_values_new, label='You', markersize=2, color='y')
 
     # Create legends
