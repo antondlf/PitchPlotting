@@ -47,13 +47,13 @@ def validated_smooth(sound_object: parselmouth.Sound):
     pitch_object = sound_object.to_pitch()
 
     # Remove octave jumps
-    kill_octaves = pitch_object.kill_octave_jumps()
+    kill_octaves = pitch_object#.kill_octave_jumps()
 
     # Smooth
     smoothed = kill_octaves.smooth(bandwidth=15)
 
     # add interpolation
-    interpolated = smoothed.interpolate()
+    interpolated = smoothed#.interpolate()
 
     return interpolated
 
@@ -190,16 +190,16 @@ def draw_pitch(new_pitch, old_pitch, path, show=False):
     time_new += start_room
 
     # create a plot object for old_pitch with label "Target"
-    plt.plot(time_old, pitch_values_old, 'o', markersize=7, color='w')
-    old_pitch_plot = plt.plot(time_old, pitch_values_old, 'o', label='Native Speaker', markersize=3, color='b')
+    plt.plot(time_old, pitch_values_old, markersize=7, color='w')
+    old_pitch_plot = plt.plot(time_old, pitch_values_old, label='Native Speaker', markersize=3, color='b')
 
     # Plot the new pitch over the old
     # Make sure units are not included
     plt.xticks(time_new, '')
     plt.yticks(pitch_values_new, '')
     # create a plot object for new_pitch with label "You"
-    plt.plot(time_new, pitch_values_new, 'o', markersize=5, color='w')
-    new_pitch_plot = plt.plot(time_new, pitch_values_new, 'o', label='You', markersize=2, color='y')
+    plt.plot(time_new, pitch_values_new, markersize=5, color='w')
+    new_pitch_plot = plt.plot(time_new, pitch_values_new, label='You', markersize=2, color='y')
 
     # Create legends
     first_legend = plt.legend(handles=new_pitch_plot, markerscale=3.0)
@@ -224,7 +224,7 @@ def draw_pitch(new_pitch, old_pitch, path, show=False):
 #     # testing code
 #     learner = '~/desktop/Grad_seminar_project/JIIL presentation/examples/uninterpretable/10_La_bevanda(S)_S_0_c7a9 copy.wav'#input('Path to learner:')
 #     #'~/PycharmProjects/Data_analysis/Pilot data/data_sample/9_Daria_brinda(Q)_Q_0_4a6c_pre_train.wav' \
-#     native = '~/PycharmProjects/Data_analysis/Pilot data/Recordings/1-Q-Delia_guida.wav'#input('Path to native:')
+#     native = '~/PycharmProjects/Data_analysis/Pilot data/Recordings_new/1-Q-Delia_guida.wav'#input('Path to native:')
 #     path = '/users/anton/desktop/Grad School/writing sample/update_uninterpret.png'#input('Path to plot:')
 #     old = parselmouth.Sound(native)
 #     new = parselmouth.Sound(learner)

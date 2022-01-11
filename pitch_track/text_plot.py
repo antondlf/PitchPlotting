@@ -6,9 +6,6 @@ import numpy as np
 import os
 from pitch_plot import preprocess_pipeline
 
-
-
-
 sns.set() # Use seaborn's default style to make attractive graphs
 
 
@@ -44,7 +41,7 @@ def draw_text_plot(audio, textgrid, plot_path):#,  jitter = 0.001, text_jitter =
     entryList = tg.tierDict[tier_key].entryList  # Get all intervals
 
     # Get time values rounded to correspond to correspond to textgrid values
-    time = (np.around(time, decimals=2))
+    time = (np.around(time, decimals=20))
 
     # Color list for plotting
     # color_list = ['b', 'r', 'g', 'm', 'c', 'k', 'y']
@@ -94,8 +91,8 @@ def draw_text_plot(audio, textgrid, plot_path):#,  jitter = 0.001, text_jitter =
 
     time += start_room
 
-    plt.plot(time, pitch_values, 'o', markersize=5, color='w')
-    plt.plot(time, pitch_values, 'o', markersize=2, color='b')
+    plt.plot(time, pitch_values, markersize=5, color='w')
+    plt.plot(time, pitch_values, markersize=2, color='b')
 
     plt.xticks(time, '')
     plt.yticks(pitch_values, '')
@@ -106,11 +103,10 @@ def draw_text_plot(audio, textgrid, plot_path):#,  jitter = 0.001, text_jitter =
     plt.xlabel('Time')
     plt.tick_params(axis='x', which='both')
     plt.savefig(plot_path)
-    # Optionally pre-emphasize the sound before calculating the spectrogram snd.pre_emphasize()
-
+    #plt.show()
 
 def preprocess_chapters(chapters_path):
-    """From path to Recordings add a pitch plot to every dir that starts with "Chapter_"."""
+    """From path to Recordings_new add a pitch plot to every dir that starts with "Chapter_"."""
 
     for dir in os.listdir(chapters_path):
 
@@ -131,5 +127,8 @@ def preprocess_chapters(chapters_path):
 
             draw_text_plot(audio, grid, pathname)
 
+
 if __name__ == '__main__':
     preprocess_chapters('Recordings')
+
+    #draw_text_plot('Recordings/Il_lago(S)/3-S-il_lago.wav', 'Recordings/Il_lago(S)/3-S-il_lago.TextGrid')
