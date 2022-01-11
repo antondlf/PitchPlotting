@@ -44,11 +44,7 @@ def connect_email_db():
         detect_types=sqlite3.PARSE_DECLTYPES
         )
         db.row_factory = sqlite3.Row
-    else:
-        db = sqlite3.connect(dir_path + '/../backend_instance/base.sqlite')
-        with open(dir_path + '/../notify_users/email_schema.sql') as f:
-            db.executescript(f.read())
-        db.commit()
+
     return db
 
 if __name__=='__main__':
