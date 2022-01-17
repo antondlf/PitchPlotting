@@ -53,7 +53,7 @@ Remember we are focusing on intonation, so don’t worry if you mispronounce a w
 {% endif %}
 
 {% if next_panel == 'training' %}
-    <a href="{{ url_for('/record.record', session='Session 1', trial_type='training', chapterorder='0') }}">Continue to training</a>
+    <a href="{{ url_for('/record.record', session={{ session }}, trial_type='training', chapterorder='0') }}">Continue to training</a>
 {% elif next_panel == 'menu' %}
     <a href="{{ url_for('/record.index') }}">Back to menu</a>
 {% endif %}

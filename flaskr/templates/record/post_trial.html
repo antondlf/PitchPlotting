@@ -9,6 +9,12 @@
     <link rel="stylesheet" type="text/css" href="/static/stylejs.css"/>
 </head>
     <body>
+    <ul>
+    {% if g.user %}
+      <li><span>{{ g.user['username'] }}</span>
+      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+        {% endif %}
+    </ul>
             <h1>Compare your intonation with the native speaker's:</h1>
             <h3> {{ sentence }} </h3>
             <audio id = "audio" hidden>

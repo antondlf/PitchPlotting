@@ -13,6 +13,12 @@
     <link rel="stylesheet" type="text/css" href="/static/stylejs.css">
   </head>
   <body>
+    <ul>
+    {% if g.user %}
+      <li><span>{{ g.user['username'] }}</span>
+      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+                {% endif %}
+    </ul>
     <!--Sentence text to be rendered below-->
         <h1>Listen to the native speaker, then record yourself imitating their intonation:</h1>
         {% if textplot %}

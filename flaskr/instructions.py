@@ -47,7 +47,7 @@ def test_recordings(post):
 
 @bp.route('/instructions/training/<string:is_session>')
 @login_required
-def training(is_session):
+def training(session, is_session):
     user_id = g.user['id']
     condition = get_user_state(user_id).get_condition()
     if condition == 'Error, user not properly registered. Contact the support email to get a new account.':
@@ -62,7 +62,9 @@ def training(is_session):
     return render_template(
             'Instructions/training.html',
             condition=condition,
-            next_panel=what_next)
+            next_panel=what_next,
+            session=session
+    )
 
 
 @bp.route('/instructions/post_train')

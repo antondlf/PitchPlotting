@@ -36,6 +36,7 @@ CREATE TABLE recordings (
   experimental_condition TEXT NOT NULL,
   session_number TEXT NOT NULL,
   trial_type TEXT NOT NULL, --Only three categories encoded (7 categories encoded together with session_number
+  trial_type_ord INT NOT NULL,
   sent_group TEXT NOT NULL, --TODO: Some sentences will not belong to any tracked group
   sent_type TEXT NOT NULL, --TODO: check if this is easy to encode (maybe str.endswith('?'))
   sent_id TEXT NOT NULL, --TODO: come up with sentence identifiers (change to sent_id)

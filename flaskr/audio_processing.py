@@ -67,16 +67,19 @@ def process_recording(original_audio_path, audio_data, chaptername, database_inp
     else:
         db = get_db()
 
+        trial_type_dict = {'pre_train': 1, 'training': 2, 'post_train': 3}
+        trial_type_ord = trial_type_dict[trial_type]
+
         db.execute(
             'INSERT INTO recordings ('
             'user_id, sent_order, experimental_condition,'
-            'session_number, trial_type, sent_group,'
+            'session_number, trial_type, trial_type_ord, sent_group,'
             'sent_type, sent_id, repetition, trial_id'
             ')'
-            ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             (
                 user_id, sent_order, experimental_condition,
-                session, trial_type, sent_group,
+                session, trial_type, trial_type_ord, sent_group,
                 sent_type, sent_id, repetition, trial_id
             )
         )
