@@ -45,7 +45,7 @@ def test_recordings(post):
             post=post, post_name=post_name)
 
 
-@bp.route('/instructions/training/<string:is_session>')
+@bp.route('/instructions/training/<string:session>/<string:is_session>')
 @login_required
 def training(session, is_session):
     user_id = g.user['id']

@@ -8,52 +8,35 @@
 <body>
 <h1>Training</h1>
 <p>
-    Now for the training! We are focusing on intonation, which is basically the melody of speech. You’ll listen to a native speaker say a sentence. Then you’ll imitate them, and you’ll get to compare your recording to theirs.
-
-For each sentence, you’ll get to do it twice as a statement and then twice as a question, so you get a chance to practice and improve.
-
-Remember we are focusing on intonation, so don’t worry if you mispronounce a word. Also, pay attention to the difference between statements and questions.
+    Now for the training! For each sentence, you will imitate a native speaker and compare your recording to theirs.
+    Then you will get to try again with the same sentence, applying what you have learned, before repeating the process
+    with the question version of the sentence. Remember we are focusing on intonation — basically the melody of speech —
+    so don’t worry if you mispronounce a word.
 
 </p>
 {% if condition == 'a' %}
-<img width=25% src="{{ url_for('/instructions.get_image', filename='training_interface.png') }}">
-<p>
-    Press “Record”, wait for the “Go!” sign,
-    and try to imitate the native speaker’s production.
-    Once you press “Stop”, you will be redirected to another page
-    (this may take a few seconds to process).
-</p>
-<img width="25%" src="{{ url_for('/instructions.get_image', filename='post_trial.png') }}">
-<p>
-    This page will display a plot of your intonation against
-    the native speaker, so you can compare both traces and see
-    what you did right and what you did wrong. The example
-    here is from a learner who hasn't quite hit the right intonation
-    pattern but is almost there. You can see that the second syllable
-    has quite a different intonation when compared to the native speaker,
-    but the rest of the sentence aligns. You can evaluate your own intonation
-    visually like this, and you also have the opportunity to listen to yourself
-    by pressing "Listen to yourself". Try to order get a better idea of where
-    you went wrong by listening to your recording and comparing the pitch traces.
-</p>
+<ol>
+    <li>Play the recording of the native speaker</li>
+    <li>Press “Start” to record yourself</li>
+    <li>Press “Stop” to stop recording and get to the next page (this may take a second or two)</li>
+    <img width=25% src="{{ url_for('/instructions.get_image', filename='training_interface.png') }}">
+    <li>Take your time to compare both recordings and the new plot in the new interface before trying again.</li>
+    <img width="25%" src="{{ url_for('/instructions.get_image', filename='post_trial.png') }}">
+</ol>
+
 {% elif condition == 'b' %}
-<img width="25%" src="{{ url_for('/instructions.get_image', filename='control_training.png') }}">
-<p>
-    Press “Record”, wait for the “Go!” sign,
-    and try to imitate the native speaker’s production.
-    Once you press “Stop”, you will be redirected to another page
-    (this may take a few seconds to process).
-</p>
-<img width="25%" src="{{ url_for('/instructions.get_image', filename='control_post.png') }}">
-<p>
-    You will then be redirected to another page where you will be able
-    to listen to the recording you just made before moving on to the
-    next sentence.
-</p>
+<ol>
+    <li>Play the recording of the native speaker</li>
+    <li>Press “Start” to record yourself</li>
+    <li>Press “Stop” to stop recording and get to the next page (this may take a second or two)</li>
+    <img width="25%" src="{{ url_for('/instructions.get_image', filename='control_training.png') }}">
+    <li>Take your time to listen to yourself and the native speaker before you try again in the next sentence.</li>
+    <img width="25%" src="{{ url_for('/instructions.get_image', filename='control_post.png') }}">
+</ol>
 {% endif %}
 
 {% if next_panel == 'training' %}
-    <a href="{{ url_for('/record.record', session={{ session }}, trial_type='training', chapterorder='0') }}">Continue to training</a>
+    <a href="{{ url_for('/record.record', session=session, trial_type='training', chapterorder='0') }}">Continue to training</a>
 {% elif next_panel == 'menu' %}
     <a href="{{ url_for('/record.index') }}">Back to menu</a>
 {% endif %}
