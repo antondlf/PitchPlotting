@@ -127,7 +127,7 @@ def preprocess_audio(new_sound, old_sound, low=0, high=500, smoothing=100):
     """Processes sound objects for plotting"""
 
     # Individual audio preprocessing
-    pitch_old, time_old = preprocess_pipeline(old_sound, low=low, high=high, smoothing=smoothing)
+    pitch_old, time_old = old_sound
     pitch_new, time_new = preprocess_pipeline(new_sound, low=low, high=high, smoothing=smoothing)
 
     # Simple time warping
@@ -150,7 +150,6 @@ def pitch_difference(pitch_values_old, pitch_values_new):
     pitch_values_new = pitch_values_new + scaling_factor
 
     return pitch_values_new, scaling_factor
-
 
 
 def draw_pitch(new_pitch, old_pitch, path, show=False):

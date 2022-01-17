@@ -1,5 +1,5 @@
 import uuid
-
+import pickle
 import os
 from flask import current_app
 
@@ -137,6 +137,11 @@ def input_sent_pair(recordings_dir, sent_group, current_sent, database):
             elif file.endswith('.png'):
                 textplot_path = os.path.join(chap_directory, file)
 
+            elif file.endswith('.pickle'):
+                with open(os.path.join(chap_directory, file), 'rb') as in_file:
+                    precomputed_trace = in_file.read()
+
+
             # In case files have been uploaded from mac and .DS_Store
             # was not deleted
             elif file == '.DS_Store':
@@ -149,9 +154,9 @@ def input_sent_pair(recordings_dir, sent_group, current_sent, database):
         if sent_id and text:
 
             database.execute(
-                'INSERT INTO chapters (sent_group, sent_type, sent_id, text, audio_path, textplot_path)'
-                ' VALUES (?, ?, ?, ?, ?, ?)',
-                (sent_group, sent_type, sent_id, text, audio_path, textplot_path)
+                'INSERT INTO chapters (sent_group, sent_type, sent_id, text, audio_path, textplot_path, precomputed_trace)'
+                ' VALUES (?, ?, ?, ?, ?, ?, ?)',
+                (sent_group, sent_type, sent_id, text, audio_path, textplot_path, precomputed_trace)
             )
             database.commit()
 

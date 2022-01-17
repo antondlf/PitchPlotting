@@ -6,30 +6,18 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-<h1>Test Recordings</h1>
+<h1>Instructions</h1>
 <p>
     In this section you will read Italian statements and questions out loud.
 </p>
+<p>
+   Record yourself reading each sentence out loud.
+    Click “Start” to start recording.
+    (Your browser will probably ask you if you want to allow the website to use your microphone.)
+    When you are done speaking, click “Stop”. Then click “Next Activity” to move on.
+    Try to avoid extra noise while recording as it can interfere with processing.
+</p>
 <img width=25% src="{{ url_for('/instructions.get_image', filename='baseline_interface.png') }}">
-<p>
-    Click 'Start' to start recording. Your browser will probably ask you if you want to allow
-    the website to use your microphone. Once you allow this the recorder
-    will initialize. This can take a few seconds, so a “Wait…” message
-    will appear under the controls.
-</p>
-<img width=25% src="{{ url_for('/instructions.get_image', filename='wait_message.png') }}">
-<p>
-    The recording won’t start until this
-    message turns to “Go!”. While recording, try to make sure you, or anyone
-    around you don't make any noise since it could interfere with the processing.
-</p>
-<img width=25% src="{{ url_for('/instructions.get_image', filename='Go_message.png') }}">
-<p>
-    Once you have recorded your voice, you can press the “Stop”
-    button, which will stop the recorder and store the audio on the server.
-    This button should also make the “Next Activity” button available,
-    which will take you to the next sentence.
-</p>
 
 <h1><a class="action" href="{{ url_for('/record.record', session=post, trial_type='pre_train', chapterorder=0) }}">Start {{ post_name }}</a></h1>
 
