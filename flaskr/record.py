@@ -15,6 +15,8 @@ from flaskr.notification_cue import notify_next_week
 
 import os
 
+import pickle
+
 
 # Main frontent utility, with backend functions mixed in
 
@@ -171,7 +173,7 @@ def record(session, trial_type, chapterorder):
 
         # Make sure the microphone picked up a recording
         # This may not catch all recording errors
-        if recording_path == None:
+        if not recording_path:
             flash("No audio was recorded.", 'error')
             return redirect(url_for('/record.record', session=session, trial_type=trial_type, chapterorder=chapterorder))
 

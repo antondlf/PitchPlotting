@@ -53,5 +53,6 @@ CREATE TABLE chapters (
   text TEXT NOT NULL,
   audio_path TEXT NOT NULL,
   textplot_path TEXT NOT NULL,
+  precomputed_trace BLOB NOT NULL,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

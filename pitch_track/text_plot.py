@@ -4,6 +4,7 @@ from praatio import tgio
 import parselmouth
 import numpy as np
 import os
+import pickle
 from pitch_plot import preprocess_pipeline
 
 sns.set() # Use seaborn's default style to make attractive graphs
@@ -14,7 +15,16 @@ def midpoint(x, y):
     return point
 
 
-def draw_text_plot(audio, textgrid, plot_path):#,  jitter = 0.001, text_jitter = 10):
+def precompute_trace(sound, precompute_path):
+
+    trace = preprocess_pipeline(sound)
+    with open(precompute_path, 'wb') as in_file:
+        pickled_trace = pickle.dumps(trace)
+        in_file.write(pickled_trace)
+
+    return trace
+
+def draw_text_plot(audio, textgrid, plot_path, precompute_path):#,  jitter = 0.001, text_jitter = 10):
 
     plt.clf()
 
@@ -22,7 +32,7 @@ def draw_text_plot(audio, textgrid, plot_path):#,  jitter = 0.001, text_jitter =
 
 
     # Extract selected pitch contour, and trim the beginning zeroes
-    pitch_values, time = preprocess_pipeline(sound)
+    pitch_values, time = precompute_trace(sound, precompute_path)
 
     pitch_values[pitch_values == 0] = np.nan
 
@@ -123,9 +133,10 @@ def preprocess_chapters(chapters_path):
                 if file.endswith('.wav'):
                     audio = os.path.join(chap_directory, file)
                     pathname = os.path.join(chap_directory, file.rsplit('.')[0] + '.png')
+                    trace_data_path = os.path.join(chap_directory, file.rsplit('.')[0] + '.pickle')
                     print(pathname)
 
-            draw_text_plot(audio, grid, pathname)
+            draw_text_plot(audio, grid, pathname, trace_data_path)
 
 
 if __name__ == '__main__':
