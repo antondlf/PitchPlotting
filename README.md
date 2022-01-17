@@ -3,7 +3,7 @@
 This repository contains the source code for an online experiment that was designed to test a system of automatic pitch visualization
 for the learning of L2 prosody. This experiment specifically is designed with the acquisition of Italian question-statement
 discrimination in mind. The repository is divided into two main sections. First, **Site** contains the visualization system under **Pitch_Plotting**
-and the source code associated with the experiment website, hosted [here](https://prosody.delafuentealvarez.com), under **flaskr**.
+and the source code associated with the experiment website, hosted [here](https://prosody.delafuentealvarez.com), under **flaskr**. A demo of the basic functionality is accessible [here](https://prosody.delafuentealvarez.com/demo).
 Second, a system of automatic notification associated with the experiment is held under **notify_users**.
 Below each part of the project will be introduced.
 
