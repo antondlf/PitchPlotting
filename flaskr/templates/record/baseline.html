@@ -13,6 +13,12 @@
     <link rel="stylesheet" type="text/css" href="/static/stylejs.css">
   </head>
   <body>
+  <ul>
+    {% if g.user %}
+      <li><span>{{ g.user['username'] }}</span>
+      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+              {% endif %}
+  </ul>
     <!--Sentence text to be rendered below-->
     <div class="row" id="chapter_data">
       <div class="column">

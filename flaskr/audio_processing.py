@@ -14,7 +14,7 @@ import parselmouth as praat
 
 import numpy as np
 
-import sys
+import pickle
 
 import os
 
@@ -50,7 +50,7 @@ def process_recording(original_audio_path, audio_data, chaptername, database_inp
         return None
 
     if trial_type == 'training':
-        result = save_plot(original_audio_path, trial_path)
+        result = save_plot(chaptername, trial_path)
 
         # if result = None then wav file only contains 0s.
         if result == None:
@@ -67,16 +67,19 @@ def process_recording(original_audio_path, audio_data, chaptername, database_inp
     else:
         db = get_db()
 
+        trial_type_dict = {'pre_train': 1, 'training': 2, 'post_train': 3}
+        trial_type_ord = trial_type_dict[trial_type]
+
         db.execute(
             'INSERT INTO recordings ('
             'user_id, sent_order, experimental_condition,'
-            'session_number, trial_type, sent_group,'
+            'session_number, trial_type, trial_type_ord, sent_group,'
             'sent_type, sent_id, repetition, trial_id'
             ')'
-            ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             (
                 user_id, sent_order, experimental_condition,
-                session, trial_type, sent_group,
+                session, trial_type, trial_type_ord, sent_group,
                 sent_type, sent_id, repetition, trial_id
             )
         )
@@ -99,7 +102,7 @@ def save_audio(path, audio_data):
     else:
         return recording_path
 
-def save_plot(filename, path):
+def save_plot(chaptername, path):
     """produces comparison plot using draw_pitch
     and returns path to plot and recording.
     """
@@ -117,7 +120,16 @@ def save_plot(filename, path):
     if np.count_nonzero(new_pitch.as_array()) == 0:
         return None
 
-    old_pitch = praat.Sound(filename)
+    db = get_db()
+    old_pitch_pickle = db.execute(
+        'SELECT precomputed_trace'
+        ' FROM chapters'
+        ' WHERE sent_id=?',
+        (chaptername,)
+    ).fetchall()[0]['precomputed_trace']
+
+    old_pitch = pickle.loads(old_pitch_pickle)
+
     pitch_plot.draw_pitch(new_pitch, old_pitch, plot_path)
 
     return plot_path, recording_path

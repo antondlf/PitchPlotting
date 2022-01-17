@@ -25,18 +25,19 @@ def get_user_state(user_id):
     return g.user_dict
 
 
-def get_progress(session, chapterorder):
+def get_progress(session, chapterorder, trial_type):
     """Returns progress throughout the session."""
 
-    chapterorder = int(chapterorder)
+    trial_mapping = {'pre_train': 0, 'training': 9, 'post_train': 39}
+    current_chapter = int(chapterorder) + trial_mapping[trial_type]
 
     if session != 'Session 3':
 
-        progress = round((chapterorder/48)*100)
+        progress = round((current_chapter/48)*100)
 
     elif session == 'Session 3':
 
-        progress = round((chapterorder/8)*100)
+        progress = round((current_chapter/8)*100)
 
     return progress
 
@@ -58,6 +59,22 @@ def is_repetition(trial_type, chapterorder):
     else:
         return '0'
 
+
+def get_user_progress(user_id):
+
+    db = get_db()
+    user_progress = db.execute(
+        'SELECT sent_order, session_number, trial_type'
+        ' FROM recordings WHERE user_id=?'
+        ' ORDER BY session_number DESC, trial_type_ord DESC, sent_order DESC',
+        (user_id,)
+    ).fetchall()
+    if len(user_progress) > 1:
+        return user_progress[0]
+
+    else:
+        return None
+
 bp = Blueprint('/record', __name__)
 
 # Simple login index
@@ -65,11 +82,40 @@ bp = Blueprint('/record', __name__)
 @login_required
 def index():
 
-    post = 'Session_1'
+    user_id = g.user['id']
+    user_progress = get_user_progress(user_id)
+    user_dict = get_user_state(user_id)
+    condition = user_dict.get_condition()
 
-    print(post)
+    if user_progress == None:
 
-    return render_template('/Instructions/Introduction.html', post=post)
+        post = 'Session_1'
+
+        print(post)
+
+        return render_template('/Instructions/Introduction.html', post=post)
+
+    else:
+
+        sent_order, session_number, trial_type = user_progress
+
+        if sent_order == 0:
+            if trial_type == 'pre_train':
+                return render_template('/Instructions/Introduction.html', post=session_number)
+            elif trial_type == 'training':
+                return render_template(
+                    '/Instructions/training.html',
+                    condition=condition,
+                    next_panel=trial_type,
+                    session=session_number)
+            elif trial_type == 'post_train':
+                return render_template('Instructions/post_test.html')
+        else:
+            return redirect(url_for(
+                '/record.record',
+                session=session_number,
+                trial_type=trial_type,
+                chapterorder=sent_order))
 
 
 # Specific session index, to be sent through email
@@ -171,7 +217,7 @@ def record(session, trial_type, chapterorder):
 
         # Make sure the microphone picked up a recording
         # This may not catch all recording errors
-        if recording_path == None:
+        if not recording_path:
             flash("No audio was recorded.", 'error')
             return redirect(url_for('/record.record', session=session, trial_type=trial_type, chapterorder=chapterorder))
 
@@ -315,7 +361,7 @@ def next_chapter(session, trial_type, chapter_order):
         if session != 'Session 3':
             # Check which template to serve
             if trial_type == 'pre_train':
-                return redirect(url_for('/instructions.training', is_session=True))
+                return redirect(url_for('/instructions.training', session=session, is_session=True))
             elif trial_type == 'training':
                 return redirect(url_for('/instructions.post_training'))
             elif trial_type == 'post_train':
