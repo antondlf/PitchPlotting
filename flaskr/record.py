@@ -126,7 +126,7 @@ def record(session, trial_type, chapterorder):
     else:
         sentence_type = 'STATEMENT: '
 
-    progress = get_progress(session, chapterorder)
+    progress = get_progress(session, chapterorder, trial_type)
 
     repetition = is_repetition(trial_type, chapterorder)
 
@@ -214,7 +214,7 @@ def post_trial(session, trial_type, chapter_order):
     condition = user_dict.get_condition()
     #print('condition: ' + condition)
 
-    progress = get_progress(session, chapter_order)
+    progress = get_progress(session, chapter_order, trial_type)
 
     # Query user recording
     user_audio = db.execute(
