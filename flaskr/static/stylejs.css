@@ -83,6 +83,22 @@ button:disabled {
 }
 button:first-child {
   margin-left: 0;
+}.clickplz {
+    animation:btn 2s;
+    -webkit-animation:btn 2s;
+    animation-iteration-count:infinite;
+    -webkit-animation-iteration-count:infinite;
+}
+@keyframes btn  {
+    0%   {color:#8c8; background-color:#000; text-shadow:0 0 9px rgba(255,255,144,0);}
+    50%  {color:#fff; background-color:#0b0; text-shadow:0 0 9px rgba(255,255,144,0.75);}
+    100% {color:#8c8; background-color:#000; text-shadow:0 0 9px rgba(255,255,144,0);}
+}
+
+@-webkit-keyframes btn {
+    0%   {color:#8c8; background-color:#000; text-shadow:0 0 9px rgba(255,255,144,0);}
+    50%  {color:#fff; background-color:#0b0; text-shadow:0 0 9px rgba(255,255,144,0.75);}
+    100% {color:#8c8; background-color:#000; text-shadow:0 0 9px rgba(255,255,144,0);}
 }
 
 audio {

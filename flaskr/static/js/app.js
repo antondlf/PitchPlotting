@@ -112,7 +112,7 @@ function startRecording() {
     	Disable the record button until we get a success or fail from getUserMedia() 
 	*/
 
-	recordButton.disabled = true;
+    recordButton.disabled = true;
 	stopButton.disabled = false;
 	//pauseButton.disabled = false;
 	//sendButton.disabled = true;
@@ -155,6 +155,8 @@ function startRecording() {
 
 		//start the recording process
 		rec.record();
+		recordButton.disabled=false
+		recordButton.className='clickplz';
 
 		console.log("Recording started");
 
@@ -183,6 +185,8 @@ function pauseRecording(){
 
 function stopRecording() {
 	console.log("stopButton clicked");
+
+	recordButton.className='';
 
 	//disable the stop button, enable the record too allow for new recordings
 	stopButton.disabled = true;

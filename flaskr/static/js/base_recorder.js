@@ -23,8 +23,8 @@ nextButton.addEventListener("click", nextChapter);
 
 
 function startRecording() {
-    document.getElementById("formats").innerHTML="Wait..."
 	console.log("recordButton clicked");
+	document.getElementById("formats").innerHTML="Wait..."
 
 	/*
 		Simple constraints object, for more advanced audio features see
@@ -37,11 +37,10 @@ function startRecording() {
     	Disable the record button until we get a success or fail from getUserMedia()
 	*/
 
-	recordButton.disabled = true;
+    recordButton.disabled = true;
 	stopButton.disabled = false;
 	//pauseButton.disabled = false;
 	//sendButton.disabled = true;
-	nextButton.disabled = true;
 
 	/*
     	We're using the standard promise based getUserMedia()
@@ -55,34 +54,43 @@ function startRecording() {
 			create an audio context after getUserMedia is called
 			sampleRate might change after getUserMedia is called, like it does on macOS when recording through AirPods
 			the sampleRate defaults to the one set in your OS for your playback device
+
 		*/
+
 		audioContext = new AudioContext();
+		console.log("audioContext initialized");
 
 		//update the format
 		document.getElementById("formats").innerHTML="Go!"
+        console.log("getElementById done");
 
 		/*  assign to gumStream for later use  */
 		gumStream = stream;
 
 		/* use the stream */
 		input = audioContext.createMediaStreamSource(stream);
+		console.log("Stream input created");
 
 		/*
 			Create the Recorder object and configure to record mono sound (1 channel)
 			Recording 2 channels  will double the file size
 		*/
-		rec = new Recorder(input,{numChannels:1})
+		rec = new Recorder(input,{numChannels:1});
+		console.log("Recorder created");
 
 		//start the recording process
-		rec.record()
+		rec.record();
+		recordButton.disabled=false
+		recordButton.className='clickplz';
 
 		console.log("Recording started");
 
 	}).catch(function(err) {
 	  	//enable the record button if getUserMedia() fails
+	  	console.log(err);
     	recordButton.disabled = false;
     	stopButton.disabled = true;
-    	//pauseButton.disabled = true
+    	//pauseButton.disabled = true;
 	});
 }
 
@@ -102,6 +110,8 @@ function startRecording() {
 
 function stopRecording() {
 	console.log("stopButton clicked");
+
+	recordButton.className='';
 
 	//disable the stop button, enable the record too allow for new recordings
 	stopButton.disabled = true;
