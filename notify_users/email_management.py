@@ -53,7 +53,7 @@ def notify_new(password):
 
         input_email_db(email_db, iter_username, iter_email)
 
-        notify("Session_1", iter_email, server=server, username=iter_username, is_reminder=False)
+        notify("Session 1", iter_email, server=server, username=iter_username, is_reminder=False)
 
         flaskr_db.execute(
             'DELETE FROM new_emails WHERE email=?',
