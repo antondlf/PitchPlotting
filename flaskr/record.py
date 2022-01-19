@@ -42,6 +42,15 @@ def get_progress(session, chapterorder, trial_type):
     return progress
 
 
+def get_sent_type(text):
+
+    if text[-1] == '?':
+        sentence_type = 'QUESTION: '
+    else:
+        sentence_type = 'STATEMENT: '
+
+    return sentence_type
+
 def is_repetition(trial_type, chapterorder):
     """Determine if recording is a repetition
     ____________________________________________
@@ -167,10 +176,7 @@ def record(session, trial_type, chapterorder):
         audio_path,\
         textplot_path = sentence[0]
 
-    if text[-1] == '?':
-        sentence_type = 'QUESTION: '
-    else:
-        sentence_type = 'STATEMENT: '
+    sentence_type = get_sent_type(text)
 
     progress = get_progress(session, chapterorder, trial_type)
 
@@ -293,16 +299,19 @@ def post_trial(session, trial_type, chapter_order):
 
     text = sentence[0]['text']
 
+    sent_type = get_sent_type(text)
+
     # Render templates by condition
     if condition == 'a':
         return render_template(
-            '/record/post_trial.html', sentence=text, recording=recording_path,
+            '/record/post_trial.html', sentence=text, sent_type=sent_type,
+            recording=recording_path,
             plot=plot_path, original_audio=sent_id, progress=progress
         )
 
     else:
         return render_template(
-            '/record/post_trial.html', sentence=text,
+            '/record/post_trial.html', sentence=text, sent_type=sent_type,
             recording=recording_path, plot=None, original_audio=sent_id, progress=progress
         )
 

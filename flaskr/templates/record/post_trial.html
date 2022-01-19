@@ -16,7 +16,6 @@
         {% endif %}
     </ul>
             <h1>Compare your intonation with the native speaker's:</h1>
-            <h3> {{ sentence }} </h3>
             <audio id = "audio" hidden>
                 <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
                 <source src="{{ url_for('/audio.download_file', chaptername=original_audio)}}" type="audio/wav">
@@ -30,6 +29,8 @@
             <img width="50%" class='NO-CACHE' src="{{ url_for('/record.return_plot_file', filename=plot) }}">
             </div>
             {% endif %}
+            <h3> {{ sent_type }} {{ sentence }} </h3>
+
             <div id="controls">
                 <button id="replayButton">Listen To Yourself</button>
                 <button id="playButton">Listen to the Native Speaker</button>
