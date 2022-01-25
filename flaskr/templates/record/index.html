@@ -21,7 +21,20 @@
                 {% endif %}
     </ul>
     <!--Sentence text to be rendered below-->
-        <h1>Listen to the native speaker, then record yourself imitating their intonation:</h1>
+        {% if repetition=='0' %}
+            {% if sent_type == 'STATEMENT: ' %}
+            <h1>Listen to the native speaker, then record yourself imitating their intonation:</h1>
+            {% elif sent_type=='QUESTION: ' %}
+            <h1>Now try it as a Question:</h1>
+            {% endif %}
+        {% elif repetition=='1' %}
+            {% if sent_type=='STATEMENT: ' %}
+            <h1>Try this statement again:</h1>
+            {% elif sent_type=='QUESTION: ' %}
+            <h1>Try it again as a question:</h1>
+            {% endif %}
+        {% endif %}
+
         {% if textplot %}
         <div id="textplot">
         <img width="50%" src="{{ url_for('/record.return_textplot_file', chaptername=recording, filename=textplot) }}">

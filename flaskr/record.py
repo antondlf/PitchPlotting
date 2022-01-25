@@ -61,9 +61,11 @@ def is_repetition(trial_type, chapterorder):
 
     Returns 1 if it's repetition and 0 if not
     """
-    if trial_type == 'Training':
+    if trial_type == 'training':
         if int(chapterorder) % 2 == 1:
             return '1'
+        else:
+            return '0'
 
     else:
         return '0'
@@ -251,13 +253,14 @@ def record(session, trial_type, chapterorder):
     if condition == 'a':
         # full feedback condition
         return render_template(
-                '/record/index.html', recording=sent_id, sentence=text,
+                '/record/index.html', recording=sent_id, sentence=text, repetition=repetition,
             sent_type=sentence_type, textplot=textplot, audio=recordings, progress=progress
             )
     else:
+        print('is_repetition: ', repetition)
         # audio only condition
         return render_template(
-                '/record/index.html', recording=sent_id, sentence=text,
+                '/record/index.html', recording=sent_id, sentence=text, repetition=repetition,
             sent_type=sentence_type, textplot=None, audio=recordings, progress=progress
             )
 
