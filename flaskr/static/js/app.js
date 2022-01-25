@@ -99,7 +99,6 @@ async function playUserAudio() {
 
 function startRecording() {
 	console.log("recordButton clicked");
-	document.getElementById("formats").innerHTML="Wait..."
 
 	/*
 		Simple constraints object, for more advanced audio features see
@@ -135,8 +134,7 @@ function startRecording() {
 		audioContext = new AudioContext();
 		console.log("audioContext initialized");
 
-		//update the format 
-		document.getElementById("formats").innerHTML="Go!"
+		//update the format
         console.log("getElementById done");
 
 		/*  assign to gumStream for later use  */

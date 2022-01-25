@@ -19,9 +19,7 @@
     <li>Play the recording of the native speaker</li>
     <li>Press “Start” to record yourself</li>
     <li>Press “Stop” to stop recording and get to the next page (this may take a second or two)</li>
-    <img width=25% src="{{ url_for('/instructions.get_image', filename='training_interface.png') }}">
-    <li>Take your time to compare both recordings and the new plot in the new interface before trying again.</li>
-    <img width="25%" src="{{ url_for('/instructions.get_image', filename='post_trial.png') }}">
+    <li>Take your time to compare both recordings and the comparative pitch plot in the new interface before trying again.</li>
 </ol>
 
 {% elif condition == 'b' %}
@@ -29,9 +27,7 @@
     <li>Play the recording of the native speaker</li>
     <li>Press “Start” to record yourself</li>
     <li>Press “Stop” to stop recording and get to the next page (this may take a second or two)</li>
-    <img width="25%" src="{{ url_for('/instructions.get_image', filename='control_training.png') }}">
     <li>Take your time to listen to yourself and the native speaker before you try again in the next sentence.</li>
-    <img width="25%" src="{{ url_for('/instructions.get_image', filename='control_post.png') }}">
 </ol>
 {% endif %}
 

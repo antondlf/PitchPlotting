@@ -15,10 +15,10 @@
 </ul>
 </nav>
 <h1>Learning Italian Intonation</h1>
+
+{% if post=='Session 1' %}
 <p>
-
 Welcome! In this study, we are testing a training for intonation (the melody of speech) in Italian, distinguishing statements and questions.
-
 You will start by reading a few sentences out loud. Then you’ll do the training, where you get to compare your intonation to a native speaker of Italian.
     You will then finish by reading a few more sentences out loud.
 
@@ -26,6 +26,30 @@ You will start by reading a few sentences out loud. Then you’ll do the trainin
 <p>
     Things you'll need:
 </p>
+    {% elif post=='Session 2' %}
+<p>
+    Welcome to the second Session of your training! As you may remember from last week we are testing a training for intonation (the melody of speech) in Italian, distinguishing statements and questions.
+
+    Here is a reminder of the instructions:
+<p>
+You will start by reading a few sentences out loud. Then you’ll do the training, where you get to compare your intonation to a native speaker of Italian.
+    You will then finish by reading a few more sentences out loud.
+
+</p>
+<p>
+    Things you'll need:
+</p>
+{% elif post=='Session 3' %}
+<p>
+    Welcome to the last Session of your training! This will be a shorter session, to see how well you remembered what you learned.
+    Afterwards we would appreciate it if you could give us a little feedback by following the link at the end.
+</p>
+<p>
+    Here's a reminder of what you need:
+</p>
+{% endif %}
+
+
 <ul>
     <li>A quiet space to work in.</li>
     <li>A microphone (if you have a quality mic that is best).</li>

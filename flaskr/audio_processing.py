@@ -69,7 +69,7 @@ def process_recording(original_audio_path, audio_data, chaptername, database_inp
 
         trial_type_dict = {'pre_train': 1, 'training': 2, 'post_train': 3}
         trial_type_ord = trial_type_dict[trial_type]
-
+        # TODO: Write try block to verify complete data storage
         db.execute(
             'INSERT INTO recordings ('
             'user_id, sent_order, experimental_condition,'
@@ -101,6 +101,7 @@ def save_audio(path, audio_data):
 
     else:
         return recording_path
+
 
 def save_plot(chaptername, path):
     """produces comparison plot using draw_pitch
