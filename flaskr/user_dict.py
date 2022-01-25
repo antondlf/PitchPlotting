@@ -199,7 +199,7 @@ def create_user_dict(user_id, condition=None, db=None):
             n += 1
 
     # We start unmatched at 15 (there was a reason for this but I forget)
-    n = len(order_dict['Session 1']['training'])-1
+    n = len(order_dict['Session 1']['training'])
     print('unmatched:')
 
     # Trainings are longer, these extra pairs are drawn from unmatched sentences
@@ -293,10 +293,10 @@ class user_state:
 
 
 # if __name__ == '__main__':
-#     #with open('/users/anton/desktop/example_orders.txt', 'w') as in_file:
-#     # for i in range(1):
-#     user_id = random.randint(0,100)
-#     dictionary = user_state(user_id)
-#     print(dictionary.get_trial_length('Session 1', 'pre_train'))
-#     print(dictionary.get_trial_length('Session 1', 'training'))
-#     print(dictionary.get_trial_length('Session 1', 'post_train'))
+#     with open('/users/anton/desktop/example_orders.txt', 'w') as in_file:
+#         for i in range(1):
+#             user_id = random.randint(0,100)
+#             dictionary = user_state(user_id)
+#             print(dictionary.get_trial_length('Session 1', 'pre_train'))
+#             print(dictionary.get_trial_length('Session 1', 'training'))
+#             print(dictionary.get_trial_length('Session 1', 'post_train'))
