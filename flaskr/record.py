@@ -28,16 +28,16 @@ def get_user_state(user_id):
 def get_progress(session, chapterorder, trial_type):
     """Returns progress throughout the session."""
 
-    trial_mapping = {'pre_train': 0, 'training': 9, 'post_train': 39}
+    trial_mapping = {'pre_train': 0, 'training': 8, 'post_train': 40}
     current_chapter = int(chapterorder) + trial_mapping[trial_type]
 
     if session != 'Session 3':
 
-        progress = round((current_chapter/48)*100)
+        progress = round((current_chapter/47)*100)
 
     elif session == 'Session 3':
 
-        progress = round((current_chapter/8)*100)
+        progress = round((current_chapter/7)*100)
 
     return progress
 
@@ -78,7 +78,7 @@ def get_user_progress(user_id):
         ' ORDER BY session_number DESC, trial_type_ord DESC, sent_order DESC',
         (user_id,)
     ).fetchall()
-    if len(user_progress) > 1:
+    if len(user_progress) > 0:
         return user_progress[0]
 
     else:
@@ -96,7 +96,7 @@ def index():
     user_dict = get_user_state(user_id)
     condition = user_dict.get_condition()
 
-    if user_progress == None:
+    if user_progress is None:
 
         post = 'Session_1'
 
@@ -107,6 +107,7 @@ def index():
     else:
 
         sent_order, session_number, trial_type = user_progress
+        print(sent_order, session_number, trial_type)
 
         if sent_order == 0:
             if trial_type == 'pre_train':
@@ -119,6 +120,18 @@ def index():
                     session=session_number)
             elif trial_type == 'post_train':
                 return render_template('Instructions/post_test.html')
+        elif trial_type == 'post_train':
+            if sent_order == '7':
+                print('next sesh condition reached')
+                next_session = 'Session 2' if session_number == 'Session 1' else 'Session 3'
+                return redirect(url_for('/instructions.intro', post=next_session))
+            else:
+                return redirect(url_for(
+                '/record.record',
+                session=session_number,
+                trial_type=trial_type,
+                chapterorder=sent_order))
+
         else:
             return redirect(url_for(
                 '/record.record',
