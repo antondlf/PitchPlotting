@@ -74,10 +74,7 @@ if (nextButton) {
     if (recordButton){
         recordButton.disabled = true;
     }
-if (replayButton){
-    console.log('Demo plot button exists');
-    replayButton.addEventListener("click", plotPitch);
-}
+
 
 if (menuButton){
     menuButton.addEventListener('click', window.location.href='/demo');
