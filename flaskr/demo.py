@@ -14,8 +14,6 @@ import tempfile
 
 import os
 
-
-
 bp = Blueprint('/demo', __name__)
 
 
@@ -73,7 +71,7 @@ def italian_demo():
             flash("No audio was recorded.", 'error')
             return get_demo_sent()
 
-        nativeaudio = 'Recordings/Damiano_morde(Q)/2-Q-Damiano_morde.wav'
+        nativeaudio = 'Damiano_morde(Q)'
         plot, useraudio = save_plot(nativeaudio, trial_path)
 
         # Redirect to the post_trial (comparison plot template)

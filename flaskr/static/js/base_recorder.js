@@ -14,11 +14,24 @@ var stopButton = document.getElementById("stopButton");
 //var sendButton = document.getElementById("sendButton");
 var nextButton = document.getElementById('nextButton');
 
+var currentButton = recordButton
+
+window.addEventListener('keydown', pressCurrent);
+function pressCurrent(event){
+    if (event.keyCode === 32){
+        currentButton.click()
+        console.log('Spacebar pressed')
+    }
+}
+
 //add events to those 2 buttons
 recordButton.addEventListener("click", startRecording);
+
 stopButton.addEventListener("click", stopRecording);
+
 //sendButton.addEventListener("click", sendAudioEvent);
 nextButton.addEventListener("click", nextChapter);
+
 
 
 
@@ -38,6 +51,7 @@ function startRecording() {
 
     recordButton.disabled = true;
 	stopButton.disabled = false;
+	currentButton = stopButton
 	//pauseButton.disabled = false;
 	//sendButton.disabled = true;
 
@@ -87,6 +101,7 @@ function startRecording() {
 	  	//enable the record button if getUserMedia() fails
 	  	console.log(err);
     	recordButton.disabled = false;
+    	currentButton = recordButton
     	stopButton.disabled = true;
     	//pauseButton.disabled = true;
 	});
@@ -116,6 +131,7 @@ function stopRecording() {
 	recordButton.disabled = true;
 	//sendButton.disabled = false;
 	nextButton.disabled = false;
+	currentButton = nextButton
 
 	document.getElementById("formats").innerHTML="Done!"
 

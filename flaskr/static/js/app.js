@@ -22,6 +22,43 @@ var useraudioElem = document.getElementById('useraudio');
 var nextButton = document.getElementById('nextButton');
 var replayButton = document.getElementById('replayButton');
 var plotButton = document.getElementById('plotButton')
+var resetDemo = document.getElementById('resetDemo')
+
+function getCurrentButton(){
+        // First branching, is there user audio
+        // This would mean that the user is in post_trial
+        if (useraudioElem){
+            if (replayButton.disabled){
+                if (playButton.disabled){
+                    if (currentButton){
+                    currentButton = nextButton
+                    }
+                    else if (resetDemo){
+                    currentButton = resetDemo
+                    }
+                }
+                else {currentButton = playButton}
+            }
+            else {currentButton = replayButton}
+        }
+        else if (playButton.disabled){
+            if (stopButton.disabled){
+            currentButton = recordButton
+            }
+            else {currentButton = stopButton}
+        }
+        else {currentButton = playButton}
+        return currentButton
+}
+
+window.addEventListener('keydown', pressCurrent);
+function pressCurrent(event){
+    if (event.keyCode === 32){
+        currentButton = getCurrentButton()
+        currentButton.click()
+        console.log('Spacebar pressed')
+    }
+}
 
 if (playButton){
     console.log('Record button exists');
@@ -153,8 +190,9 @@ function startRecording() {
 
 		//start the recording process
 		rec.record();
-		recordButton.disabled=false
+		//recordButton.disabled=false
 		recordButton.className='clickplz';
+		stopButton.disabled = false
 
 		console.log("Recording started");
 
@@ -224,9 +262,9 @@ function sendAudio(data) {
 //                else {throw Error(`Server returned ${response.status}: ${response.statusText}`)}
             })
             .then(response => console.log(response.text()))
-           // .catch(err => {
-           //     alert(err);
-           // });
+            //.catch(err => {
+            //    alert(err);
+            //});
 }
 
 function sendAudioEvent() {

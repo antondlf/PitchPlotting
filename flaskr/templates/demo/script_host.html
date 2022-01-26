@@ -28,7 +28,7 @@
             <div id="controls">
                 <button id="replayButton">Listen To Yourself</button>
                 <button id="playButton">Native Speaker</button>
-                <button type="button" onclick="window.location.href='{{ url_for('/demo.reset_demo', demo_id=demo_id) }}'">
+                <button id="resetDemo" type="button" onclick="window.location.href='{{ url_for('/demo.reset_demo', demo_id=demo_id) }}'">
                     Reset Demo
                 </button>
             </div>

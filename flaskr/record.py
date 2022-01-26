@@ -55,7 +55,7 @@ def is_repetition(trial_type, chapterorder):
     """Determine if recording is a repetition
     ____________________________________________
     Repetitions are every other recording for a
-    training trial only, so theymust be divisible
+    training trial only, so they must be divisible
     by 2. Since Python uses 0 indexing then the
     mod2 operation should equal 1.
 
