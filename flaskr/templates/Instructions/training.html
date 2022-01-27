@@ -32,8 +32,8 @@
 </ol>
 {% endif %}
 
-<p>Remember to wait a second or two before starting to speak. Because you will be able to hear yourself afterwards,
-you will be able to find out if your browser has any latency with starting the recorder.</p>
+<p>Remember to wait until the record button turns green to begin speaking.
+    Some browsers take longer than others to begin recording. For this reason we recommend that you use Google Chrome.</p>
 
 {% if next_panel == 'training' %}
     <a href="{{ url_for('/record.record', session=session, trial_type='training', chapterorder='0') }}">Continue to training</a>
