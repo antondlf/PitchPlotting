@@ -32,6 +32,9 @@
 </ol>
 {% endif %}
 
+<p>Remember to wait a second or two before starting to speak. Because you will be able to hear yourself afterwards,
+you will be able to find out if your browser has any latency with starting the recorder.</p>
+
 {% if next_panel == 'training' %}
     <a href="{{ url_for('/record.record', session=session, trial_type='training', chapterorder='0') }}">Continue to training</a>
 {% elif next_panel == 'menu' %}
