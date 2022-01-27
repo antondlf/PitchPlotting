@@ -52,7 +52,7 @@ function startRecording() {
 		audioContext = new AudioContext();
 
 		//update the format
-		document.getElementById("formats").innerHTML="Format: 1 channel pcm @ "+audioContext.sampleRate/1000+"kHz"
+		//document.getElementById("formats").innerHTML="Format: 1 channel pcm @ "+audioContext.sampleRate/1000+"kHz"
 
 		/*  assign to gumStream for later use  */
 		gumStream = stream;
@@ -73,6 +73,8 @@ function startRecording() {
 
 	}).catch(function(err) {
 	  	//enable the record button if getUserMedia() fails
+	  	console.log('User Media failed')
+	  	console.log(err)
     	recordButton.disabled = false;
     	stopButton.disabled = true;
     	pauseButton.disabled = true
