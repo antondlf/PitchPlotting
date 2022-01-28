@@ -102,19 +102,23 @@ if (stopButton) {
 
 //playButton.addEventListener("click", handlePlayButton, false);
 //playVideo();
-
 async function playAudio() {
   console.log('Audio Playing')
-  var duration = document.getElementById("audio").duration;
-  console.log(duration)
   try {
     await audioElem.play();
     playButton.classList.add("playing");
   } catch(err) {
     playButton.classList.remove("playing");
-  }
+  };
     playButton.disabled = true;
-    if (recordButton) {recordButton.disabled = false;}
+    audioElem.addEventListener('ended', function(){
+    console.log('Audio ended')
+    if (recordButton) {
+    recordButton.disabled = false
+    console.log('Record button enabled')
+    }
+    }
+    );
 }
 
 async function playUserAudio() {
@@ -126,7 +130,14 @@ async function playUserAudio() {
     replayButton.classList.remove("playing");
   }
     replayButton.disabled = true;
-    nextButton.disabled = false;
+        audioElem.addEventListener('ended', function(){
+    console.log('User audio ended')
+    if (recordButton) {
+    nextButton.disabled = false
+    console.log('Next button enabled')
+    }
+    }
+    );
 }
 
 
