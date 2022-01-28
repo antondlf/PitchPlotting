@@ -68,7 +68,7 @@ function startRecording() {
 
 		//start the recording process
 		rec.record()
-
+        recordButton.className='clickplz';
 		console.log("Recording started");
 
 	}).catch(function(err) {
