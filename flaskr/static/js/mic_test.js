@@ -76,6 +76,7 @@ function startRecording() {
 	  	console.log('User Media failed')
 	  	console.log(err)
     	recordButton.disabled = false;
+    	recordButton.className=''
     	stopButton.disabled = true;
     	pauseButton.disabled = true
 	});
@@ -86,10 +87,12 @@ function pauseRecording(){
 	if (rec.recording){
 		//pause
 		rec.stop();
+		recordButton.className=''
 		pauseButton.innerHTML="Resume";
 	}else{
 		//resume
 		rec.record()
+		recordButton.className='clickplz'
 		pauseButton.innerHTML="Pause";
 
 	}
@@ -101,6 +104,7 @@ function stopRecording() {
 	//disable the stop button, enable the record too allow for new recordings
 	stopButton.disabled = true;
 	recordButton.disabled = false;
+	recordButton.className=''
 	pauseButton.disabled = true;
 
 	//reset button just in case the recording is stopped while paused
