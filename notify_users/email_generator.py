@@ -20,7 +20,7 @@ def get_email_text(stage, username, is_reminder=False):
                 " should take 15 minutes or less. Completing each session" \
                 " gets you an entry in our drawing, plus an additional entry" \
                 " for completing the whole study.\n\n"\
-                "To start the first session, click on the ling below. You signed up with the following username:\n\n"\
+                "In case you can't find the link, we're providing it below. You signed up with the following username:\n\n"\
                 "username: {}\n\n"\
                 "Please log in at this url: {}\n\n"\
                 "We hope you enjoy!" \
