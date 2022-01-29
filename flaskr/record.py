@@ -44,10 +44,14 @@ def get_progress(session, chapterorder, trial_type):
 
 def get_sent_type(text):
 
-    if text[-1] == '?':
+    if '?' in text:
         sentence_type = 'QUESTION: '
-    else:
+    elif '.' in text:
         sentence_type = 'STATEMENT: '
+
+    # In case there is some error
+    else:
+        sentence_type = ''
 
     return sentence_type
 
