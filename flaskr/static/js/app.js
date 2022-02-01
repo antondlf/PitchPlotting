@@ -116,6 +116,9 @@ async function playAudio() {
     if (recordButton) {
     recordButton.disabled = false
     console.log('Record button enabled')
+    } else if ((replayButton.disabled) && (nextButton)){
+    nextButton.disabled = false
+    console.log('Next button enabled')
     }
     }
     );
@@ -130,12 +133,12 @@ async function playUserAudio() {
     replayButton.classList.remove("playing");
   }
     replayButton.disabled = true;
-        audioElem.addEventListener('ended', function(){
+    useraudioElem.addEventListener('ended', function(){
     console.log('User audio ended')
-    if (recordButton) {
+    if ((playButton.disabled)&&(nextButton)) {
     nextButton.disabled = false
     console.log('Next button enabled')
-    }
+    }else{console.log('Native speaker audio button still active')}
     }
     );
 }
