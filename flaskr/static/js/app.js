@@ -111,18 +111,27 @@ async function playAudio() {
     playButton.classList.remove("playing");
   };
     playButton.disabled = true;
-    audioElem.addEventListener('ended', function(){
-    console.log('Audio ended')
     if (recordButton) {
-    recordButton.disabled = false
-    console.log('Record button enabled')
-    } else if ((replayButton.disabled) && (nextButton)){
-    nextButton.disabled = false
-    console.log('Next button enabled')
+        audioElem.addEventListener('ended', function(){
+        console.log('Audio ended')
+        recordButton.disabled = false
+        console.log('Record button enabled')
+        })
+    } else if (replayButton.disabled){
+        console.log('Post trial condition, user audio already played')
+        audioElem.addEventListener('ended', function(){
+        nextButton.disabled = false
+        console.log('Next button enabled')
+        })
+    } else {
+        console.log('Post trial condition, user audio not played')
+        replayButton.disabled = true
+        audioElem.addEventListener('ended', function(){
+        replayButton.disabled = false
+        console.log('Replay button re-enabled')
+        })
     }
-    }
-    );
-}
+    };
 
 async function playUserAudio() {
   console.log('Playing User Audio')
@@ -133,15 +142,21 @@ async function playUserAudio() {
     replayButton.classList.remove("playing");
   }
     replayButton.disabled = true;
-    useraudioElem.addEventListener('ended', function(){
     console.log('User audio ended')
     if ((playButton.disabled)&&(nextButton)) {
-    nextButton.disabled = false
-    console.log('Next button enabled')
-    }else{console.log('Native speaker audio button still active')}
+        useraudioElem.addEventListener('ended', function(){
+        nextButton.disabled = false
+        console.log('Next button enabled')
+        })
+    }else{
+        playButton.disabled = true
+        console.log('Native speaker audio not played, disabled')
+        useraudioElem.addEventListener('ended', function(){
+        playButton.disabled = false
+        console.log('User audio button re-enabled')
+    })
     }
-    );
-}
+    }
 
 
 
