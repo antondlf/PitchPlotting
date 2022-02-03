@@ -84,6 +84,20 @@ def process_recording(original_audio_path, audio_data, chaptername, database_inp
             )
         )
         db.commit()
+        #
+        # try:
+        #     sentence = db.execute(
+        #         'SELECT sent_group, sent_type, text, audio_path, textplot_path'  # TODO: get all variables necessary
+        #         ' FROM chapters WHERE sent_id=?'  # p JOIN user u ON p.author_id = u.id'
+        #         ' ORDER BY created DESC',
+        #         (sent_id,)
+        #     ).fetchall()
+        #     print(sentence[0])
+        #
+        # except:
+        #
+        #     print('Error, audio entry corrupt')
+
     return recording_path
 
 
