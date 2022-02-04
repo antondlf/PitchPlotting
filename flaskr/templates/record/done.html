@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>End message</title>
+      <meta content='width=device-width, initial-scale=1' name='viewport'/>
+    <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" type="text/css" href="/static/style.css">
+</head>
+<body>
+
+<h1>Well done! Thank you so much for your participation!</h1>
+
+<p> Go to <a href={{ url }}> this link </a> to register for our prize drawing.</p>
+{% if session == '1' %}
+<p>See you in a week for session 2! You will get the link in your email in 7 days.</p>
+{% elif session == '2' %}
+<p>Thanks for sticking with us! See you in a week for the last follow up.
+    You will again get the link on your email in 7 days.</p>
+{% elif session == '3' %}
+<p>You're all done! Thank you for sticking with it all the way, we hope you found it rewarding.
+    If you have the time, please fill out this form to let us know about your experience.
+    You will also receive this link in a final email. </p>
+{% endif %}
+
+</body>
+</html>
