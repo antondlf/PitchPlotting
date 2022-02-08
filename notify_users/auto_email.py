@@ -40,7 +40,7 @@ def server_logout(server):
 def generate_email(stage, username=None, password=None, is_reminder=False):
     """generate email reminder for a given session and mime encode it."""
 
-    subject, text = get_email_text(stage, username, is_reminder=is_reminder)
+    subject, text = get_email_text(stage, username, password=password, is_reminder=is_reminder)
 
     if (contains_non_ascii_characters(text)):
         plain_text = MIMEText(text.encode('utf-8'), 'plain', 'utf-8')
