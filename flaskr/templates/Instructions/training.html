@@ -9,40 +9,31 @@
 <body>
 <h1>Training</h1>
 <p>
-    Now for the training! For each sentence,
-    you will imitate a native speaker and compare your recording to theirs.
-    Then you will get to try again with the same sentence, applying what you have learned,
-    before repeating the process with the question version of the sentence. Remember we are focusing on intonation — basically the melody of speech — so don’t worry if you mispronounce a word.
+Well done! Now for the training. <br>
 
-As before, you can click on the buttons or press the spacebar to advance through them in order.
+In this section you will imitate a native speaker and compare your intonation with hers.<br>
+
+You’ll try each sentence two times so you can apply what you learn. Then you’ll do the same sentence as a question.<br>
+
+As before, you can click the buttons or press the spacebar to advance through them in order.
+
 </p>
 <p>
     <b>Remember to wait for the record button to turn green before starting to speak.</b>
 
 </p>
 {% if condition == 'a' %}
-<ol>
-    <li>Play the recording of the native speaker</li>
-    <li>Press “Start” to record yourself</li>
-    <li>Press “Stop” to stop recording and get to the next page (this may take a second or two)</li>
-    <li>Take your time to compare both recordings and the comparative pitch plot in the new interface before trying again.</li>
-</ol>
-
-{% elif condition == 'b' %}
-<ol>
-    <li>Play the recording of the native speaker</li>
-    <li>Press “Start” to record yourself</li>
-    <li>Press “Stop” to stop recording and get to the next page (this may take a second or two)</li>
-    <li>Take your time to listen to yourself and the native speaker before you try again in the next sentence.</li>
-</ol>
+<p> The plots that you're going to see throughout the training represent intonation.
+    Keep these traces in mind when you listen to each recording.</p>
 {% endif %}
 
-<p>Remember to wait until the record button turns green to begin speaking.
-    Some browsers take longer than others to begin recording. For this reason we recommend that you use Google Chrome.</p>
+<p>
+    Some browsers take longer than others to begin recording, if you can't hear the beginning of your recording,
+    wait an extra second after the button turns green.</p>
 
 {% if next_panel == 'training' %}
     <a href="{{ url_for('/record.record', session=session, trial_type='training', chapterorder='0') }}">
-        Continue to training</a>
+        Start training</a>
 {% elif next_panel == 'menu' %}
     <a href="{{ url_for('/record.index') }}">Back to menu</a>
 {% endif %}

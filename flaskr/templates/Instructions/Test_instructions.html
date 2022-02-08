@@ -8,24 +8,37 @@
 </head>
 <body>
 <h1>Instructions</h1>
-<p>
-    In this section you will read Italian statements and questions out loud.
-    Try to avoid extra noise while recording as it can interfere with processing.
-</p>
-<p>
 
-To start recording, click "Start" or press the spacebar.
-    <b>Don't start speaking until the record button turns green.</b>
-    Your browser will probably ask you if you want to allow the website to use your microphone before your first recording.
-    If this request appears each time you try to record please contact us. Due to performance issues that can sometimes arise
-    on other browsers, we recommend that you use Google Chrome.
-</p>
-<p>
-To stop recording, click "Stop" or press the spacebar.
-    Then click "Next Activity" or press the spacebar again to move on.
+{% if post_name != Session 3 %}
+<p>Today’s activity has 3 parts:</p>
 
+<ol>
+    <li>Speaking</li>
+    <li>Training</li>
+    <li>Applying what you’ve learned to new sentences</li>
+</ol>
+<p>
+For the first section, you’ll record 4 pairs of statements and questions.
+    We are focusing on intonation (the melody of the sentence), so don’t worry if you mispronounce a word.
 </p>
-<h1><a class="action" href="{{ url_for('/record.record', session=post, trial_type='pre_train', chapterorder=0) }}">Start {{ post_name }}</a></h1>
+<ul>
+    <li>To start recording, click "Start" or press the spacebar.</li>
+    <li>Your browser will probably ask you if you want to allow the website to use your microphone before your first recording.</li>
+    <li>Don't start speaking until the record button turns green.</li>
+    <li>To stop recording, click "Stop" or press the spacebar.</li>
+    <li>Then click "Next Activity" or press the spacebar again to move on.</li>
+    <li>Remember if the website freezes, try refreshing the page.</li>
+</ul>
+
+{% elif post_name == Session 3 %}
+
+<p>Today's activity only has one section.
+    We want you to try to remember what you learned the last two trainings and apply it to some nes sentences</p>
+
+{% endif %}
+
+
+<h1><a class="action" href="{{ url_for('/record.record', session=post, trial_type='pre_train', chapterorder=0) }}">Let's get Started!</a></h1>
 
 </body>
 </html>
