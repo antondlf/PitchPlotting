@@ -22,7 +22,8 @@ CREATE TABLE user (
 
 CREATE TABLE new_emails(
     username TEXT UNIQUE NOT NULL,
-    email TEXT NOT NULL
+    email TEXT NOT NULL,
+    password TEXT NOT NULL,
 );
 
 CREATE TABLE userdata (

@@ -8,6 +8,8 @@ from flaskr.db import get_db
 
 from flaskr.user_dict import create_user_dict
 
+from notify_users.email_management import notify_new
+
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 
@@ -38,8 +40,8 @@ def register():
             )
             db.commit()
             db.execute(
-                'INSERT INTO new_emails (username, email) VALUES (?, ?)',
-                (username, email)
+                'INSERT INTO new_emails (username, email, password) VALUES (?, ?, ?)',
+                (username, email, password)
             )
             db.commit()
             user_id = db.execute(

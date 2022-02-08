@@ -71,12 +71,12 @@ def send_email(msg, server, sender, receiver_list):
         print('Error: email supplied is invalid.')
 
 
-def notify(session, receiver_list, server=None, username=None, is_reminder=False):
+def notify(session, receiver_list, password='', server=None, username=None, is_reminder=False):
     """This function sends the email notifications."""
 
     if server:
         print(is_reminder)
-        msg = generate_email(session, username=username, is_reminder=is_reminder)
+        msg = generate_email(session, username=username, password=password, is_reminder=is_reminder)
         send_email(msg, server, 'italianprosody.reminders@gmail.com', receiver_list)
 
     else:

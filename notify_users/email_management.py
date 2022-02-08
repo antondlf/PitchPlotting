@@ -50,10 +50,11 @@ def notify_new(password):
         user_counter += 1
         iter_email = row['email']
         iter_username = row['username']
+        iter_password = row['password']
 
         input_email_db(email_db, iter_username, iter_email)
 
-        notify("Session 1", iter_email, server=server, username=iter_username, is_reminder=False)
+        notify("Session 1", iter_email, password=iter_password, server=server, username=iter_username, is_reminder=False)
 
         flaskr_db.execute(
             'DELETE FROM new_emails WHERE email=?',

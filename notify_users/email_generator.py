@@ -3,7 +3,7 @@
 # Script holds email messages as strings to be formatted with user
 # specific information.
 
-def get_email_text(stage, username, is_reminder=False):
+def get_email_text(stage, username, password='', is_reminder=False):
 
     url = 'prosody.delafuentealvarez.com/session_menu/{}'
 
@@ -20,14 +20,15 @@ def get_email_text(stage, username, is_reminder=False):
                 " should take 15 minutes or less. Completing each session" \
                 " gets you an entry in our drawing, plus an additional entry" \
                 " for completing the whole study.\n\n"\
-                "In case you can't find the link, we're providing it below. You signed up with the following username:\n\n"\
-                "username: {}\n\n"\
+                "In case you can't find the link, we're providing it below. You signed up with the following username and password:\n\n"\
+                "username: {}\n"\
+                "password: {}\n\n"\
                 "Please log in at this url: {}\n\n"\
                 "We hope you enjoy!" \
                 " If you run into any issues," \
                 " contact Antón de la Fuente at antondlf@mac.com\n\n"\
                 "Grazie mille!\n"\
-                "Catherine Scanlon and Antón de la Fuente".format(username, url.format('Session_1'))
+                "Catherine Scanlon and Antón de la Fuente".format(username, password, url.format('Session_1'))
 
         reminder = "Hi again!\n\n"\
                 "Just checking in to see if you’re" \
