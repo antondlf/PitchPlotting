@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content='width=device-width, initial-scale=1' name='viewport'/>
+    <meta charset="UTF-8">
+    <title>Equipment Survey</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+    <h1>Equipment Information</h1>
+    <p>In order to understand possible errors in our data collection we want to
+    collect a little bit of information into what equipment you were using.</p>
+    <form action="{{ url_for('/survey.equipment_survey', post=post) }}" method="post">
+    What kind of device are you using?
+            <div>
+
+                <input type="radio" id="laptop" name="device" value="laptop">
+                <label for="laptop">Laptop</label>
+            </div>
+                <input type="radio" id="desktop" name="device" value="desktop">
+                <label for="desktop">Desktop</label>
+            </div>
+             <div>
+
+                <input type="radio" id="tablet" name="device" value=tablet>
+                 <label for="tablet">Tablet</label>
+            </div>
+            <div>
+
+                <input type="radio" id="phone" name="device" value=phone>
+                <label for="phone">Phone</label>
+            </div>
+            <div>
+                <input type="radio" name="device" value=""> Other <input type="text" name="other_device" /><br><br>
+
+            </div>
+        What system are you using?<br>
+            <input type="radio" name="system" value="mac (apple)"> Mac/IOS<br>
+            <input type="radio" name="system" value="windows"> Windows <br>
+            <input type="radio" name="system" value="android"> Android <br>
+            <input type="radio" name="system" value="linux"> Linux <br>
+            <input type="radio" name="system" value="chrome os"> Chrome OS <br>
+            <input type="radio" name="system" value=""> Other <input type="text" name="other_system"/><br><br>
+
+        What browser are you on?<br>
+            <input type="radio" name="browser" value="chrome"> Google Chrome<br>
+            <input type="radio" name="browser" value="firefox"> Firefox<br>
+            <input type="radio" name="browser" value="safari"> Safari<br>
+            <input type="radio" name="browser" value=""> Other <input type="text" name="other_browser"/><br><br>
+
+        Microphone setup?<br>
+            <div><input type="radio" name="mic" value="inbuilt"> In-built </div>
+            <div><input type="radio" name="mic" value="external_wired"> External Wired <br></div>
+            <div><input type="radio" name="mic" value="bluetooth"> Bluetooth </div>
+            <div><input type="radio" name="mic" value="">Other <input type="text" name="other_mic"/></div><br><br>
+        Are you using headphones?<br>
+            <input type="radio" name="phones" value="yes_wired"> Yes (Wired) <br>
+            <input type="radio" name="phones" value="yes_bluetooth"> Yes (Bluetooth) <br>
+            <input type="radio" name="phones" value="No"> No <br><br>
+        Any other comments about your setup?<br>
+
+            <textarea style="height:200px; width: 900px; font-size:12pt;" type="text" name="comments" size="60"></textarea><br>
+
+        <input type="submit" value="submit">
+</form>
+
+</body>
+</html>

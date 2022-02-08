@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS recordings;
 DROP TABLE IF EXISTS chapters;
 DROP TABLE IF EXISTS userdata;
 DROP TABLE IF EXISTS new_emails;
+DROP TABLE IF EXISTS survey;
 
 
 CREATE TABLE notifications(
@@ -56,4 +57,17 @@ CREATE TABLE chapters (
   textplot_path TEXT NOT NULL,
   precomputed_trace BLOB NOT NULL,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE survey (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    session_number TEXT NOT NULL,
+    device TEXT NOT NULL,
+    system TEXT NOT NULL,
+    browser TEXT NOT NULL,
+    mic TEXT NOT NULL,
+    headphones TEXT NOT NULL,
+    comments TEXT,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
