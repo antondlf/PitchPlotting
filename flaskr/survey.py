@@ -64,7 +64,7 @@ def input_form2db(form, user_id, session):
     db.execute(
         'INSERT INTO survey '
         '(user_id, session_number, device, system, browser, mic, headphones, comments)'
-        'VALUES (?, ?, ?, ?, ?, ?, ?)',
+        'VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
         (
             user_id, session, device, system, browser, mic, phones, comments
         )
