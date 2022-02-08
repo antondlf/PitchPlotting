@@ -8,8 +8,6 @@ from flaskr.db import get_db
 
 from flaskr.user_dict import create_user_dict
 
-from notify_users.email_management import notify_new
-
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 
