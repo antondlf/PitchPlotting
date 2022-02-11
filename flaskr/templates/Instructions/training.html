@@ -9,27 +9,26 @@
 <body>
 <h1>Training</h1>
 <p>
-Well done! Now for the training. <br>
-
-In this section you will imitate a native speaker and compare your intonation with hers.<br>
-
-You’ll try each sentence two times so you can apply what you learn. Then you’ll do the same sentence as a question.<br>
-
-As before, you can click the buttons or press the spacebar to advance through them in order.
-
+Well done! Now for the training. 
 </p>
 <p>
-    <b>Remember to wait for the record button to turn green before starting to speak.</b>
-
+In this section you will imitate a native speaker and compare your intonation with theirs.
 </p>
+
 {% if condition == 'a' %}
-<p> The plots that you're going to see throughout the training represent intonation.
-    Keep these traces in mind when you listen to each recording.</p>
+<p> You'll see plots of the native speaker's pitch over time to help you visualize their intonation. We'll also show you how your intonantion compares.
+</p>
 {% endif %}
 
 <p>
-    Some browsers take longer than others to begin recording, if you can't hear the beginning of your recording,
-    wait an extra second after the button turns green.</p>
+You’ll try each sentence two times so you can apply what you learn. Then you’ll do the same sentence as a question.
+</p>
+<p>
+As before, you can click the buttons or press the spacebar to advance through them in order.
+</p>
+<p>
+    <b>Remember to wait for the record button to turn green before starting to speak.</b>
+</p>
 
 {% if next_panel == 'training' %}
     <a href="{{ url_for('/record.record', session=session, trial_type='training', chapterorder='0') }}">
