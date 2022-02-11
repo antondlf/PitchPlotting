@@ -55,6 +55,7 @@ def get_sent_type(text):
 
     return sentence_type
 
+
 def is_repetition(trial_type, chapterorder):
     """Determine if recording is a repetition
     ____________________________________________
@@ -401,7 +402,7 @@ def next_chapter(session, trial_type, chapter_order):
                 else:
                     notify_next_week(user_id, 'Session 3')
 
-                return redirect(url_for('/record.end_message'))
+                return redirect(url_for('/record.end_message', session=session[-1]))
 
         # If last sentence but not last trial, serve 0 for next trial
         elif trial_type != trial_type_list[-1]:
@@ -435,7 +436,19 @@ def return_textplot_file(chaptername, filename):
     return send_from_directory(path, filename, as_attachment=True)
 
 
-@bp.route('/done')
+@bp.route('/<string:session>/done')
 @login_required
-def end_message():
-    return 'Done!'
+def end_message(session):
+
+    survey_link_dict = {
+
+        'Session 1': 'https://docs.google.com/forms/d/e/1FAIpQLScYS156tDci28nL1nY_8L-lyUf9S5i0VE_FQHxZAKVVyXLleA/viewform?usp=sf_link',
+        'Session_1': 'https://docs.google.com/forms/d/e/1FAIpQLScYS156tDci28nL1nY_8L-lyUf9S5i0VE_FQHxZAKVVyXLleA/viewform?usp=sf_link',
+        'Session 2': 'https://docs.google.com/forms/d/e/1FAIpQLSf3ROjAMenfKWa_CakIDtA34VOyLnNwYiqY7scB0r24G4glaQ/viewform?usp=sf_link',
+        'Session_2': 'https://docs.google.com/forms/d/e/1FAIpQLSf3ROjAMenfKWa_CakIDtA34VOyLnNwYiqY7scB0r24G4glaQ/viewform?usp=sf_link',
+        'Session_3': 'https://docs.google.com/forms/d/e/1FAIpQLSe7AYYGDRG6SgEOrGl-A45OYXSbJYoMPjZSxOY8nwVLOofBpQ/viewform?usp=sf_link',
+        'Session 3': 'https://docs.google.com/forms/d/e/1FAIpQLSe7AYYGDRG6SgEOrGl-A45OYXSbJYoMPjZSxOY8nwVLOofBpQ/viewform?usp=sf_link'
+
+    }
+    survey_link = survey_link_dict[session]
+    return render_template('/record/done.html', session=session, url=survey_link)
