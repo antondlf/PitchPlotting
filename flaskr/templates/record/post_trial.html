@@ -27,7 +27,7 @@
             <p>Check out the <a href="https://github.com/addpipe/simpl-recorderjs-demo" target="_blank">code on GitHub</a> and <a href="https://addpipe.com/blog/using-recorder-js-to-capture-wav-audio-in-your-html5-web-site/" target="_blank">our blog post on using Recorder.js to capture WAV audio</a>.</p>-->
             {% if plot %}
             <div id="image">
-            <img width="50%" class='NO-CACHE' src="{{ url_for('/record.return_plot_file', filename=plot) }}">
+            <img width="(min-width: 320) 100%, (min-width: 1025) 50%" class='NO-CACHE' src="{{ url_for('/record.return_plot_file', filename=plot) }}">
             </div>
             {% endif %}
             <h3> {{ sent_type }} {{ sentence }} </h3>

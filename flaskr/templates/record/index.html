@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-      <meta content='width=device-width, initial-scale=1' name='viewport'/>
     <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate" />
     <meta charset="UTF-8">
     <title>Italian Prosody Project</title>
@@ -37,7 +36,7 @@
 
         {% if textplot %}
         <div id="textplot">
-        <img width="50%" src="{{ url_for('/record.return_textplot_file', chaptername=recording, filename=textplot) }}">
+        <img width="(min-width: 320) 100%, (min-width: 1025) 50%" src="{{ url_for('/record.return_textplot_file', chaptername=recording, filename=textplot) }}">
         </div>
         {% endif %}
         <h3> {{ sent_type }} {{ sentence }} </h3>
