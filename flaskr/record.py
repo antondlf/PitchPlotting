@@ -402,7 +402,7 @@ def next_chapter(session, trial_type, chapter_order):
                 else:
                     notify_next_week(user_id, 'Session 3')
 
-                return redirect(url_for('/record.end_message', session=session[-1]))
+                return redirect(url_for('/record.end_message', session=session))
 
         # If last sentence but not last trial, serve 0 for next trial
         elif trial_type != trial_type_list[-1]:

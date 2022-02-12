@@ -17,9 +17,13 @@
 </nav>
 <h1>Learning Italian Intonation</h1>
 
-{% if post=='Session 1' %}
+{% if post=='Session_1' %}
 <p>
-    Welcome to our online Italian intonation training! The study consists of three sessions:
+    Welcome to our online Italian intonation training!
+    You'll practice the melodies of Italian statements and questions.
+</p>
+<p>
+ The study consists of three sessions:
 </p>
 
 <ol>
@@ -30,7 +34,7 @@
 <p>
 Let’s check your set-up to make sure everything works smoothly.
 </p>
-    {% elif post=='Session 2' %}
+    {% elif post=='Session_2' %}
 <p>
     Welcome to the second Session of your training! As you may remember from last week we are testing a training for intonation (the melody of speech) in Italian, distinguishing statements and questions.
 
@@ -38,7 +42,7 @@ Let’s check your set-up to make sure everything works smoothly.
 <p>
     Reminder of equipment requirements:
 </p>
-{% elif post=='Session 3' %}
+{% elif post=='Session_3' %}
 <p>
     Welcome to the last Session of your training! This will be a shorter session, to see how well you remembered what you learned.
     Afterwards we would appreciate it if you could give us a little feedback by following the link at the end.
@@ -50,9 +54,9 @@ Let’s check your set-up to make sure everything works smoothly.
 
 
 <ul>
-    <li>Use <b>Google Chrome</b> if possible. Otherwise Firefox also works well. Safari gives some performance issues</li>
+    <li>Use <b>Google Chrome</b> if possible. Otherwise Firefox also works well. Safari gives some performance issues.</li>
     <li>Make sure you have a quiet space to work in.</li>
-    <li><a class="action" href="{{ url_for('/instructions.mic_test', post=post) }}">Check your Microphone</a></li>
+    <li><a class="action" href="{{ url_for('/instructions.mic_test', post=post) }}">Check your Microphone.</a></li>
 </ul>
 
 <p>

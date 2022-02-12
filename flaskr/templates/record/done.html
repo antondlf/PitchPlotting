@@ -10,19 +10,22 @@
 </head>
 <body>
 
-<h1>That's it! We hope you had fun practicing Italian intonation.</h1>
+<h1>Thank you! We hope you had fun practicing Italian intonation.</h1>
 
-<p> If you’d like to enter the drawing for a $100 Visa gift card, click <a href="{{ url }}"> here </a></p>
-{% if session == '1' %}
+
+{% if session == 'Session 1' %}
 <p>See you in a week for session 2! You will get the link in your email in 7 days.</p>
-{% elif session == '2' %}
-<p>Thanks for sticking with us! See you in a week for the last follow up.
+{% elif session == 'Session 2' %}
+<p> See you in a week for the last follow up!
     You will again get the link on your email in 7 days.</p>
-{% elif session == '3' %}
+{% elif session == 'Session 3' %}
 <p>You're all done! Thank you for sticking with it all the way, we hope you found it rewarding.
-    If you have the time, please fill out this form to let us know about your experience.
+    If you would like to
+    please fill out this form to let us know about your experience.
     You will also receive this link in a final email. </p>
 {% endif %}
+
+<p> If you’d like to enter the drawing for a $100 Visa gift card, click <a href="{{ url }}"> here </a></p>
 
 </body>
 </html>

@@ -9,9 +9,7 @@
 <body>
 <h1>Training</h1>
 <p>
-Well done! Now for the training. 
-</p>
-<p>
+Well done! Now for the training.
 In this section you will imitate a native speaker and compare your intonation with theirs.
 </p>
 
@@ -29,12 +27,13 @@ As before, you can click the buttons or press the spacebar to advance through th
 <p>
     <b>Remember to wait for the record button to turn green before starting to speak.</b>
 </p>
-
+<h1>
 {% if next_panel == 'training' %}
     <a href="{{ url_for('/record.record', session=session, trial_type='training', chapterorder='0') }}">
         Start training</a>
 {% elif next_panel == 'menu' %}
     <a href="{{ url_for('/record.index') }}">Back to menu</a>
 {% endif %}
+</h1>
 </body>
 </html>
