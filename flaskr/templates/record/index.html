@@ -36,13 +36,13 @@
 
         {% if textplot %}
         <div id="textplot">
-            <script>
-                @media screen and (min-width: 450px){
+            <style>
+                @media screen and (max-width: 600px){
                     img {max-width: 450xp,
                     height: auto}
                 }
 
-            </script>
+            </style>
         <img src="{{ url_for('/record.return_textplot_file', chaptername=recording, filename=textplot) }}">
         </div>
         {% endif %}
