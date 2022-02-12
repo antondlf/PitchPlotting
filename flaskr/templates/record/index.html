@@ -36,7 +36,7 @@
 
         {% if textplot %}
         <div id="textplot">
-        <img width=" 50%" src="{{ url_for('/record.return_textplot_file', chaptername=recording, filename=textplot) }}">
+        <img width="(max-width: 600) 50%, (min-width: 1025) 50%" src="{{ url_for('/record.return_textplot_file', chaptername=recording, filename=textplot) }}">
         </div>
         {% endif %}
         <h3> {{ sent_type }} {{ sentence }} </h3>
