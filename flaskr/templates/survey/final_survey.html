@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Survey</title>
+    <meta content='width=device-width, initial-scale=1' name='viewport'/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+<h1>What did you think?</h1>
+<form action="{{ url_for('/survey.final_survey', post=post) }}" method="post">>
+
+What, if anything, did you learn through participating in this study?<br>
+<textarea style="height:100px; width: 900px; font-size:12pt;" type="text" name="what_learn" size="60"></textarea><br><br>
+How was the experience of doing the training? Was it enjoyable, boring, frustrating, ...? <br>
+Would you want this kind of training to be incorporated in your language classes and/or be available as an app?<br>
+<textarea style="height:200px; width: 900px; font-size:12pt;" type="text" name="satisfaction" size="60"></textarea><br><br>
+Did you encounter any technical issues? If so, please describe them here.<br>
+<textarea style="height:200px; width: 900px; font-size:12pt;" type="text" name="tech_issues" size="60"></textarea><br><br>
+Would you like to share any other feedback or suggestions with us? Thanks again!<br>
+<textarea style="height:200px; width: 900px; font-size:12pt;" type="text" name="final_comments" size="60"></textarea><br><br>
+
+<input type="submit" value="submit"/>
+</form>
+</body>
+</html>

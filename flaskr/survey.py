@@ -69,3 +69,42 @@ def input_form2db(form, user_id, session):
     except:
 
         return print('Error inputing into db')
+
+
+@bp.route('/final_survey', methods=['POST', 'GET'])
+def final_survey():
+
+    if request.method == 'GET':
+
+        return render_template('/survey/final_survey.html')
+
+    elif request.method == 'POST':
+
+        user_id = g.user['id']
+
+        final_survey_input(request.form, user_id)
+
+        return redirect(url_for('/record.end_message', session='Session 3'))
+
+
+def final_survey_input(form, user_id):
+
+    db = get_db()
+
+    what = form['what_learn']
+    satisfaction = form['satisfaction']
+    tech_issues = form['tech_issues']
+    comments = form['final_comments']
+
+    db.execute(
+
+        'INSERT INTO final_survey'
+        '(user_id, what_learn, satisfaction, tech_issues, comments)'
+        'VALUES (?, ?, ?, ?, ?)',
+        (
+            user_id, what, satisfaction, tech_issues, comments
+        )
+    )
+    db.commit()
+
+

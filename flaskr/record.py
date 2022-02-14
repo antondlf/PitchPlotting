@@ -382,7 +382,7 @@ def next_chapter(session, trial_type, chapter_order):
             # TODO: send thank you message
             #notify('done', )
 
-            return redirect(url_for('/record.end_message'))
+            return redirect(url_for('/survey.final_survey'))
 
     # if it's the last sentence
     elif int(chapter_order) == int(trial_length):
@@ -415,7 +415,7 @@ def next_chapter(session, trial_type, chapter_order):
 
     else:
         # when all else fails it must be over
-        return redirect(url_for('/record.end_message'))
+        return redirect(url_for('/survey.final_survey'))
 
 
 @bp.route('/audio_process/participant_recordings/<string:filename>')

@@ -72,3 +72,13 @@ CREATE TABLE survey (
     comments TEXT,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE final_survey (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    what_learn TEXT NOT NULL,
+    satisfaction TEXT NOT NULL,
+    tech_issues TEXT NOT NULL,
+    comments TEXT NOT NULL,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+)
