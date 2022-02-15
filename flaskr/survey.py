@@ -72,6 +72,7 @@ def input_form2db(form, user_id, session):
 
 
 @bp.route('/final_survey', methods=['POST', 'GET'])
+@login_required
 def final_survey():
 
     if request.method == 'GET':
