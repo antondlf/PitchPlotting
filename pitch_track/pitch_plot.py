@@ -54,7 +54,7 @@ def validated_smooth(sound_object: parselmouth.Sound, change_octave_cost=False):
     kill_octaves = pitch_object#.kill_octave_jumps()
 
     # Smooth
-    smoothed = kill_octaves.smooth(bandwidth=20)
+    smoothed = kill_octaves.smooth(bandwidth=15)
 
     # add interpolation
     interpolated = smoothed#.interpolate()
@@ -107,12 +107,12 @@ def adjust_time_samples(new_time, old_time):
     return new_time_normalized
 
 
-def preprocess_pipeline(sound, low=75, high=600, smoothing=100, change_octave_cost=False):
+def preprocess_pipeline(sound, low=0, high=600, smoothing=100, change_octave_cost=False):
     """Preprocesses praat sound objects for plotting.
     Filters, trims silences, smooths samples."""
 
     # Filter out high frequencies to reduce chances of interfering noise
-    filtered = sound #low_pass(sound, low, high, smoothing)
+    filtered = low_pass(sound, low, high, smoothing)
 
     # Trim short transient noise samples and long silences
     trimmed = trim_silences(filtered)
@@ -127,7 +127,7 @@ def preprocess_pipeline(sound, low=75, high=600, smoothing=100, change_octave_co
     return pitch, time
 
 
-def preprocess_audio(new_sound, old_sound, low=75, high=600, smoothing=100):
+def preprocess_audio(new_sound, old_sound, low=0, high=600, smoothing=100):
     """Processes sound objects for plotting"""
 
     # Individual audio preprocessing
