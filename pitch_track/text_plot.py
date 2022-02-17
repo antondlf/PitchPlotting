@@ -15,16 +15,17 @@ def midpoint(x, y):
     return point
 
 
-def precompute_trace(sound, precompute_path):
+def precompute_trace(sound, precompute_path, change_octave_cost=False):
 
-    trace = preprocess_pipeline(sound)
+    trace = preprocess_pipeline(sound, change_octave_cost=change_octave_cost)
     with open(precompute_path, 'wb') as in_file:
         pickled_trace = pickle.dumps(trace)
         in_file.write(pickled_trace)
 
     return trace
 
-def draw_text_plot(audio, textgrid, plot_path, precompute_path):#,  jitter = 0.001, text_jitter = 10):
+
+def draw_text_plot(audio, textgrid, plot_path, precompute_path, change_octave_cost=False):#,  jitter = 0.001, text_jitter = 10):
 
     plt.clf()
 
@@ -32,7 +33,7 @@ def draw_text_plot(audio, textgrid, plot_path, precompute_path):#,  jitter = 0.0
 
 
     # Extract selected pitch contour, and trim the beginning zeroes
-    pitch_values, time = precompute_trace(sound, precompute_path)
+    pitch_values, time = precompute_trace(sound, precompute_path, change_octave_cost=change_octave_cost)
 
     pitch_values[pitch_values == 0] = np.nan
 
@@ -112,13 +113,19 @@ def draw_text_plot(audio, textgrid, plot_path, precompute_path):#,  jitter = 0.0
     plt.ylabel('Pitch')
     plt.xlabel('Time')
     plt.tick_params(axis='x', which='both')
-    plt.savefig(plot_path)
+    plt.savefig(plot_path, bbox_inches='tight')
     #plt.show()
 
-def preprocess_chapters(chapters_path):
+
+def preprocess_chapters(chapters_path, problem_list):
     """From path to Recordings_new add a pitch plot to every dir that starts with "Chapter_"."""
 
     for dir in os.listdir(chapters_path):
+
+        if dir in problem_list:
+            change_octave_cost = True
+        else:
+            change_octave_cost = False
 
         chap_directory = os.path.join(chapters_path, dir)
         print(chap_directory)
@@ -132,14 +139,27 @@ def preprocess_chapters(chapters_path):
 
                 if file.endswith('.wav'):
                     audio = os.path.join(chap_directory, file)
-                    pathname = os.path.join(chap_directory, file.rsplit('.')[0] + '.png')
+                    pathname = os.path.join('Recordings', file.rsplit('.')[0] + '.png')
                     trace_data_path = os.path.join(chap_directory, file.rsplit('.')[0] + '.pickle')
                     print(pathname)
 
-            draw_text_plot(audio, grid, pathname, trace_data_path)
+            draw_text_plot(audio, grid, pathname, trace_data_path, change_octave_cost=change_octave_cost)
 
 
 if __name__ == '__main__':
-    preprocess_chapters('Recordings')
+    problem_list = ['Loredana_vende(S)',
+    'Elena_guarda(Q)',
+    'Luigi_odia(S)',
+    'La_legna(S)',
+    'La_via(S)',
+    'Il_leone(S)',
+    'Il_melone(S)',
+    'La_balena(S)',
+    'La_ragione(S)',
+    'Debora_gira(S)']
+    preprocess_chapters('Recordings', problem_list)
 
-    #draw_text_plot('Recordings/Il_lago(S)/3-S-il_lago.wav', 'Recordings/Il_lago(S)/3-S-il_lago.TextGrid')
+    #draw_text_plot('Recordings/La_rana(S)/3-S-La_rana.wav',
+     #              'Recordings/La_rana(S)/3-S-La_rana.TextGrid',
+      #             '',
+       #            'Recordings/La_rana(S)/3-S-La_rana.pickle')

@@ -40,17 +40,21 @@ def low_pass(sound_object, low_freq, high_freq, smoothing):
     return filtered
 
 
-def validated_smooth(sound_object: parselmouth.Sound):
+def validated_smooth(sound_object: parselmouth.Sound, change_octave_cost=False):
     """Smooths f0 while filtering out doubled samples."""
 
     # Turn into a pitch object
-    pitch_object = sound_object.to_pitch()
+    # If it's one of set examples then change octave cost
+    if change_octave_cost:
+        pitch_object = sound_object.to_pitch_ac(pitch_floor=20, octave_cost=0.2)
+    else:
+        pitch_object = sound_object.to_pitch(pitch_floor=20)
 
     # Remove octave jumps
     kill_octaves = pitch_object#.kill_octave_jumps()
 
     # Smooth
-    smoothed = kill_octaves.smooth(bandwidth=15)
+    smoothed = kill_octaves.smooth(bandwidth=20)
 
     # add interpolation
     interpolated = smoothed#.interpolate()
@@ -103,18 +107,18 @@ def adjust_time_samples(new_time, old_time):
     return new_time_normalized
 
 
-def preprocess_pipeline(sound, low=0, high=500, smoothing=100):
+def preprocess_pipeline(sound, low=75, high=600, smoothing=100, change_octave_cost=False):
     """Preprocesses praat sound objects for plotting.
     Filters, trims silences, smooths samples."""
 
     # Filter out high frequencies to reduce chances of interfering noise
-    filtered = low_pass(sound, low, high, smoothing)
+    filtered = sound #low_pass(sound, low, high, smoothing)
 
     # Trim short transient noise samples and long silences
     trimmed = trim_silences(filtered)
 
     # Create pitch objects and smooth
-    smooth = validated_smooth(trimmed)
+    smooth = validated_smooth(trimmed, change_octave_cost=change_octave_cost)
         #trimmed.to_pitch().smooth()
 
     # Remove trailing and leading silences
@@ -123,7 +127,7 @@ def preprocess_pipeline(sound, low=0, high=500, smoothing=100):
     return pitch, time
 
 
-def preprocess_audio(new_sound, old_sound, low=0, high=500, smoothing=100):
+def preprocess_audio(new_sound, old_sound, low=75, high=600, smoothing=100):
     """Processes sound objects for plotting"""
 
     # Individual audio preprocessing
@@ -212,7 +216,7 @@ def draw_pitch(new_pitch, old_pitch, path, show=False):
     plt.ylim(0,  np.nanmax(pitch_values_old) + 200)
     plt.ylabel('Pitch')
     plt.xlabel('Time')
-    plt.savefig(path)
+    plt.savefig(path, bbox_inches='tight')
     #plt.show()
     return path
 
