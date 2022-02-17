@@ -139,7 +139,7 @@ def preprocess_chapters(chapters_path, problem_list):
 
                 if file.endswith('.wav'):
                     audio = os.path.join(chap_directory, file)
-                    pathname = os.path.join('Recordings', file.rsplit('.')[0] + '.png')
+                    pathname = os.path.join(chap_directory, file.rsplit('.')[0] + '.png')
                     trace_data_path = os.path.join(chap_directory, file.rsplit('.')[0] + '.pickle')
                     print(pathname)
 
