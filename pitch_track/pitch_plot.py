@@ -57,7 +57,7 @@ def validated_smooth(sound_object: parselmouth.Sound, change_octave_cost=False):
     smoothed = kill_octaves.smooth(bandwidth=15)
 
     # add interpolation
-    interpolated = smoothed#.interpolate()
+    interpolated = smoothed.interpolate()
 
     return interpolated
 
