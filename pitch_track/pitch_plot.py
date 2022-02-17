@@ -48,7 +48,7 @@ def validated_smooth(sound_object: parselmouth.Sound, change_octave_cost=False):
     if change_octave_cost:
         pitch_object = sound_object.to_pitch_ac(pitch_floor=20, octave_cost=0.2)
     else:
-        pitch_object = sound_object.to_pitch(pitch_floor=20)
+        pitch_object = sound_object.to_pitch()# this function has pitch_floor=20 for preprocessing
 
     # Remove octave jumps
     kill_octaves = pitch_object#.kill_octave_jumps()
