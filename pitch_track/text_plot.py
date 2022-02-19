@@ -147,19 +147,35 @@ def preprocess_chapters(chapters_path, problem_list):
 
 
 if __name__ == '__main__':
-    problem_list = ['Loredana_vende(S)',
-    'Elena_guarda(Q)',
-    'Luigi_odia(S)',
+
+    #### This is the list of problem sentences due to octave halving at the start of the
+    #### sentence. These file paths trigger a condition in preprocessing
+    ### That changes the octave cost value of pitch extraction to 0.06. This is the
+    ### Lowest value that fixes the issue for all of them
+    problem_list = [
     'La_legna(S)',
     'La_via(S)',
-    'Il_leone(S)',
-    'Il_melone(S)',
-    'La_balena(S)',
-    'La_ragione(S)',
-    'Debora_gira(S)']
+    'Il_melone(S)']
+
+    # ['Loredana_vende(S)',
+    #     'Elena_guarda(Q)',
+    #     'Luigi_odia(S)',
+    # 'Il_leone(S)'
+    # ,'La_balena(S)',
+    #     'La_ragione(S)',
+    #     'Debora_gira(S)']
+    # (Livia_dorme(Q), 0.12)
+    #
+    # (Bernardo_viene(Q), 0.23)
+    #
+    # (Giovanni_ruba(Q), 0.27)
+    #
+    # (Il_nome(Q), 0.1)
+    #
+    # (La_balena(Q), 0.11)
     preprocess_chapters('Recordings', problem_list)
 
-    #draw_text_plot('Recordings/La_rana(S)/3-S-La_rana.wav',
-     #              'Recordings/La_rana(S)/3-S-La_rana.TextGrid',
+    #draw_text_plot('Recordings/La_via(S)/3-S-La_via.wav',
+     #              'Recordings/La_via(S)/3-S-La_via.TextGrid',
       #             '',
-       #            'Recordings/La_rana(S)/3-S-La_rana.pickle')
+       #            'Recordings/La_via(S)/3-S-La_via.pickle')

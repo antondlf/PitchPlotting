@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS chapters;
 DROP TABLE IF EXISTS userdata;
 DROP TABLE IF EXISTS new_emails;
 DROP TABLE IF EXISTS survey;
+DROP TABLE IF EXISTS final_survey;
 
 
 CREATE TABLE notifications(
