@@ -40,15 +40,15 @@ def low_pass(sound_object, low_freq, high_freq, smoothing):
     return filtered
 
 
-def validated_smooth(sound_object: parselmouth.Sound, change_octave_cost=False):
+def validated_smooth(sound_object: parselmouth.Sound): #, change_octave_cost=False):
     """Smooths f0 while filtering out doubled samples."""
 
     # Turn into a pitch object
     # If it's one of set examples then change octave cost
-    if change_octave_cost:
-        pitch_object = sound_object.to_pitch_ac(pitch_floor=20, octave_cost=0.06)
-    else:
-        pitch_object = sound_object.to_pitch()#_ac()# this function has pitch_floor=20 for preprocessing
+    #if change_octave_cost:
+    #    pitch_object = sound_object.to_pitch_ac(pitch_floor=20, octave_cost=0.06)
+    #else:
+    pitch_object = sound_object.to_pitch()#_ac()# this function has pitch_floor=20 for preprocessing
 
     # Remove octave jumps
     kill_octaves = pitch_object#.kill_octave_jumps()
@@ -107,7 +107,7 @@ def adjust_time_samples(new_time, old_time):
     return new_time_normalized
 
 
-def preprocess_pipeline(sound, low=0, high=600, smoothing=100, change_octave_cost=False):
+def preprocess_pipeline(sound, low=0, high=600, smoothing=100): # , change_octave_cost=False):
     """Preprocesses praat sound objects for plotting.
     Filters, trims silences, smooths samples."""
 
@@ -118,7 +118,7 @@ def preprocess_pipeline(sound, low=0, high=600, smoothing=100, change_octave_cos
     trimmed = trim_silences(filtered)
 
     # Create pitch objects and smooth
-    smooth = validated_smooth(trimmed, change_octave_cost=change_octave_cost)
+    smooth = validated_smooth(trimmed)# , change_octave_cost=change_octave_cost)
         #trimmed.to_pitch().smooth()
 
     # Remove trailing and leading silences
