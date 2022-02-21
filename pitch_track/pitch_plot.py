@@ -48,7 +48,7 @@ def validated_smooth(sound_object: parselmouth.Sound, change_octave_cost=False):
     if change_octave_cost:
         pitch_object = sound_object.to_pitch_ac(pitch_floor=20, octave_cost=0.06)
     else:
-        pitch_object = sound_object.to_pitch_ac()# this function has pitch_floor=20 for preprocessing
+        pitch_object = sound_object.to_pitch()#_ac()# this function has pitch_floor=20 for preprocessing
 
     # Remove octave jumps
     kill_octaves = pitch_object#.kill_octave_jumps()
@@ -57,7 +57,7 @@ def validated_smooth(sound_object: parselmouth.Sound, change_octave_cost=False):
     smoothed = kill_octaves.smooth(bandwidth=15)
 
     # add interpolation
-    interpolated = smoothed.interpolate()
+    interpolated = smoothed#.interpolate()
 
     return interpolated
 
