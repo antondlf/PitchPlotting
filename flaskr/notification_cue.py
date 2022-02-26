@@ -13,7 +13,7 @@ def notify_next_week(user_id, notification_session):
 
     # Get notification time for next week
     # TODO: change from 1 day to 7 after testing
-    notification_time = datetime.datetime.now() + datetime.timedelta(days=0, minutes=1)#days=1)
+    notification_time = datetime.datetime.now() + datetime.timedelta(days=1)#days=1)
 
     # Delete any prior entries with that email to avoid duplicate emails
     db.execute(
