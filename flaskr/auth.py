@@ -20,12 +20,20 @@ def register():
         db = get_db()
         error = None
 
+        sus_strings = ['crypto', 'NFT', '$', 'BTC ', 'Ukraine', 'Russia', 'Novy originalny', 'Support the fund', ' ']
+
         if not username:
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
         elif not email:
             error = 'Valid email is required.'
+        elif len(username) > 10:
+            error = 'Username entered is not valid'
+
+        elif ' ' in username:
+            error = 'Username entered is not valid, please do not include spaces.'
+
         elif db.execute(
             'SELECT id FROM user WHERE username = ?', (username,)
         ).fetchone() is not None:

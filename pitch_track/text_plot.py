@@ -17,7 +17,7 @@ def midpoint(x, y):
 
 def precompute_trace(sound, precompute_path, change_octave_cost=False):
 
-    trace = preprocess_pipeline(sound, change_octave_cost=change_octave_cost)
+    trace = preprocess_pipeline(sound)#, change_octave_cost=change_octave_cost)
     with open(precompute_path, 'wb') as in_file:
         pickled_trace = pickle.dumps(trace)
         in_file.write(pickled_trace)
