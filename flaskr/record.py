@@ -152,11 +152,12 @@ def index():
 @login_required
 def specific_index(session):
 
-    if session == 'Session_3':
-
-        return render_template('/Instructions/Introduction.html', post=session)
-
-    return render_template('/Instructions/Introduction.html', post=session)
+    return index()
+    # if session == 'Session_3':
+    #
+    #     return render_template('/Instructions/Introduction.html', post=session)
+    #
+    # return render_template('/Instructions/Introduction.html', post=session)
 
 
 @bp.route('/record/<string:session>/<string:trial_type>/<string:chapterorder>', methods=['POST', 'GET'])
