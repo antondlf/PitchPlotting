@@ -394,7 +394,7 @@ def next_chapter(session, trial_type, chapter_order):
             if trial_type == 'pre_train':
                 return redirect(url_for('/instructions.training', session=session, is_session=True))
             elif trial_type == 'training':
-                return redirect(url_for('/instructions.post_training'))
+                return redirect(url_for('/instructions.post_training', session=session))
             elif trial_type == 'post_train':
 
                 # If finished add to notification cue for session 2
