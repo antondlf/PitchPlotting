@@ -67,7 +67,7 @@ def training(session, is_session):
     )
 
 
-@bp.route('/instructions/post_train')
+@bp.route('/instructions/<string:session>/post_train')
 @login_required
 def post_training():
     return render_template('Instructions/post_test.html')
