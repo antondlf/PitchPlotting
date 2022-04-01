@@ -31,6 +31,10 @@ def register():
         elif len(username) > 10:
             error = 'Username entered is not valid'
 
+        elif '>>' in username:
+
+            error = "Username entered is not valid, disallowed characters are contained."
+
         elif ' ' in username:
             error = 'Username entered is not valid, please do not include spaces.'
 
