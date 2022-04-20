@@ -28,7 +28,7 @@ def process_recording(original_audio_path, audio_data, chaptername, database_inp
     Returns a the path where the recording is stored.
     """
 
-    print(original_audio_path)
+    #print(original_audio_path)
 
 
     error = None

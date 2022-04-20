@@ -77,7 +77,7 @@ def post_training(session):
 @login_required
 def get_image(filename):
     path = os.path.join(current_app.root_path, 'instructions_pics')
-    print(path)
+    #print(path)
     return send_from_directory(path, filename, as_attachment=True)
 
 

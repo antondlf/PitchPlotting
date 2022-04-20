@@ -34,7 +34,7 @@ def equipment_survey(post):
         user_id = g.user['id']
 
         input_form2db(request.form, user_id, post)
-        print(request.form)
+        #print(request.form)
         return render_template('/Instructions/Test_instructions.html', post=post, post_name=post_name)
 
 

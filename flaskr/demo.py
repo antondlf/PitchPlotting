@@ -64,7 +64,7 @@ def italian_demo():
         trial_path = os.path.join(current_app.root_path, '../demo_recordings', 'demo_rec' + demo_id)
 
         recording_path = save_audio(trial_path, audio_data)
-        print(recording_path)
+        #print(recording_path)
 
         # If recording_path = None then wav file is empty.
         if recording_path == None:

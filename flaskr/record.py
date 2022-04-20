@@ -255,7 +255,6 @@ def record(session, trial_type, chapterorder):
         # Redirect to the post_trial (comparison plot template)
         return redirect(url_for('/record.post_trial', session=session, trial_type=trial_type, chapter_order=chapterorder))
 
-
     if condition == 'a':
         # full feedback condition
         return render_template(
