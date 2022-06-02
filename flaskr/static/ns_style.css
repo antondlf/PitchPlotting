@@ -50,7 +50,7 @@ button:disabled {
 }
 button:first-child {
   margin-left: 0;
-}.clickplz {
+}.playing {
     animation:btn 2s;
     -webkit-animation:btn 2s;
     animation-iteration-count:infinite;

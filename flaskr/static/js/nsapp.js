@@ -48,18 +48,24 @@ function trialResponse(event){
     }
 }
 
-async function playTrialAudio(){
+function playTrialAudio(){
 
     startTrial.diabled = true
     console.log('trial started')
 
     playAudio(firstRecording, firstButton)
     firstRecording.addEventListener('ended',
-    function(){playAudio(secondRecording, secondButton)}
+    function(){
+    firstButton.classList.remove("playing")
+    playAudio(secondRecording, secondButton)
+    }
     )
-
+    secondRecording.addEventListener('ended', function(){
+    secondButton.classList.remove("playing")
   firstButton.disabled = false
   secondButton.disabled = false
+  }
+  )
 
 
 }
@@ -72,7 +78,7 @@ async function playAudio(audio, button){
     button.classList.add("playing");
   } catch(err) {
     button.classList.remove("playing");
-    startTrial.diabled = false
+    startTrial.disabled = false
   };
 
 }
