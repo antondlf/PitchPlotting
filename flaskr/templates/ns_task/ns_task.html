@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate" />
+    <meta charset="UTF-8">
+    <title>Italian Prosody Project NS Task</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/static/js/nsapp.js"></script>
+
+    <!-- Latest compiled and minified Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> <!--integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"-->
+    <link rel="stylesheet" type="text/css" href="/static/ns_style.css">
+</head>
+<body>
+<!--List of variables needed: first_recording, second_recording-->
+        <audio id = "firstAudio" hidden>
+            <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
+            <source src="{{ url_for('/record.return_plot_file', filename=recording) }}" type="audio/wav">
+        </audio>
+        <audio id = "secondAudio" hidden>
+            <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
+            <source src="{{ url_for('/record.return_plot_file', filename=recording) }}" type="audio/wav">
+        </audio>
+
+<h1>Press <b>A</b> if the first recording is better <b>L</b> if it's the second recording.</h1>
+<h2><button id="startTrial"> Play Recordings </button></h2>
+<div class="row">
+    <div class="column">
+        <button id="firstButton" disabled>First Recording</button>
+    </div>
+    <div class="column">
+        <button id="secondButton" disabled>Second Recording</button>
+    </div>
+</div>
+
+
+</body>
+</html>
