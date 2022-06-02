@@ -34,9 +34,9 @@ def display_trial(trial_order):
 
     user_id = g.user['id']
 
-    pre_recording = '1_Anna_lavora(Q)_0_9f1f.wav'#'11144_Il_ladro(S)_0_9dea.wav'
+    pre_recording = '11144_Il_ladro(S)_0_9dea.wav' #'1_Anna_lavora(Q)_0_9f1f.wav'#
 
-    post_recording = '2_Daria_brinda(S)_0_e2b7.wav' #'11144_Il_brodo(S)_0_79e9.wav'
+    post_recording = '11144_Il_brodo(S)_0_79e9.wav' #'2_Daria_brinda(S)_0_e2b7.wav' #
 
     current_trial_order = 0  # another query statement
 
