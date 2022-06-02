@@ -98,7 +98,7 @@ bp = Blueprint('/record', __name__)
 @login_required
 def new_index():
 
-    return url_for('/ns_task.display_trial')
+    return redirect(url_for('/ns_task.display_trial'), trial_order=0)
 # Simple login index
 @bp.route('/old_index')
 @login_required
