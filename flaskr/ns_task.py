@@ -80,7 +80,7 @@ def display_trial(trial_order):
         else:
             print(response)
             print('some error has ocurred')
-
+        trial_order += 1
         # return get_next_trial()
-        return render_template('/ns_task/ns_task.html', first_recording=first_recording, second_recording=second_recording)
+        return redirect(url_for('/ns_task.display_trial', trial_order=trial_order))
 
