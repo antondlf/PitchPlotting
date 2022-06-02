@@ -55,6 +55,10 @@ def create_app(test_config=None):
     app.register_blueprint(demo.bp)
     app.add_url_rule('/', endpoint='demo')
 
+    from . import ns_task
+    app.register_blueprint(ns_task.bp)
+    app.add_url_rule('/', endpoint='ns_task')
+
     return app
 
 

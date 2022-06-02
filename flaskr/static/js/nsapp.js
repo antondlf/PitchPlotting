@@ -5,12 +5,16 @@ var startTrial = document.getElementById('startTrial')
 var firstRecording = document.getElementById('firstAudio')
 var secondRecording = document.getElementById('secondAudio')
 
+console.log(firstButton.disabled, secondButton.disabled)
+
+if (startTrial){
 startTrial.addEventListener('click', playTrialAudio)
+}
 
 window.addEventListener('keydown', trialResponse);
 function trialResponse(event){
 
-    if (firsButton.disabled == true && secondButton.disabled == true){
+    if (firstButton.disabled == true && secondButton.disabled == true){
         if (event.keyCode === 32){
             playTrialAudio()
         }
@@ -19,51 +23,68 @@ function trialResponse(event){
     else if (firstButton.disabled == false && secondButton.disabled == false){
 
 
-    }
+
     // If 'a' key is pressed first recording is selected
     // 'a' key code is 65
     if (event.keyCode === 65){
         firstButton.disabled = true;
         secondButton.disabled = true;
         firstButton.click();
+        sendData('first');
         console.log('a pressed, first recording picked')
     }
     else if (event.keyCode === 76){
         firstButton.disabled = true;
         secondButton.disabled = true;
         secondButton.click();
+        sendData('second');
         console.log('l key pressed, second recording picked')
     }
     // go to next trial
-
+}
     else{
         console.log('Some issue came up with button uncoordination')
         location.reload()
     }
 }
 
-function playTrialAudio(){
+async function playTrialAudio(){
 
     startTrial.diabled = true
+    console.log('trial started')
 
-    try {
-    await firstRecording.play();
-    firstButton.classList.add("playing");
-  } catch(err) {
-    firstButton.classList.remove("playing");
-    startTrial.diabled = false
-  };
-
-    try {
-    await secondRecording.play();
-    secondButton.classList.add("playing");
-  } catch(err) {
-    secondButton.classList.remove("playing");
-    startTrial.diabled = false
-  };
+    playAudio(firstRecording, firstButton)
+    firstRecording.addEventListener('ended',
+    function(){playAudio(secondRecording, secondButton)}
+    )
 
   firstButton.disabled = false
   secondButton.disabled = false
 
+
+}
+
+
+async function playAudio(audio, button){
+
+    try {
+    await audio.play();
+    button.classList.add("playing");
+  } catch(err) {
+    button.classList.remove("playing");
+    startTrial.diabled = false
+  };
+
+}
+
+
+function sendData(nsResponse){
+
+    var xhr = new XMLHttpRequest();
+xhr.open("POST", window.location.href, true);
+xhr.setRequestHeader('Content-Type', 'application/json');
+xhr.send(JSON.stringify({
+    value: nsResponse
+}));
 
 }
