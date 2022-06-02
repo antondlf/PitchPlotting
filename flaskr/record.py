@@ -93,8 +93,14 @@ def get_user_progress(user_id):
 
 bp = Blueprint('/record', __name__)
 
-# Simple login index
+
 @bp.route('/')
+@login_required
+def new_index():
+
+    return url_for('/ns_task.display_trial')
+# Simple login index
+@bp.route('/old_index')
 @login_required
 def index():
 
