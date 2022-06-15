@@ -7,6 +7,10 @@ import sqlite3
 
 import click
 
+import random
+
+import pandas as pd
+
 from werkzeug.exceptions import abort
 
 from flaskr.audio_processing import process_recording
@@ -17,6 +21,7 @@ from flaskr.notification_cue import notify_next_week
 
 import os
 
+
 @click.command('init-ns-db')
 def init_ns_db():
 
@@ -26,16 +31,20 @@ def init_ns_db():
 
     with open(dir_path + '/ns_schema.sql') as f:
         db.executescript(f.read())
+
     db.commit()
+
+    input_trials('~/recordings.csv')
 
 
 def get_ns_db():
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    if 'ns_db' not in g:
-        ns_db = sqlite3.connect(
-            dir_path + '/../instance/ns_base.sqlite',
-            detect_types=sqlite3.PARSE_DECLTYPES
-        )
+    print(dir_path)
+    #if 'ns_db' not in g:
+    ns_db = sqlite3.connect(
+        dir_path + '/../instance/ns_base.sqlite',
+        detect_types=sqlite3.PARSE_DECLTYPES
+    )
     return ns_db
 
 
@@ -52,22 +61,22 @@ def display_trial(trial_order):
     # Maybe add a sanity check here?
     pre_recording, post_recording, display_order = db.execute(
         'SELECT pre_recording_id, post_recording_id, display_order '
-        'FROM trial_order WHERE user_id=? AND trial=?',
-        (user_id, trial_order)
+        'FROM trial_order WHERE trial=?',
+        (trial_order,)  # (user_id, trial_order,)
     ).fetchall()[0]
 
-    #pre_recording = '11144_Il_ladro(S)_0_9dea.wav' #'1_Anna_lavora(Q)_0_9f1f.wav'#
+    # pre_recording = '11144_Il_ladro(S)_0_9dea.wav' #'1_Anna_lavora(Q)_0_9f1f.wav'#
 
-    #post_recording = '11144_Il_brodo(S)_0_79e9.wav' #'2_Daria_brinda(S)_0_e2b7.wav' #
+    # post_recording = '11144_Il_brodo(S)_0_79e9.wav' #'2_Daria_brinda(S)_0_e2b7.wav' #
 
-    #display_order = 0  # another query statement
+    # display_order = 0  # another query statement
 
     current_trial_pair = (pre_recording,
                           post_recording)  # some query statement on whatever structure we build returning a tuple of filenames
 
-    first_recording = current_trial_pair[display_order]
+    first_recording = current_trial_pair[display_order] + '.wav'
 
-    second_recording = current_trial_pair[display_order - 1]
+    second_recording = current_trial_pair[display_order - 1] + '.wav'
 
     if request.method == 'GET':
 
@@ -113,19 +122,23 @@ def display_trial(trial_order):
 
         register_response(
             db, user_id, trial_order,
-            response, bool_response, chosen_recording)
-
-        trial_order += 1
+            response, chosen_recording, bool_response)
         # return get_next_trial()
         return redirect(url_for('/ns_task.display_trial', trial_order=trial_order))
 
+@bp.route('/ns_task/<int:trial_order>/next_trial')
+def next_trial(trial_order):
 
-def register_response(db, user_id, trial_order, response, bool_response, chosen_recording):
+    trial_order += 1
+    return redirect(url_for('/ns_task.display_trial', trial_order=trial_order))
+
+
+def register_response(db, user_id, trial_order, response, chosen_recording, bool_response):
 
     trial_metadata = db.execute(
-        'SELECT * FROM trial_order'
-        'WHERE user_id=? AND trial=?',
-        (user_id, trial_order)
+        'SELECT * FROM trial_order '
+        'WHERE trial=?',#'WHERE user_id=? AND trial=?',
+        (trial_order,)#(user_id, trial_order,)
     ).fetchall()[0]
 
     row_id, user_id_fromdb, username, trial, learner_id, sent_typ,\
@@ -140,15 +153,94 @@ def register_response(db, user_id, trial_order, response, bool_response, chosen_
 
         db.execute(
             'INSERT INTO ns_data (rater_id, learner_id, sent_typ,'
-            'sent_group, pre_recording_id, pre_recording_sent, post_recording_id'
+            'sent_group, pre_recording_id, pre_recording_sent, post_recording_id, '
             'post_recording_sent, display_order, chosen_recording_id, is_improved)'
-            'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             (user_id, learner_id, sent_typ, sent_group,
              pre_recording_id, pre_recording_sent,
              post_recording_id, post_recording_sent,
-             display_order, chosen_recording, bool_response)
+             display_order,
+             chosen_recording,
+             bool_response
+             )
         )
         db.commit()
+
+
+def get_trial_metadata(trial_order, user_id):
+
+    # Maybe add a sanity check here?
+    pre_recording, post_recording, display_order = db.execute(
+        'SELECT pre_recording_id, post_recording_id, display_order '
+        'FROM trial_order WHERE trial=?',
+        (trial_order,)  # (user_id, trial_order,)
+    ).fetchall()[0]
+
+    # pre_recording = '11144_Il_ladro(S)_0_9dea.wav' #'1_Anna_lavora(Q)_0_9f1f.wav'#
+
+    # post_recording = '11144_Il_brodo(S)_0_79e9.wav' #'2_Daria_brinda(S)_0_e2b7.wav' #
+
+    # display_order = 0  # another query statement
+
+    current_trial_pair = (pre_recording,
+                          post_recording)  # some query statement on whatever structure we build returning a tuple of filenames
+
+    first_recording = current_trial_pair[display_order] + '.wav'
+
+    second_recording = current_trial_pair[display_order - 1] + '.wav'
+
+    return first_recording, second_recording, display_order
+
+
+def input_trials(path_to_csv):
+    data = pd.read_csv(path_to_csv)
+    db = get_ns_db()
+    trial_counter = 0
+    for row in data.iterrows():
+        #print('function entered')
+
+        row_data = row[1]
+
+        #try:
+
+        paired_row = data.sample(1)
+        #print(paired_row)
+        # paired_row = data.loc[(data['user_id'] == row_data['user_id']) &
+        #                       (data['trial_type'] == row_data['trial_id']) &
+        #                       (data['sent_type'] == row_data['sent_type'])&
+        #                       (data['sent_group'] == row_data['sent_group'])
+        # ][0]
+        #print(row[1]['trial_id'])
+
+        display_order = random.choice([0,1])
+
+        db.execute(
+
+            'INSERT INTO trial_order'
+            '(user_id, username, trial, learner_id, sent_typ,'
+            'sent_group, pre_recording_id, pre_recording_sent,'
+            'post_recording_id, post_recording_sent, display_order)'
+            'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            (
+                1,
+                'test',
+                trial_counter,
+                row_data['user_id'],
+                row_data['sent_type'],
+                row_data['sent_group'],
+                row_data['trial_id'],
+                row_data['sent_id'],
+                paired_row['trial_id'].item(),
+                paired_row['sent_id'].item(),
+                display_order,
+            )
+        )
+        db.commit()
+
+        trial_counter += 1
+        # except:
+        #     print(IndexError('Index out of bounds'))
+        #     #break
 
 
 if __name__ == '__main__':

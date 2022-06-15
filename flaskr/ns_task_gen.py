@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from random import shuffle
 import sqlite3
 
 
@@ -68,6 +69,9 @@ def get_recordings(path_to_metadata):
         'condition_3': {'pre': 'Session 1', 'post': 'Session 3'}
     }
 
+    # A counter to gather how many pairs of stimuli there are in total
+    pair_len = 0
+
     trial_order_dict = dict()
 
     data = pd.read_csv(path_to_metadata)
@@ -113,14 +117,16 @@ def get_recordings(path_to_metadata):
                 # print()
 
                 cond_dict[group + sent_type] = (trial_id_pre, trial_id_post)
+                pair_len += 1
 
             user_dict[cond] = cond_dict
 
         trial_order_dict[user] = user_dict
 
-        return trial_order_dict
+        return trial_order_dict, pair_len
 
-def generate_trials(num_raters, num_block, block_len, concurrency=5):
+
+def generate_trials(num_raters, num_block, block_len, path_to_metadata, concurrency=5):
     """Generates randomized order of trials for a set number
     of native speaker raters with a set number of sentences
     rated by all native speakers.
@@ -141,3 +147,43 @@ def generate_trials(num_raters, num_block, block_len, concurrency=5):
 
     Function returns the order trials for all raters.
     """
+
+    rater_list = ['rater_'+str(rater) for rater in range(0, num_raters)]
+
+    #create_accounts(rater_list)
+
+    trial_dict, pair_len = get_recordings(path_to_metadata)
+
+    # ERROR HERE IF CONCURRENCY>NUMBER OF RATERS
+    total_ratings = pair_len*concurrency
+
+    # Get the number of times the rater list must be repeated
+
+    # This is equivalent to ceiling division
+    trials_per_rater = -1 * (-total_ratings//len(rater_list))
+    raters_rand_expand = list()
+
+    for i in range(trials_per_rater):
+
+        shuffle(rater_list)
+        raters_rand_expand.append(rater_list)
+
+"""5. Iter over len of list of each group of stimuli for user (from step 4).
+    
+    1. Select the slice of 2 (n_comparison_condtions*concurrency)
+     corresponding to the current iteration
+        (something like rater_list[start_slice*i:end_slice*i] where 
+        end_slice is checked to be no more than the total length of the list)
+    2. Give first 5 S/comparison_1 second 5 Q/comparison_1, Next 5 S/comparison_2...
+    
+
+"""
+
+
+
+
+
+
+
+
+

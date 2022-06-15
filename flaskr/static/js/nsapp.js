@@ -93,4 +93,16 @@ xhr.send(JSON.stringify({
     value: nsResponse
 }));
 
+    nextTrial()
+
 }
+
+function nextTrial() {
+    console.log('redirect_started')
+    console.log(window.location.href)
+    var new_address = window.location.href + '/next_trial'
+    var new_page = new URL(new_address)
+    console.log(new_address)
+    window.location.replace(new_page);
+}
+
