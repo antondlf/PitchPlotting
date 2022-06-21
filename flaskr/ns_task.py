@@ -11,6 +11,8 @@ import random
 
 import pandas as pd
 
+import csv
+
 from werkzeug.exceptions import abort
 
 from flaskr.audio_processing import process_recording
@@ -32,9 +34,8 @@ def init_ns_db():
     with open(dir_path + '/ns_schema.sql') as f:
         db.executescript(f.read())
 
+    csv2sql(dir_path + '/../apportioned.csv')
     db.commit()
-
-    input_trials('~/recordings.csv')
 
 
 def get_ns_db():
@@ -168,7 +169,7 @@ def register_response(db, user_id, trial_order, response, chosen_recording, bool
 
 
 def get_trial_metadata(trial_order, user_id):
-
+    db = get_ns_db()
     # Maybe add a sanity check here?
     pre_recording, post_recording, display_order = db.execute(
         'SELECT pre_recording_id, post_recording_id, display_order '
@@ -190,6 +191,24 @@ def get_trial_metadata(trial_order, user_id):
     second_recording = current_trial_pair[display_order - 1] + '.wav'
 
     return first_recording, second_recording, display_order
+
+
+def csv2sql(path_to_csv):
+
+    db = get_ns_db()
+
+    cur = db.cursor()
+
+    with open(path_to_csv, 'r') as f:
+
+        rows = csv.reader(f)
+
+        cur.executemany('INSERT INTO trial_order (user_id, username, trial, learner_id, sent_typ,'
+            'sent_group, pre_recording_id, pre_recording_sent,'
+            'post_recording_id, post_recording_sent, display_order)'
+            'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',rows)
+
+    db.commit()
 
 
 def input_trials(path_to_csv):
