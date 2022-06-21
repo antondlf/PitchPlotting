@@ -222,6 +222,8 @@ def pairs2rater(rater_id, trial_list, trial_len):
 
     for i in range(trial_len):
 
+        # This function gets the last item and removes it from the
+        # list.
         item = trial_list.pop()
 
         if conditions_banned.intersection(item[-1]) == set():
@@ -297,7 +299,6 @@ def pairs2data_dict(rater, current_pair, trial_order, data):
         return None
 
 
-
 def apportion_pairs(num_raters, trial_list, data, output_path, concurrency=5):
 
     all_trials = trial_list*concurrency
@@ -349,10 +350,12 @@ def generate_trials(num_raters, path_to_metadata, output_path, concurrency=5):
 
     num_raters : int
         The number of raters anticipated for the experiment
-    num_block : int
-        The number of blocks in the trial
-    block_len : int
-        The number of trials in each block
+
+    path_to_metadata : str
+        The path to a metadata sheet in csv from the production experiment
+
+    output_path : str
+        A path to save the apportioned stimuli
 
     keyword arguments:
 
