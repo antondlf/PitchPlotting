@@ -1,6 +1,8 @@
 from flask import (
     Blueprint, flash,  current_app, g, redirect, render_template, request, url_for, send_from_directory
 )
+from werkzeug.security import check_password_hash, generate_password_hash
+
 from flaskr.auth import login_required
 
 import sqlite3
@@ -12,6 +14,10 @@ import random
 import pandas as pd
 
 import csv
+
+import diceware
+
+#from db import get_db
 
 from werkzeug.exceptions import abort
 
@@ -34,7 +40,23 @@ def init_ns_db():
     with open(dir_path + '/ns_schema.sql') as f:
         db.executescript(f.read())
 
-    csv2sql(dir_path + '/../apportioned.csv')
+    usernames = pd.read_csv('/Users/anton/apportioned.csv').iloc[:, 1].unique()
+
+    user_list = list()
+    flaskr_db = sqlite3.connect(dir_path+'/../instance/flaskr.sqlite')
+
+    for user in usernames:
+
+        passwrd = diceware.get_passphrase()
+
+        register_rater(user, passwrd, flaskr_db)
+        user_list.append(str((user, passwrd)))
+
+    with open('/Users/anton/users.txt', 'w') as f:
+        for userpass in user_list:
+            f.write(userpass + '\n')
+
+    csv2sql('/Users/anton/apportioned.csv')#dir_path + '/../apportioned.csv')
     db.commit()
 
 
@@ -63,7 +85,7 @@ def display_trial(trial_order):
     pre_recording, post_recording, display_order = db.execute(
         'SELECT pre_recording_id, post_recording_id, display_order '
         'FROM trial_order WHERE trial=?',
-        (trial_order,)  # (user_id, trial_order,)
+        (user_id, trial_order,)
     ).fetchall()[0]
 
     # pre_recording = '11144_Il_ladro(S)_0_9dea.wav' #'1_Anna_lavora(Q)_0_9f1f.wav'#
@@ -260,6 +282,41 @@ def input_trials(path_to_csv):
         # except:
         #     print(IndexError('Index out of bounds'))
         #     #break
+
+
+def register_rater(username, password, db):
+
+    error = None
+
+    sus_strings = ['crypto', 'NFT', '$', 'BTC ', 'Ukraine', 'Russia', 'Novy originalny', 'Support the fund', ' ']
+
+    if not username:
+        error = 'Username is required.'
+    elif not password:
+        error = 'Password is required.'
+    #elif not email:
+    #    error = 'Valid email is required.'
+    elif len(username) > 10:
+        error = 'Username entered is not valid'
+
+    elif '>>' in username:
+
+        error = "Username entered is not valid, disallowed characters are contained."
+
+    elif ' ' in username:
+        error = 'Username entered is not valid, please do not include spaces.'
+
+    elif db.execute(
+        'SELECT id FROM user WHERE username = ?', (username,)
+    ).fetchone() is not None:
+        error = 'User {} is already registered'.format(username)
+
+    if error is None:
+        db.execute(
+            'INSERT INTO user (username, password) VALUES (?, ?)',
+            (username, generate_password_hash(password))
+        )
+        db.commit()
 
 
 if __name__ == '__main__':

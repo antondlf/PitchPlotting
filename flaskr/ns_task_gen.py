@@ -3,6 +3,7 @@ import numpy as np
 import random
 from random import shuffle
 import sqlite3
+import os
 
 
 """
@@ -243,7 +244,7 @@ def pairs2rater(rater_id, trial_list, trial_len):
     return rater_list, trial_list
 
 
-def pairs2data_dict(rater, current_pair, trial_order, data):
+def pairs2data_dict(rater, rater_id, current_pair, trial_order, data):
 
     #print(current_pair)
     pre_recording = data.loc[data['trial_id'] == current_pair[0]].sample(1)
@@ -273,8 +274,8 @@ def pairs2data_dict(rater, current_pair, trial_order, data):
         if all(sanity_check_tup):
 
             pair_dict = {
-                    'user_id': rater,
-                    'username': 'rater_'+str(rater),
+                    'user_id': rater_id,
+                    'username': 'rater_'+str(rater_id),
                     'trial': trial_order,
                     'learner_id': pre_recording['user_id'].item(),
                     'sent_typ': pre_recording['sent_type'].item(),
@@ -299,7 +300,7 @@ def pairs2data_dict(rater, current_pair, trial_order, data):
         return None
 
 
-def apportion_pairs(num_raters, trial_list, data, output_path, concurrency=5):
+def apportion_pairs(num_raters, trial_list, data, output_path, starting_id, concurrency=5):
 
     all_trials = trial_list*concurrency
 
@@ -317,7 +318,10 @@ def apportion_pairs(num_raters, trial_list, data, output_path, concurrency=5):
         trial_order = 0
         for pair in rater_list:
 
-            trials_dict_list.append(pairs2data_dict(rater, pair, trial_order, data))
+            # Make sure the rater id is the same as the id for the last user existing
+            rater_id = rater + starting_id
+
+            trials_dict_list.append(pairs2data_dict(rater, rater_id, pair, trial_order, data))
 
             trial_order += 1
 
@@ -382,8 +386,17 @@ def generate_trials(num_raters, path_to_metadata, output_path, concurrency=5):
     # Get list of all trial pairs
     trial_order_list = pairs2list(data)
 
+    # Get current highest user_id + 1 because 0 indexing
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    flaskr_db = sqlite3.connect(dir_path+'/../instance/flaskr.sqlite')
+    starting_id = flaskr_db.execute(
+        'SELECT id FROM user '
+        'ORDER by id DESC'
+    ).fetchall()[0][0] + 1
+    #starting_id = data.user_id.unique().max() + 1
+
     # Apportion pairs to num_raters
-    trial_frame = apportion_pairs(num_raters, trial_order_list, data,  output_path, concurrency=concurrency)
+    trial_frame = apportion_pairs(num_raters, trial_order_list, data,  output_path, starting_id, concurrency=concurrency)
 
     return trial_frame
 
