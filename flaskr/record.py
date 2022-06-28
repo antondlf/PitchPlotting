@@ -1,17 +1,17 @@
 from flask import (
     Blueprint, flash,  current_app, g, redirect, render_template, request, url_for, send_from_directory
 )
-from flaskr.auth import login_required
+from auth import login_required
 
-from flaskr.db import get_db
+from db import get_db
 
 from werkzeug.exceptions import abort
 
-from flaskr.audio_processing import process_recording
+from audio_processing import process_recording
 
-from flaskr.user_dict import user_state
+from user_dict import user_state
 
-from flaskr.notification_cue import notify_next_week
+from notification_cue import notify_next_week
 
 import os
 
