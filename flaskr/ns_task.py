@@ -3,7 +3,7 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from flaskr.auth import login_required
+from auth import login_required
 
 import sqlite3
 
@@ -17,7 +17,7 @@ import csv
 
 import diceware
 
-from flaskr.db import get_db
+from db import get_db
 
 from werkzeug.exceptions import abort
 
@@ -40,12 +40,12 @@ def init_ns_db():
     with open(dir_path + '/ns_schema.sql') as f:
         db.executescript(f.read())
 
-    usernames = pd.read_csv('/Users/anton/apportioned.csv').iloc[:, 0].unique()
+    usernames = pd.read_csv(dir_path + '/../apportioned.csv').iloc[:, 0].unique()
 
     user_list = list()
     flaskr_db = sqlite3.connect(dir_path+'/../instance/flaskr.sqlite')
 
-    csv2sql('/Users/anton/apportioned.csv')  # dir_path + '/../apportioned.csv')
+    csv2sql(dir_path + '/../apportioned.csv')
 
     for user in usernames:
 
