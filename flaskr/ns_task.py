@@ -54,7 +54,7 @@ def init_ns_db():
         register_rater(user, passwrd, flaskr_db)
         user_list.append(str((user, passwrd)))
 
-    with open('/Users/anton/users.txt', 'w') as f:
+    with open(dir_path+ '/../users.txt', 'w') as f:
         for userpass in user_list:
             f.write(userpass + '\n')
 
