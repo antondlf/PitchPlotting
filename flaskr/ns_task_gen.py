@@ -274,7 +274,6 @@ def pairs2data_dict(rater, rater_id, current_pair, trial_order, data):
         if all(sanity_check_tup):
 
             pair_dict = {
-                    'user_id': rater_id,
                     'username': 'rater_'+str(rater_id),
                     'trial': trial_order,
                     'learner_id': pre_recording['user_id'].item(),
@@ -326,7 +325,6 @@ def apportion_pairs(num_raters, trial_list, data, output_path, starting_id, conc
             trial_order += 1
 
     trial_frame = pd.DataFrame(trials_dict_list, columns = [
-        'user_id',
         'username',
         'trial',
         'learner_id',

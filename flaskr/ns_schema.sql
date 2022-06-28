@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS ns_data;
 
 CREATE TABLE trial_order (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
+--    user_id INTEGER NOT NULL,
     username TEXT NOT NULL,
     trial INTEGER NOT NULL,
     learner_id INTEGER NOT NULL,
@@ -20,7 +20,8 @@ CREATE TABLE trial_order (
 
 CREATE TABLE ns_data (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    rater_id INTEGER NOT NULL,
+    trial_id INTEGER NOT NULL,
+    rater_id TEXT NOT NULL,
     learner_id INTEGER NOT NULL,
     sent_typ TEXT NOT NULL,
     sent_group TEXT NOT NULL,

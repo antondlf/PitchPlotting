@@ -42,7 +42,7 @@ def process_recording(original_audio_path, audio_data, chaptername, database_inp
     trial_path = os.path.join(current_app.root_path, '../participant_recordings', trial_id)
 
     recording_path = save_audio(trial_path, audio_data)
-    print(recording_path)
+    #print(recording_path)
 
     # If recording_path = None then wav file is empty.
     if recording_path == None:
