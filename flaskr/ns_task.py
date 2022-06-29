@@ -51,10 +51,14 @@ def init_ns_db():
 
         passwrd = diceware.get_passphrase()
 
-        register_rater(user, passwrd, flaskr_db)
-        user_list.append(str((user, passwrd)))
+        user_not_exists = register_rater(user, passwrd, flaskr_db)
+        if user_not_exists:
+            user_list.append(str((user, passwrd)))
 
-    with open(dir_path+ '/../users.txt', 'w') as f:
+        else:
+            continue
+
+    with open(dir_path + '/../users.txt', 'a') as f:
         for userpass in user_list:
             f.write(userpass + '\n')
 
@@ -334,9 +338,11 @@ def register_rater(username, password, db):
             (username, generate_password_hash(password))
         )
         db.commit()
+        return True
 
     else:
         print(error)
+        return False
 
 
 if __name__ == '__main__':
