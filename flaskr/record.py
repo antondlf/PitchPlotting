@@ -13,6 +13,8 @@ from user_dict import user_state
 
 from notification_cue import notify_next_week
 
+from ns_task import route_user
+
 import os
 
 
@@ -99,53 +101,57 @@ bp = Blueprint('/record', __name__)
 @login_required
 def index():
 
-    user_id = g.user['id']
-    user_progress = get_user_progress(user_id)
-    user_dict = get_user_state(user_id)
-    condition = user_dict.get_condition()
+    return route_user()
 
-    if user_progress is None:
-
-        post = 'Session_1'
-
-        print(post)
-
-        return render_template('/Instructions/Introduction.html', post=post)
-
-    else:
-
-        sent_order, session_number, trial_type = user_progress
-        print(sent_order, session_number, trial_type)
-
-        if sent_order == 0:
-            if trial_type == 'pre_train':
-                return render_template('/Instructions/Introduction.html', post=session_number)
-            elif trial_type == 'training':
-                return render_template(
-                    '/Instructions/training.html',
-                    condition=condition,
-                    next_panel=trial_type,
-                    session=session_number)
-            elif trial_type == 'post_train':
-                return render_template('Instructions/post_test.html')
-        elif trial_type == 'post_train':
-            if sent_order == '7':
-                print('next sesh condition reached')
-                next_session = 'Session 2' if session_number == 'Session 1' else 'Session 3'
-                return redirect(url_for('/instructions.intro', post=next_session))
-            else:
-                return redirect(url_for(
-                '/record.record',
-                session=session_number,
-                trial_type=trial_type,
-                chapterorder=sent_order))
-
-        else:
-            return redirect(url_for(
-                '/record.record',
-                session=session_number,
-                trial_type=trial_type,
-                chapterorder=sent_order))
+    # This is the normal functioning, for ease in transition to ns_task
+    #  The above code is used.
+    # user_id = g.user['id']
+    # user_progress = get_user_progress(user_id)
+    # user_dict = get_user_state(user_id)
+    # condition = user_dict.get_condition()
+    #
+    # if user_progress is None:
+    #
+    #     post = 'Session_1'
+    #
+    #     print(post)
+    #
+    #     return render_template('/Instructions/Introduction.html', post=post)
+    #
+    # else:
+    #
+    #     sent_order, session_number, trial_type = user_progress
+    #     print(sent_order, session_number, trial_type)
+    #
+    #     if sent_order == 0:
+    #         if trial_type == 'pre_train':
+    #             return render_template('/Instructions/Introduction.html', post=session_number)
+    #         elif trial_type == 'training':
+    #             return render_template(
+    #                 '/Instructions/training.html',
+    #                 condition=condition,
+    #                 next_panel=trial_type,
+    #                 session=session_number)
+    #         elif trial_type == 'post_train':
+    #             return render_template('Instructions/post_test.html')
+    #     elif trial_type == 'post_train':
+    #         if sent_order == '7':
+    #             print('next sesh condition reached')
+    #             next_session = 'Session 2' if session_number == 'Session 1' else 'Session 3'
+    #             return redirect(url_for('/instructions.intro', post=next_session))
+    #         else:
+    #             return redirect(url_for(
+    #             '/record.record',
+    #             session=session_number,
+    #             trial_type=trial_type,
+    #             chapterorder=sent_order))
+    #
+    #     else:
+    #         return redirect(url_for(
+    #             '/record.record',
+    #             session=session_number,
+    #             trial_type=trial_type,
+    #             chapterorder=sent_order))
 
 
 # Specific session index, to be sent through email

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content='width=device-width, initial-scale=1' name='viewport'/>
+    <meta charset="UTF-8">
+    <title>Overview</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav>
+<ul>
+    {% if g.user %}
+      <li><span>{{ g.user['username'] }}</span>
+      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+    {% endif %}
+</ul>
+</nav>
+<h1>Time for a break!</h1>
+<p>
+    If you're feeling fatigued by the task, this is a good time to stop and take a break.
+    You're welcome to keep going whenever you feel ready.
+</p>
+    <h1><a class="action" href="{{ url_for('/ns_task/display_trial', trial_order=trial_order) }}">Continue!</a></h1>
+</body>
+</html>

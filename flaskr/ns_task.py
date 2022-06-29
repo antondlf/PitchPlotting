@@ -78,6 +78,27 @@ def get_ns_db():
 
 bp = Blueprint('/ns_task', __name__)
 
+def route_user():
+
+    user_id = g.user['id']
+    flaskr_db = get_db()
+
+    username = flaskr_db.execute(
+        'SELECT username FROM user WHERE id=?',
+        (user_id,)
+    ).fetchall()[0][0]
+
+    db = get_ns_db()
+    last_trial = db.execute(
+        'SELECT trial_id FROM ns_data'
+        'WHERE username=?'
+        'ORDERED by trial_id DESC',
+        (username,)
+    ).fetchall()[0][0]
+
+    return redirect(url_for('/ns_task/display_trial', trial_order=last_trial, method='GET'))
+
+
 @bp.route('/ns_task/<int:trial_order>', methods=['GET', 'POST'])
 @login_required
 def display_trial(trial_order):
@@ -166,8 +187,14 @@ def display_trial(trial_order):
 @bp.route('/ns_task/<int:trial_order>/next_trial')
 def next_trial(trial_order):
 
-    trial_order += 1
-    return redirect(url_for('/ns_task.display_trial', trial_order=trial_order))
+    # The number here indicates how often a break option is given
+    if trial_order % 20:
+        trial_order += 1
+        return render_template('/ns_task/break.html', trial_order=trial_order)
+
+    else:
+        trial_order += 1
+        return redirect(url_for('/ns_task.display_trial', trial_order=trial_order))
 
 
 def register_response(db, username, trial_order, response, chosen_recording, bool_response):
