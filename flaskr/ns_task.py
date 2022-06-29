@@ -89,14 +89,20 @@ def route_user():
     ).fetchall()[0][0]
 
     db = get_ns_db()
-    last_trial = db.execute(
+    trial_list = db.execute(
         'SELECT trial_id FROM ns_data'
-        'WHERE username=?'
-        'ORDER BY trial_id DESC',
+        ' WHERE rater_id=?'
+        ' ORDER BY trial_id DESC',
         (username,)
-    ).fetchall()[0][0]
+    ).fetchall()
 
-    return redirect(url_for('/ns_task/display_trial', trial_order=last_trial, method='GET'))
+    if len(trial_list) == 0:
+
+        last_trial = 0
+    else:
+        last_trial = trial_list[0][0]
+
+    return redirect(url_for('/ns_task.display_trial', trial_order=last_trial))
 
 
 @bp.route('/ns_task/<int:trial_order>', methods=['GET', 'POST'])
