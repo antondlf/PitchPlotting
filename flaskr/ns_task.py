@@ -96,7 +96,7 @@ def route_user():
     else:
         last_trial = trial_list[0][0] + 1
 
-    progress = round(last_trial/511)*100
+    progress = round((last_trial/511)*100)
 
     return redirect(url_for('/ns_task.display_trial', trial_order=last_trial, progress=progress))
 
@@ -131,7 +131,7 @@ def display_trial(trial_order):
 
     if request.method == 'GET':
 
-        progress = round(trial_order / 511) * 100
+        progress = round((trial_order / 511) * 100)
 
         return render_template('/ns_task/ns_task.html', first_recording=first_recording, second_recording=second_recording, progress=progress)
 
