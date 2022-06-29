@@ -94,7 +94,7 @@ def route_user():
 
         last_trial = 0
     else:
-        last_trial = trial_list[0][0]
+        last_trial = trial_list[0][0] + 1
 
     return redirect(url_for('/ns_task.display_trial', trial_order=last_trial))
 
