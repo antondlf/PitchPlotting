@@ -80,13 +80,7 @@ bp = Blueprint('/ns_task', __name__)
 
 def route_user():
 
-    user_id = g.user['id']
-    flaskr_db = get_db()
-
-    username = flaskr_db.execute(
-        'SELECT username FROM user WHERE id=?',
-        (user_id,)
-    ).fetchall()[0][0]
+    username = g.user['username']
 
     db = get_ns_db()
     trial_list = db.execute(
@@ -109,14 +103,7 @@ def route_user():
 @login_required
 def display_trial(trial_order):
 
-    user_id = g.user['id']
-
-    flaskr_db = get_db()
-
-    username = flaskr_db.execute(
-        'SELECT username FROM user WHERE id=?',
-        (user_id,)
-    ).fetchall()[0][0]
+    username = g.user['username']
 
     db = get_ns_db()
 
