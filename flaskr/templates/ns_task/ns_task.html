@@ -11,6 +11,12 @@
     <link rel="stylesheet" type="text/css" href="/static/ns_style.css">
 </head>
 <body>
+<ul>
+    {% if g.user %}
+      <span>{{ g.user['username'] }}</span>
+      <a href="{{ url_for('auth.logout') }}">Log Out</a>
+    {% endif %}
+</ul>
 <!--List of variables needed: first_recording, second_recording-->
         <audio id = "firstAudio" hidden>
             <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
