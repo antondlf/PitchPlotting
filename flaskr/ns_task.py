@@ -92,7 +92,7 @@ def route_user():
     last_trial = db.execute(
         'SELECT trial_id FROM ns_data'
         'WHERE username=?'
-        'ORDERED by trial_id DESC',
+        'ORDER BY trial_id DESC',
         (username,)
     ).fetchall()[0][0]
 
