@@ -96,7 +96,16 @@ def route_user():
     else:
         last_trial = trial_list[0][0] + 1
 
-    return redirect(url_for('/ns_task.display_trial', trial_order=last_trial))
+    trial_total = db.execute(
+        'SELECT trial FROM trial_order'
+        ' WHERE username=?'
+        ' ORDER BY trial DESC',
+        (username,)
+    ).fetchall()[0][0]
+
+    progress = round(last_trial//trial_total)*100
+
+    return redirect(url_for('/ns_task.display_trial', trial_order=last_trial, progress=progress))
 
 
 @bp.route('/ns_task/<int:trial_order>', methods=['GET', 'POST'])
@@ -129,7 +138,16 @@ def display_trial(trial_order):
 
     if request.method == 'GET':
 
-        return render_template('/ns_task/ns_task.html', first_recording=first_recording, second_recording=second_recording)
+        trial_total = db.execute(
+            'SELECT trial FROM trial_order'
+            ' WHERE username=?'
+            ' ORDER BY trial DESC',
+            (username,)
+        ).fetchall()[0][0]
+
+        progress = round(trial_order // trial_total) * 100
+
+        return render_template('/ns_task/ns_task.html', first_recording=first_recording, second_recording=second_recording, progress=progress)
 
     elif request.method == 'POST':
 
@@ -180,8 +198,21 @@ def display_trial(trial_order):
 @bp.route('/ns_task/<int:trial_order>/next_trial')
 def next_trial(trial_order):
 
+    username = g.user['username']
+    db = get_ns_db()
+    trial_total = db.execute(
+        'SELECT trial FROM trial_order'
+        ' WHERE username=?'
+        ' ORDER BY trial DESC',
+        (username,)
+    ).fetchall()[0][0]
+
+    if trial_order == trial_total:
+
+        return render_template('/ns_task/completed.html')
+
     # The number here indicates how often a break option is given
-    if trial_order % 20:
+    elif trial_order % 20:
         trial_order += 1
         return render_template('/ns_task/break.html', trial_order=trial_order)
 
