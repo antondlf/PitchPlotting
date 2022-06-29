@@ -1,9 +1,9 @@
 from flask import (
     Blueprint, flash,  current_app, g, redirect, render_template, request, url_for, send_from_directory
 )
-from auth import login_required
+from flaskr.auth import login_required
 
-from db import get_db
+from flaskr.db import get_db
 
 from werkzeug.exceptions import abort
 

@@ -4,7 +4,7 @@ from flask import (
 
 from pitch_track.pitch_plot import draw_pitch
 
-from audio_processing import save_audio, save_plot
+from flaskr.audio_processing import save_audio, save_plot
 
 import parselmouth as praat
 

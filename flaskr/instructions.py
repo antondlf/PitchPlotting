@@ -1,9 +1,9 @@
 from flask import (
     Blueprint, flash, current_app, g, render_template, send_from_directory
 )
-from auth import login_required
+from flaskr.auth import login_required
 
-from user_dict import user_state
+from flaskr.user_dict import user_state
 
 import os
 

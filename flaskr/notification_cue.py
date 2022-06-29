@@ -1,4 +1,4 @@
-from db import get_db
+from flaskr.db import get_db
 import datetime
 
 # Backend utilities to determine which users need to be reminded
