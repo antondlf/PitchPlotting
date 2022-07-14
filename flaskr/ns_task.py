@@ -78,6 +78,7 @@ def get_ns_db():
 
 bp = Blueprint('/ns_task', __name__)
 
+
 def route_user():
 
     username = g.user['username']
@@ -98,7 +99,7 @@ def route_user():
 
     progress = round((last_trial/511)*100)
 
-    return redirect(url_for('/ns_task.display_trial', trial_order=last_trial, progress=progress))
+    return redirect(url_for('/ns_task.display_trial', trial_order=last_trial))
 
 
 @bp.route('/ns_task/<int:trial_order>', methods=['GET', 'POST'])
