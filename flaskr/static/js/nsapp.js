@@ -1,42 +1,62 @@
-var firstButton = document.getElementById('firstButton')
-var secondButton = document.getElementById('secondButton')
+var pickFirst = document.getElementById('pickFirstButton')
+var pickSecond = document.getElementById('pickSecondButton')
+var playFirst = document.getElementById('playFirstButton')
+var playSecond = document.getElementById('playSecondButton')
 var startTrial = document.getElementById('startTrial')
 
 var firstRecording = document.getElementById('firstAudio')
 var secondRecording = document.getElementById('secondAudio')
 
-console.log(firstButton.disabled, secondButton.disabled)
+console.log(pickFirst.disabled, pickSecond.disabled)
 
-if (startTrial){
-startTrial.addEventListener('click', playTrialAudio)
+if (playFirst){
+    playFirst.addEventListener('click', function func(){
+    playAudio(firstRecording, playFirst);
+    playSecond.disabled = false
+    })
 }
 
+if (playSecond){
+    playSecond.addEventListener('click', function func(){playAudio(secondRecording, playSecond)})
+}
+
+/*if (startTrial){
+startTrial.addEventListener('click', playTrialAudio)
+}
+*/
 window.addEventListener('keydown', trialResponse);
 function trialResponse(event){
 
-    if (firstButton.disabled == true && secondButton.disabled == true){
+    if (playFirst.disabled == false && playSecond.disabled == true){
         if (event.keyCode === 32){
-            playTrialAudio()
+            //console.log('Spacebar pressed')
+            playAudio(firstRecording, playFirst);
+            playSecond.disabled = false
+        }
+    }
+    else if (playFirst.disabled == true && playSecond.disabled == false){
+            if (event.keyCode === 32){
+            playAudio(secondRecording, playSecond)
         }
     }
 
-    else if (firstButton.disabled == false && secondButton.disabled == false){
+    else if (playFirst.disabled == true && playSecond.disabled == true){
 
 
 
     // If 'a' key is pressed first recording is selected
     // 'a' key code is 65
     if (event.keyCode === 65){
-        firstButton.disabled = true;
-        secondButton.disabled = true;
-        firstButton.click();
+        pickFirst.disabled = true;
+        pickSecond.disabled = true;
+        pickFirst.click();
         sendData('first');
         console.log('a pressed, first recording picked')
     }
     else if (event.keyCode === 76){
-        firstButton.disabled = true;
-        secondButton.disabled = true;
-        secondButton.click();
+        pickFirst.disabled = true;
+        pickSecond.disabled = true;
+        pickFirst.click();
         sendData('second');
         console.log('l key pressed, second recording picked')
     }
@@ -48,7 +68,7 @@ function trialResponse(event){
     }
 }
 
-function playTrialAudio(){
+/*function playTrialAudio(){
 
     startTrial.diabled = true
     console.log('trial started')
@@ -56,7 +76,7 @@ function playTrialAudio(){
     playAudio(firstRecording, firstButton)
     firstRecording.addEventListener('ended',
     function(){
-    firstButton.classList.remove("playing")
+    //firstButton.classList.remove("playing")
     playAudio(secondRecording, secondButton)
     }
     )
@@ -69,15 +89,18 @@ function playTrialAudio(){
 
 
 }
+*/
 
 
-async function playAudio(audio, button){
+async function playAudio(audio, button, button2){
 
     try {
     await audio.play();
-    button.classList.add("playing");
+    button.disabled = true
+    //if (button2 === playSecond){button2.disabled = false}
+    //button.classList.add("playing");
   } catch(err) {
-    button.classList.remove("playing");
+    //button.classList.remove("playing");
     startTrial.disabled = false
   };
 

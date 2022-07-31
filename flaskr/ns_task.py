@@ -198,6 +198,8 @@ def next_trial(trial_order):
 
         return render_template('/ns_task/completed.html')
 
+    if trial_order % 100:
+        return render_template('/ns_task/session_over.html')
     # The number here indicates how often a break option is given
     elif trial_order % 20:
         trial_order += 1
