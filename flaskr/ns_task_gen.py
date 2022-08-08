@@ -203,7 +203,7 @@ def pairs2list(data):
                 # print('trial for user', user, 'and group', group, 'and sent_type', sent_type, 'does not have than one file.')
                 # print()
 
-                trial_order_list.append((trial_id_pre, trial_id_post, {user, group}))
+                trial_order_list.append((trial_id_pre, trial_id_post, sent_type, {user, group}))
                 continue
 
     return trial_order_list
@@ -216,10 +216,15 @@ def pairs2rater(rater_id, trial_list, trial_len):
 
     conditions_banned = set()
 
-    rater_list = list()
+    rater_list_Q = list()
+    rater_list_S = list()
 
     # Randomization step 1
     shuffle(trial_list)
+
+    # To make sure that half are statements and half are questions
+    # We initialize an indicator variable.
+    current_sent_type = 'S'
 
     for i in range(trial_len):
 
@@ -230,8 +235,10 @@ def pairs2rater(rater_id, trial_list, trial_len):
         if conditions_banned.intersection(item[-1]) == set():
 
             conditions_banned.add(tuple(item[-1]))
-
-            rater_list.append(item[:2])
+            if item[-2] == 'Q':
+                rater_list_Q.append(item[:3])
+            elif item[-2] == 'S':
+                rater_list_S.append(item[:3])
 
         elif conditions_banned.intersection(item[-1]) != set():
 
@@ -241,7 +248,7 @@ def pairs2rater(rater_id, trial_list, trial_len):
 
             trial_list.append(item)
 
-    return rater_list, trial_list
+    return rater_list_Q, rater_list_S, trial_list
 
 
 def pairs2data_dict(rater, rater_id, current_pair, trial_order, data):
@@ -299,7 +306,7 @@ def pairs2data_dict(rater, rater_id, current_pair, trial_order, data):
         return None
 
 
-def apportion_pairs(num_raters, trial_list, data, output_path, starting_id, concurrency=5):
+def apportion_pairs(num_raters, trial_list, data, output_path, starting_id, concurrency=5, block_len=20):
 
     all_trials = trial_list*concurrency
 
@@ -309,20 +316,49 @@ def apportion_pairs(num_raters, trial_list, data, output_path, starting_id, conc
 
     for rater in range(num_raters):
 
-        rater_list, trial_list = pairs2rater(rater, all_trials, trial_len)
+        rater_list_Q, rater_list_S, trial_list = pairs2rater(rater, all_trials, trial_len)
 
         # Randomization step 2
-        shuffle(rater_list)
+        shuffle(rater_list_Q)
+        shuffle(rater_list_S)
 
         trial_order = 0
-        for pair in rater_list:
 
+        rater_list = list()
+
+        shorter_list = rater_list_Q if len(rater_list_Q) <= len(rater_list_S) else rater_list_S
+
+        current_list = random.choice(['S', 'Q'])
+
+        for i in range(int(len(shorter_list)/block_len)):
+
+            if current_list == 'Q':
+
+                start_idx = i*block_len
+                end_idx = (i*block_len) + block_len
+
+                rater_list.extend(rater_list_Q[start_idx:end_idx])
+
+                current_list = 'S'
+
+            elif current_list == 'S':
+
+                start_idx = i * block_len
+                end_idx = (i * block_len) + block_len
+
+                rater_list.extend(rater_list_S[start_idx:end_idx])
+
+                current_list = 'Q'
+
+        for pair in rater_list:
+            #print(pair)
             # Make sure the rater id is the same as the id for the last user existing
             rater_id = rater + starting_id
 
             trials_dict_list.append(pairs2data_dict(rater, rater_id, pair, trial_order, data))
 
             trial_order += 1
+
 
     trial_frame = pd.DataFrame(trials_dict_list, columns = [
         'username',
