@@ -203,7 +203,7 @@ def pairs2list(data):
                 # print('trial for user', user, 'and group', group, 'and sent_type', sent_type, 'does not have than one file.')
                 # print()
 
-                trial_order_list.append((trial_id_pre, trial_id_post, sent_type, {user, group}))
+                trial_order_list.append((trial_id_pre, trial_id_post, sent_type, (user, group)))
                 continue
 
     return trial_order_list
@@ -232,15 +232,18 @@ def pairs2rater(rater_id, trial_list, trial_len):
         # list.
         item = trial_list.pop()
 
-        if conditions_banned.intersection(item[-1]) == set():
+        #print(item[-1])
+        #print(conditions_banned)
 
-            conditions_banned.add(tuple(item[-1]))
+        if conditions_banned.intersection({item[-1]}) == set():
+
+            conditions_banned.add(item[-1])
             if item[-2] == 'Q':
                 rater_list_Q.append(item[:3])
             elif item[-2] == 'S':
                 rater_list_S.append(item[:3])
 
-        elif conditions_banned.intersection(item[-1]) != set():
+        elif conditions_banned.intersection({item[-1]}) != set():
 
             print(conditions_banned.intersection(item[-1]), conditions_banned, item[-1])
             print('current user is banned from this user/group combination')
@@ -261,10 +264,10 @@ def pairs2data_dict(rater, rater_id, current_pair, trial_order, data):
     #post_recording = post_recording_data
 
     # If 'post_train' or 'training' something is wrong
-    print('Before the check')
-    print(type(pre_recording))
-    print(pre_recording['trial_type'].item())
-    print()
+    #print('Before the check')
+    #print(type(pre_recording))
+    #print(pre_recording['trial_type'].item())
+    #print()
     if pre_recording['trial_type'].item() != 'pre_train':
 
         print('error! wrong order in tuple')
