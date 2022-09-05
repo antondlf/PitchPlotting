@@ -5,6 +5,8 @@ from flaskr.auth import login_required
 
 from flaskr.db import get_db
 
+from flaskr.ns_task import get_ns_db
+
 from werkzeug.exceptions import abort
 
 from flaskr.audio_processing import process_recording
@@ -109,3 +111,50 @@ def final_survey_input(form, user_id):
     db.commit()
 
 
+@bp.route('/rater_survey', methods=['POST', 'GET'])
+@login_required
+def rater_survey():
+    """Renders the equipment survey"""
+
+    if request.method == 'GET':
+
+        return render_template('/survey/rater_survey.html')
+
+    elif request.method == 'POST':
+
+        user_id = g.user['id']
+
+        rater_survey_input(request.form, user_id)
+        #print(request.form)
+        return render_template('/Instructions/rater_instructions.html')
+
+
+def rater_survey_input(form, user_id):
+
+    db = get_ns_db()
+
+    age = form['age']
+    gender = form['gender']
+    grow_up = form['grow_up']
+    live_currently = form['live_currently']
+
+    db.execute(
+        'INSERT INTO rater_survey '
+        '(rater_id, age, gender, grow_up, live_currently)'
+        'VALUES (?, ?, ?, ?, ?)',
+        (
+            user_id, age, gender, grow_up, live_currently
+        )
+    )
+    db.commit()
+
+    try:
+
+        db.execute(
+            'SELECT FROM survey WHERE user_id=?',
+            (user_id)
+        ).fetchall()[0]
+
+    except:
+
+        return print('Error inputing into db')

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Survey</title>
+    <meta content='width=device-width, initial-scale=1' name='viewport'/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+<h1>Welcome</h1>
+<h2>Before you start, please answer these questions</h2>
+<form action="{{ url_for('/survey.rater_survey', post=post) }}" method="post">
+
+What is your age? (Type a whole number in years)<br>
+<textarea style="height:100px; width: 900px; font-size:12pt;" type="number" name="age" size="60"></textarea><br><br>
+What is your gender identification?<br>
+<textarea style="height:200px; width: 900px; font-size:12pt;" type="text" name="gender" size="60"></textarea><br><br>
+Where did you grow up?<br>
+<textarea style="height:200px; width: 900px; font-size:12pt;" type="text" name="grow_up" size="60"></textarea><br><br>
+Where do you currently live?<br>
+<textarea style="height:200px; width: 900px; font-size:12pt;" type="text" name="live_currently" size="60"></textarea><br><br>
+
+<input type="submit" value="submit"/>
+</form>
+</body>
+</html>
+</body>
+</html>

@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS trial_order;
 DROP TABLE IF EXISTS ns_data;
+DROP TABLE IF EXISTS rater_survey;
 
 CREATE TABLE trial_order (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,4 +35,14 @@ CREATE TABLE ns_data (
     chosen_recording_id TEXT NOT NULL,
     is_improved TEXT NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE rater_survey (
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    rater_id INTEGER,
+    age INTEGER,
+    gender TEXT,
+    grow_up TEXT,
+    live_currently TEXT
 )

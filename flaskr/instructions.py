@@ -86,3 +86,16 @@ def get_image(filename):
 def mic_test(post):
 
     return render_template('Instructions/mic_test.html', post=post)
+
+@bp.route('/instructions/raters')
+@login_required
+def rater_instructions():
+
+    return render_template('Instructions/rater_instructions.html')
+
+
+@bp.route('/instructions/ready')
+@login_required
+def rater_ready():
+
+    return render_template('Instructions/ready_to_start.html')

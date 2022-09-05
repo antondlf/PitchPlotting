@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content='width=device-width, initial-scale=1' name='viewport'/>
+    <meta charset="UTF-8">
+    <title>Overview</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Ready to Start</title>
+</head>
+<body>
+Okay! Now that you've got the hang of it we're ready to start with the real thing. Details, details...
+
+    <h1><a class="action" href="{{ url_for('/ns_task.display_trial', trial_order=0) }}">I'm ready!</a></h1>
+</body>
+</html>

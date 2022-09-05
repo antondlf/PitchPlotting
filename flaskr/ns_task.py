@@ -17,6 +17,7 @@ import csv
 
 import diceware
 
+
 from flaskr.db import get_db
 
 from werkzeug.exceptions import abort
@@ -94,6 +95,7 @@ def route_user():
     if len(trial_list) == 0:
 
         last_trial = 0
+        return redirect(url_for('/survey.rater_survey'))
     else:
         last_trial = trial_list[0][0] + 1
 
@@ -102,9 +104,34 @@ def route_user():
     return redirect(url_for('/ns_task.display_trial', trial_order=last_trial))
 
 
+def get_test_trial(trial_order,test_trial):
+
+    # Users 11071, 11072, 11073
+    test_trials = {0: ('11071_Angelo_giunge(S)_0_cb70', '11071_Livia_dorme(S)_0_458b'), # user 11071 set_1
+    1: ('11072_Damiano_morde(Q)_0_0624', '11072_Giuliana_mangia(Q)_0_33e0'), # user 11072 set_2
+    2: ('11073_La_ragione(S)_0_4770', '11073_La_balena(S)_0_56a1') # user 11073 set_4
+     }
+
+    current_test_trial = test_trials[trial_order]
+
+    return render_template(
+        '/ns_task/ns_task.html',
+        first_recording=current_test_trial[0],
+        second_recording=current_test_trial[1],
+        test_trial=test_trial
+    )
+
+
 @bp.route('/ns_task/<int:trial_order>', methods=['GET', 'POST'])
+@bp.route('/ns_task/<int:trial_order>/<string:test_trial>', methods=['GET', 'POST'])
 @login_required
-def display_trial(trial_order):
+def display_trial(trial_order, test_trial=False):
+
+    if bool(test_trial) == True:
+
+        get_test_trial(trial_order, test_trial)
+
+
 
     username = g.user['username']
 
@@ -183,7 +210,16 @@ def display_trial(trial_order):
 
 
 @bp.route('/ns_task/<int:trial_order>/next_trial')
-def next_trial(trial_order):
+@bp.route('/ns_task/<int:trial_order>/<string:test_trial>/next_trial')
+def next_trial(trial_order, test_trial = False):
+
+    if bool(test_trial) == True:
+
+        if trial_order == 2:
+            return redirect(url_for('/instructions.rater_ready'))
+        else:
+            trial_order += 1
+            return redirect(url_for('/ns_task.display_trial', trial_order=trial_order, test_trial=True))
 
     username = g.user['username']
     db = get_ns_db()

@@ -19,6 +19,9 @@
     {% endif %}
 </ul>
 <!--List of variables needed: first_recording, second_recording-->
+    {% if test_trial == 'True' %}
+    <h1>This is a test</h1>
+    {% endif %}
         <audio id = "firstAudio" hidden>
             <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
             <source src="{{ url_for('/record.return_plot_file', filename=first_recording) }}" type="audio/wav">

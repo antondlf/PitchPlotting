@@ -60,6 +60,9 @@ Steps for creating trials:
 
 """
 
+
+leftover_recs = list()
+
 def check_items_match(item1, item2):
 
     if item1 == item2:
@@ -205,7 +208,7 @@ def pairs2list(data):
 
                 trial_order_list.append((trial_id_pre, trial_id_post, sent_type, (user, group)))
                 continue
-
+    print(len(trial_order_list))
     return trial_order_list
 
 
@@ -232,6 +235,14 @@ def pairs2rater(rater_id, trial_list, trial_len):
         # list.
         item = trial_list.pop()
 
+        # TO make sure Statements and Questions alternate,
+        # reinsert the random item selected to the beginning
+        # of the list until the current item type is present
+        while item[-2] != current_sent_type:
+
+            trial_list.insert(0, item)
+            item = trial_list.pop()
+
         #print(item[-1])
         #print(conditions_banned)
 
@@ -240,17 +251,27 @@ def pairs2rater(rater_id, trial_list, trial_len):
             conditions_banned.add(item[-1])
             if item[-2] == 'Q':
                 rater_list_Q.append(item[:3])
+                current_sent_type = 'S'
             elif item[-2] == 'S':
                 rater_list_S.append(item[:3])
+                current_sent_type = 'Q'
+
+            else:
+                print('function breaks')
+
+            if item in leftover_recs:
+                leftover_recs.remove(item)
 
         elif conditions_banned.intersection({item[-1]}) != set():
 
-            print(conditions_banned.intersection(item[-1]), conditions_banned, item[-1])
-            print('current user is banned from this user/group combination')
-            print()
+            leftover_recs.append(item)
 
-            trial_list.append(item)
+            #print(conditions_banned.intersection(item[-1]), conditions_banned, item[-1])
+            #print('current user is banned from this user/group combination')
+            #print()
 
+            trial_list.insert(0, item)
+    print(rater_id, len(trial_list), len(leftover_recs))
     return rater_list_Q, rater_list_S, trial_list
 
 
@@ -319,7 +340,7 @@ def apportion_pairs(num_raters, trial_list, data, output_path, starting_id, conc
 
     for rater in range(num_raters):
 
-        rater_list_Q, rater_list_S, trial_list = pairs2rater(rater, all_trials, trial_len)
+        rater_list_Q, rater_list_S, all_trials = pairs2rater(rater, all_trials, trial_len)
 
         # Randomization step 2
         shuffle(rater_list_Q)
@@ -331,16 +352,29 @@ def apportion_pairs(num_raters, trial_list, data, output_path, starting_id, conc
 
         shorter_list = rater_list_Q if len(rater_list_Q) <= len(rater_list_S) else rater_list_S
 
+
+        if len(rater_list_Q) != len(rater_list_S):
+            #print('Statements and questions are unbalanced:')
+            #print(len(rater_list_Q), len(rater_list_S))
+            #print()
+            pass
+
+        rater_list = [None] * (len(rater_list_Q) + len(rater_list_S))
+
         current_list = random.choice(['S', 'Q'])
 
-        for i in range(int(len(shorter_list)/block_len)):
+        for i in range(int(len(rater_list)/block_len)):
 
             if current_list == 'Q':
 
                 start_idx = i*block_len
                 end_idx = (i*block_len) + block_len
 
-                rater_list.extend(rater_list_Q[start_idx:end_idx])
+                if len(rater_list_Q) > block_len:
+                    rater_list[start_idx:end_idx] = [rater_list_Q.pop() for i in range(block_len)]
+                else:
+                    leftover_items = len(rater_list_S)
+                    rater_list[start_idx:end_idx] = [rater_list_S.pop() for i in range(leftover_items)]
 
                 current_list = 'S'
 
@@ -348,17 +382,31 @@ def apportion_pairs(num_raters, trial_list, data, output_path, starting_id, conc
 
                 start_idx = i * block_len
                 end_idx = (i * block_len) + block_len
-
-                rater_list.extend(rater_list_S[start_idx:end_idx])
-
+                if len(rater_list_S) > block_len:
+                    rater_list[start_idx:end_idx] = [rater_list_S.pop() for i in range(block_len)]
+                else:
+                    leftover_items = len(rater_list_S)
+                    rater_list[start_idx:end_idx] = [rater_list_S.pop() for i in range(leftover_items)]
                 current_list = 'Q'
+
+
+        #if (len(rater_list_S) % 5 != 0) or (len(rater_list_Q) % != 0):
+
+
+
+        #rater_list[::block_len] = shuffled_lists[0]
+        #rater_list[5::block_len] = shuffled_lists[1]
+
+        # Filter None from list
+        rater_list = filter(None, rater_list)
 
         for pair in rater_list:
             #print(pair)
             # Make sure the rater id is the same as the id for the last user existing
             rater_id = rater + starting_id
-
+            #print(rater_id)
             trials_dict_list.append(pairs2data_dict(rater, rater_id, pair, trial_order, data))
+            #print(trials_dict_list)
 
             trial_order += 1
 
@@ -419,6 +467,7 @@ def generate_trials(num_raters, path_to_metadata, output_path, concurrency=5):
     """
     # Read in metadata
     data = pd.read_csv(path_to_metadata)
+    print("length of data:", len(data))
 
     # Get list of all trial pairs
     trial_order_list = pairs2list(data)
@@ -452,4 +501,4 @@ def generate_trials(num_raters, path_to_metadata, output_path, concurrency=5):
 
 if __name__ == '__main__':
 
-    generate_trials(20, '~/tidy_data.csv', '~/apportioned.csv', concurrency=5)
+    generate_trials(20, '~/final_data.csv', '~/apportioned.csv', concurrency=5)

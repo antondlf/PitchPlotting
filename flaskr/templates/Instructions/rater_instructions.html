@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta content='width=device-width, initial-scale=1' name='viewport'/>
+    <meta charset="UTF-8">
+    <title>Overview</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Rater Instructions</title>
+</head>
+<body>
+Hello and welcome to our study! We are interested in intonation, which is basically the melody of speech. Second-language learners often find it difficult to acquire the intonation patterns of their target language.
+
+In phase one of the study, English-speaking learners of Italian did an online training aimed at helping them improve their intonation/prosody in Italian. The learners read some sentences out loud, did the training, and then read some new sentences out loud.
+
+Your task is to listen to pairs of recordings and guess which one is from after the training. In other words, which recording sounds better / more Italian? As much as possible, please try to judge the recordings based on their intonation and not on the pronunciation of the words.
+
+Note it is often really hard to tell which recording is better, and that's totally fine! Just go with your instinct, and if you really have no idea, just guess.
+
+    <h1><a class="action" href="{{ url_for('/ns_task.display_trial', trial_order=0, test_trial='True') }}">I'm ready!</a></h1>
+</body>
+</html>
