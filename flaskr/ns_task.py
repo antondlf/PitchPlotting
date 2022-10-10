@@ -153,7 +153,10 @@ def display_trial(trial_order, test_trial=False):
 
     current_trial_pair = (pre_recording,
                           post_recording)  # some query statement on whatever structure we build returning a tuple of filenames
-    trial_type = 'Question' if pre_recording.split('_')[-3][-2] == 'Q' else 'S'
+    trial_type = 'Question' if pre_recording.split('_')[-3][-2] == 'Q' else 'Statement'
+
+    if test_trial:
+        trial_type = 'Test Trial'
     first_recording = current_trial_pair[display_order] + '.wav'
 
     second_recording = current_trial_pair[display_order - 1] + '.wav'
