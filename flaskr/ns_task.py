@@ -116,6 +116,7 @@ def get_test_trial(trial_order,test_trial):
 
     return render_template(
         '/ns_task/ns_task.html',
+        trial_type='test trial',
         first_recording=current_test_trial[0],
         second_recording=current_test_trial[1],
         test_trial=test_trial
@@ -152,7 +153,7 @@ def display_trial(trial_order, test_trial=False):
 
     current_trial_pair = (pre_recording,
                           post_recording)  # some query statement on whatever structure we build returning a tuple of filenames
-
+    trial_type = 'Question' if pre_recording.split('_')[-3][-2] == 'Q' else 'S'
     first_recording = current_trial_pair[display_order] + '.wav'
 
     second_recording = current_trial_pair[display_order - 1] + '.wav'
@@ -161,7 +162,7 @@ def display_trial(trial_order, test_trial=False):
 
         progress = round((trial_order / 511) * 100)
 
-        return render_template('/ns_task/ns_task.html', first_recording=first_recording, second_recording=second_recording, progress=progress)
+        return render_template('/ns_task/ns_task.html', trial_type=trial_type, first_recording=first_recording, second_recording=second_recording, progress=progress)
 
     elif request.method == 'POST':
 

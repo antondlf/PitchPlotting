@@ -30,8 +30,8 @@
             <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
             <source src="{{ url_for('/record.return_plot_file', filename=second_recording) }}" type="audio/wav">
         </audio>
-
-<h1>Press <b>A</b> if the first recording is better <b>L</b> if it's the second recording.</h1>
+<h1>This is a {{ trial_type }}</h1>
+<h2>Press <b>A</b> if the first recording is better <b>L</b> if it's the second recording.</h2>
 <!--<h2><button id="startTrial"> Play Recordings </button></h2>-->
 <div id="controls">
 

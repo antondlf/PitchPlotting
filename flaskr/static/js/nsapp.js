@@ -56,7 +56,7 @@ function trialResponse(event){
     else if (event.keyCode === 76){
         pickFirst.disabled = true;
         pickSecond.disabled = true;
-        pickFirst.click();
+        pickSecond.click();
         sendData('second');
         console.log('l key pressed, second recording picked')
     }
