@@ -4,11 +4,11 @@ from flask import (
 
 from click import echo
 
-from flaskr.db import get_db
+from db import get_db
 
 from pitch_track import pitch_plot
 
-from flaskr.data_management import get_unique_id
+from data_management import get_unique_id
 
 import parselmouth as praat
 
