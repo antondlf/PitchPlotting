@@ -18,7 +18,7 @@ import csv
 import diceware
 
 
-from flaskr.db import get_db
+from db import get_db
 
 from werkzeug.exceptions import abort
 
