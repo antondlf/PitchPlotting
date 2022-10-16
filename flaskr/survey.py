@@ -151,3 +151,50 @@ def rater_survey_input(form, user_id):
     except:
 
         return print('Error inputing into db')
+
+
+@bp.route('/final_rater_survey', methods=['POST', 'GET'])
+@login_required
+def final_rater_survey():
+    """Renders the equipment survey"""
+
+    if request.method == 'GET':
+
+        return render_template('/ns_task/completed.html')
+
+    elif request.method == 'POST':
+
+        user_id = g.user['id']
+
+        final_rater_input(request.form, user_id)
+        #print(request.form)
+        return render_template('/ns_task/ns_done.html')
+
+
+def final_rater_input(form, user_id):
+
+    db = get_ns_db()
+
+    comments = form['comments']
+
+    db.execute(
+        'INSERT INTO final_survey_rater '
+        '(rater_id, comments)'
+        'VALUES (?, ?)',
+        (
+            user_id, comments
+        )
+    )
+    db.commit()
+
+    try:
+
+        db.execute(
+            'SELECT FROM final_survey_rater WHERE user_id=?',
+            (user_id)
+        ).fetchall()[0]
+
+    except:
+
+        return print('Error inputing into db')
+

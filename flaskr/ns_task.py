@@ -237,9 +237,9 @@ def next_trial(trial_order, test_trial = False):
 
     if trial_order == trial_total:
 
-        return render_template('/ns_task/completed.html')
+        return redirect(url_for('/survey.final_rater_survey'))
 
-    if trial_order % 100:
+    if trial_order % 102:
         return render_template('/ns_task/session_over.html')
     # The number here indicates how often a break option is given
     elif trial_order % 20:

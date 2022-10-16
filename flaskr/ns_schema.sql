@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS trial_order;
 DROP TABLE IF EXISTS ns_data;
 DROP TABLE IF EXISTS rater_survey;
+DROP TABLE IF EXISTS final_survey_rater;
 
 CREATE TABLE trial_order (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -45,4 +46,10 @@ CREATE TABLE rater_survey (
     gender TEXT,
     grow_up TEXT,
     live_currently TEXT
+);
+
+CREATE TABLE final_survey_rater(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    rater_id INTEGER,
+    comments TEXT
 )
