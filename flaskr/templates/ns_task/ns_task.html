@@ -30,19 +30,20 @@
             <!--source src="http://127.0.0.1:5000/Recordings/Sentence1_dec.wav" type="audio/wav" -->
             <source src="{{ url_for('/record.return_plot_file', filename=second_recording) }}" type="audio/wav">
         </audio>
-<h1>This is a {{ trial_type }}</h1>
-<h2>Press <b>A</b> if the first recording is better <b>L</b> if it's the second recording.</h2>
+<h1>Questo è una frase {{ trial_type }}</h1>
+<h2>Quale registrazione sembra più naturale?</h2>
+<p>Premi <b>A</b> se pensi che la prima registrazione sia più naturale o <b>L</b> se pensi che la seconda registrazione sia più naturale.</p>
 <!--<h2><button id="startTrial"> Play Recordings </button></h2>-->
 <div id="controls">
 
-        <button id="playFirstButton">Play First Recording</button>
-        <button id="playSecondButton" disabled>Play Second Recording</button>
+        <button id="playFirstButton">Oggi la primera registrazione</button>
+        <button id="playSecondButton" disabled>Oggi la seconda registrazione</button>
         <button id="pickFirstButton" disabled hidden>Select First Recording</button>
 
         <button id="pickSecondButton" disabled hidden>Select Second Recording</button>
 
 </div>
-<h1>Progress</h1>
+<h1>Progresso</h1>
     <progress value={{ progress }} max="100">{{ progress }} </progress>
 
     <script onload src="/static/js/nsapp.js"></script>

@@ -19,13 +19,13 @@
 <h2>Before you start, please answer these questions</h2>
 <form action="{{ url_for('/survey.rater_survey', post=post) }}" method="post">
 
-What is your age? (Type a whole number in years)<br>
+Età?<br>
 <textarea style="height:100px; width: 900px; font-size:12pt;" type="number" name="age" size="60"></textarea><br><br>
-What is your gender identification?<br>
+Genere? <br>
 <textarea style="height:200px; width: 900px; font-size:12pt;" type="text" name="gender" size="60"></textarea><br><br>
-Where did you grow up?<br>
+Dove sei cresciuto/a? <br>
 <textarea style="height:200px; width: 900px; font-size:12pt;" type="text" name="grow_up" size="60"></textarea><br><br>
-Where do you currently live?<br>
+Dove vivi adesso?<br>
 <textarea style="height:200px; width: 900px; font-size:12pt;" type="text" name="live_currently" size="60"></textarea><br><br>
 
 <input type="submit" value="submit"/>
