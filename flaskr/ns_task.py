@@ -428,5 +428,6 @@ def register_rater(username, password, db):
 
 if __name__ == '__main__':
 
-    init_ns_db()
+    with current_app.app_context():
+        init_ns_db()
 
