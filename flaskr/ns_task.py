@@ -234,6 +234,10 @@ def next_trial(trial_order, test_trial=False):
 
             return redirect(url_for('/survey.final_rater_survey'))
 
+        elif trial_order == 0:
+            trial_order += 1
+            return redirect(url_for('/ns_task.display_trial', trial_order=trial_order))
+
         if trial_order % 102 == 0:
             return render_template('/ns_task/session_over.html')
         # The number here indicates how often a break option is given
