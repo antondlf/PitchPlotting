@@ -104,7 +104,7 @@ def route_user():
     return redirect(url_for('/ns_task.display_trial', trial_order=last_trial))
 
 
-def get_test_trial(trial_order,test_trial):
+def get_test_trial(trial_order, test_trial):
 
     # Users 11071, 11072, 11073
     test_trials = {0: ('11071_Angelo_giunge(S)_0_cb70', '11071_Livia_dorme(S)_0_458b'), # user 11071 set_1
@@ -114,13 +114,7 @@ def get_test_trial(trial_order,test_trial):
 
     current_test_trial = test_trials[trial_order]
 
-    return render_template(
-        '/ns_task/ns_task.html',
-        trial_type='test trial',
-        first_recording=current_test_trial[0],
-        second_recording=current_test_trial[1],
-        test_trial=test_trial
-    )
+    return current_test_trial
 
 
 @bp.route('/ns_task/<int:trial_order>', methods=['GET', 'POST'])
@@ -128,22 +122,25 @@ def get_test_trial(trial_order,test_trial):
 @login_required
 def display_trial(trial_order, test_trial=False):
 
-    if bool(test_trial) == True:
-
-        get_test_trial(trial_order, test_trial)
-
-
-
     username = g.user['username']
 
     db = get_ns_db()
 
-    # Maybe add a sanity check here?
-    pre_recording, post_recording, display_order = db.execute(
-        'SELECT pre_recording_id, post_recording_id, display_order '
-        'FROM trial_order WHERE trial=? AND username=?',
-        (trial_order, username,)
-    ).fetchall()[0]
+    if bool(test_trial) == True:
+
+        pre_recording, post_recording = get_test_trial(trial_order, test_trial)
+        display_order = random.choice([0,1])
+        trial_type = 'di test'
+
+
+    else:
+        # Maybe add a sanity check here?
+        pre_recording, post_recording, display_order = db.execute(
+            'SELECT pre_recording_id, post_recording_id, display_order '
+            'FROM trial_order WHERE trial=? AND username=?',
+            (trial_order, username,)
+        ).fetchall()[0]
+        trial_type = 'Interrogativa' if pre_recording.split('_')[-3][-2] == 'Q' else 'Enunciativa'
 
     # pre_recording = '11144_Il_ladro(S)_0_9dea.wav' #'1_Anna_lavora(Q)_0_9f1f.wav'#
 
@@ -153,10 +150,6 @@ def display_trial(trial_order, test_trial=False):
 
     current_trial_pair = (pre_recording,
                           post_recording)  # some query statement on whatever structure we build returning a tuple of filenames
-    trial_type = 'Interrogativa' if pre_recording.split('_')[-3][-2] == 'Q' else 'Enunciativa'
-
-    if test_trial:
-        trial_type = 'di test'
 
     first_recording = current_trial_pair[display_order] + '.wav'
 
@@ -216,7 +209,7 @@ def display_trial(trial_order, test_trial=False):
 
 @bp.route('/ns_task/<int:trial_order>/next_trial')
 @bp.route('/ns_task/<int:trial_order>/<string:test_trial>/next_trial')
-def next_trial(trial_order, test_trial = False):
+def next_trial(trial_order, test_trial=False):
 
     if bool(test_trial) == True:
 
@@ -226,29 +219,31 @@ def next_trial(trial_order, test_trial = False):
             trial_order += 1
             return redirect(url_for('/ns_task.display_trial', trial_order=trial_order, test_trial=True))
 
-    username = g.user['username']
-    db = get_ns_db()
-    trial_total = db.execute(
-        'SELECT trial FROM trial_order'
-        ' WHERE username=?'
-        ' ORDER BY trial DESC',
-        (username,)
-    ).fetchall()[0][0]
-
-    if trial_order == trial_total:
-
-        return redirect(url_for('/survey.final_rater_survey'))
-
-    if trial_order % 102 == 0:
-        return render_template('/ns_task/session_over.html')
-    # The number here indicates how often a break option is given
-    elif trial_order % 20 == 0:
-        trial_order += 1
-        return render_template('/ns_task/break.html', trial_order=trial_order)
-
     else:
-        trial_order += 1
-        return redirect(url_for('/ns_task.display_trial', trial_order=trial_order))
+
+        username = g.user['username']
+        db = get_ns_db()
+        trial_total = db.execute(
+            'SELECT trial FROM trial_order'
+            ' WHERE username=?'
+            ' ORDER BY trial DESC',
+            (username,)
+        ).fetchall()[0][0]
+
+        if trial_order == trial_total:
+
+            return redirect(url_for('/survey.final_rater_survey'))
+
+        if trial_order % 102 == 0:
+            return render_template('/ns_task/session_over.html')
+        # The number here indicates how often a break option is given
+        elif trial_order % 20 == 0:
+            trial_order += 1
+            return render_template('/ns_task/break.html', trial_order=trial_order)
+
+        else:
+            trial_order += 1
+            return redirect(url_for('/ns_task.display_trial', trial_order=trial_order))
 
 
 def register_response(db, username, trial_order, response, chosen_recording, bool_response):
