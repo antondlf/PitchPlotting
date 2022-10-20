@@ -3,7 +3,7 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from auth import login_required
+from flaskr.auth import login_required
 
 import sqlite3
 
