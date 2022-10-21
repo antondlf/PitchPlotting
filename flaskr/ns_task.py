@@ -130,7 +130,7 @@ def display_trial(trial_order, test_trial=False):
 
         pre_recording, post_recording = get_test_trial(trial_order, test_trial)
         display_order = random.choice([0,1])
-        trial_type = 'di test'
+        trial_type = 'un test'
 
 
     else:
@@ -140,7 +140,7 @@ def display_trial(trial_order, test_trial=False):
             'FROM trial_order WHERE trial=? AND username=?',
             (trial_order, username,)
         ).fetchall()[0]
-        trial_type = 'Interrogativa' if pre_recording.split('_')[-3][-2] == 'Q' else 'Enunciativa'
+        trial_type = 'una domanda' if pre_recording.split('_')[-3][-2] == 'Q' else "un'affermazione"
 
     # pre_recording = '11144_Il_ladro(S)_0_9dea.wav' #'1_Anna_lavora(Q)_0_9f1f.wav'#
 
