@@ -43,7 +43,12 @@ red {
   display: flex;
   margin-top: 2rem;
   max-width: 40em;
-} 
+}
+#controls2 {
+  display: flex;
+  margin-top: 2rem;
+  max-width: 40em;
+}
 
 button {
   flex-grow: 1;

@@ -23,6 +23,22 @@ if (playSecond){
     })
 }
 
+if (pickFirst){pickFirst.addEventListener('click', function func(){
+        pickFirst.disabled = true;
+        pickSecond.disabled = true;
+        pickFirst.click();
+        sendData('first');
+        console.log('First button clicked, first recording picked')
+})}
+
+if (pickSecond){pickSecond.addEventListener('click', function func(){
+        pickFirst.disabled = true;
+        pickSecond.disabled = true;
+        pickSecond.click();
+        sendData('second');
+        console.log('Second button clicked, second recording picked')
+})}
+
 /*if (startTrial){
 startTrial.addEventListener('click', playTrialAudio)
 }
@@ -40,6 +56,8 @@ function trialResponse(event){
     else if (playFirst.disabled == true && playSecond.disabled == false){
             if (event.keyCode === 32){
             playAudio(secondRecording, playSecond)
+            pickFirst.disabled = false;
+            pickSecond.disabled = false;
         }
     }
 
