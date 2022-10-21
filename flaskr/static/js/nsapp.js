@@ -17,7 +17,10 @@ if (playFirst){
 }
 
 if (playSecond){
-    playSecond.addEventListener('click', function func(){playAudio(secondRecording, playSecond)})
+    playSecond.addEventListener('click', function func(){playAudio(secondRecording, playSecond);
+    pickFirst.disabled=false;
+    pickSecond.disabled=false
+    })
 }
 
 /*if (startTrial){
